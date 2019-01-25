@@ -24,9 +24,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _RB = GetComponent<Rigidbody>();
-
-       
-
         _Pos = transform.position;
     }
 
@@ -49,6 +46,11 @@ public class PlayerController : MonoBehaviour
 
             _RB.AddForce(_InputVector * _Speed);
         }      
+    }
+
+    void Interact()
+    {
+
     }
 
     private void OnDrawGizmos()
