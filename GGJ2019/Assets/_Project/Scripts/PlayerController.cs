@@ -53,6 +53,23 @@ public class PlayerController : MonoBehaviour
 
     }
 
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<iInteractable>() != null)
+        {
+            print("Entered echidna trigger");
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<iInteractable>() != null)
+        {
+            print("Exited echidna trigger");
+        }
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.DrawLine(transform.position, transform.position + _InputVector);

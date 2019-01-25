@@ -27,4 +27,5 @@ public class MoveableObject : MonoBehaviour, iInteractable
         // turn rb to isnt kinematic
         // play put down particles or animation
     }
+
 }

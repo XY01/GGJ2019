@@ -545,7 +545,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7681e312d0ad79e4da2352bc888dca40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _CamLookAtTarget: {fileID: 0}
+  _CamLookAtTarget: {fileID: 1313631299}
+  _Smoothing: 4
 --- !u!1 &330107819
 GameObject:
   m_ObjectHideFlags: 0
@@ -557,9 +558,10 @@ GameObject:
   - component: {fileID: 330107823}
   - component: {fileID: 330107822}
   - component: {fileID: 330107821}
-  - component: {fileID: 330107820}
   - component: {fileID: 330107824}
   - component: {fileID: 330107825}
+  - component: {fileID: 330107820}
+  - component: {fileID: 330107826}
   m_Layer: 0
   m_Name: Echidna
   m_TagString: Untagged
@@ -669,6 +671,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ControllableRadius: 1.5
   _PerceptionRadius: 1.5
+--- !u!135 &330107826
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330107819}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &476432622
 GameObject:
   m_ObjectHideFlags: 0
