@@ -1,0 +1,173 @@
+fileFormatVersion: 2
+guid: 42944c305271c7f4081eb1c72f9ee8a2
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Enironment
+    100004: Moving_obsticles
+    100006: MovinOobsticle_1
+    100008: MovinOobsticle_2
+    100010: Obsticle
+    100012: Obsticle_1
+    100014: Obsticle_2
+    100016: Obsticle_3
+    100018: Obsticle_4
+    100020: Obsticle_5
+    100022: Obsticle_6
+    100024: Obsticle_7
+    100026: Slick
+    100028: Slick_1
+    100030: Slick_2
+    100032: Slick_3
+    100034: Slick_4
+    400000: //RootNode
+    400002: Enironment
+    400004: Moving_obsticles
+    400006: MovinOobsticle_1
+    400008: MovinOobsticle_2
+    400010: Obsticle
+    400012: Obsticle_1
+    400014: Obsticle_2
+    400016: Obsticle_3
+    400018: Obsticle_4
+    400020: Obsticle_5
+    400022: Obsticle_6
+    400024: Obsticle_7
+    400026: Slick
+    400028: Slick_1
+    400030: Slick_2
+    400032: Slick_3
+    400034: Slick_4
+    2100000: M_Sticky
+    2100002: M_Obsticle
+    2100004: M_obsitcle_ball
+    2100006: M_Environment
+    2300000: Enironment
+    2300002: MovinOobsticle_1
+    2300004: MovinOobsticle_2
+    2300006: Obsticle_1
+    2300008: Obsticle_2
+    2300010: Obsticle_3
+    2300012: Obsticle_4
+    2300014: Obsticle_5
+    2300016: Obsticle_6
+    2300018: Obsticle_7
+    2300020: Slick_1
+    2300022: Slick_2
+    2300024: Slick_3
+    2300026: Slick_4
+    3300000: Enironment
+    3300002: MovinOobsticle_1
+    3300004: MovinOobsticle_2
+    3300006: Obsticle_1
+    3300008: Obsticle_2
+    3300010: Obsticle_3
+    3300012: Obsticle_4
+    3300014: Obsticle_5
+    3300016: Obsticle_6
+    3300018: Obsticle_7
+    3300020: Slick_1
+    3300022: Slick_2
+    3300024: Slick_3
+    3300026: Slick_4
+    4300000: Slick_1
+    4300002: Slick_2
+    4300004: Slick_3
+    4300006: Slick_4
+    4300008: Obsticle_1
+    4300010: Obsticle_2
+    4300012: Obsticle_3
+    4300014: Obsticle_4
+    4300016: Obsticle_5
+    4300018: Obsticle_6
+    4300020: Obsticle_7
+    4300022: MovinOobsticle_1
+    4300024: MovinOobsticle_2
+    4300026: Enironment
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
