@@ -24,7 +24,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _RB = GetComponent<Rigidbody>();
-        _RB.isKinematic = true;
+
+       
 
         _Pos = transform.position;
     }
@@ -35,10 +36,19 @@ public class PlayerController : MonoBehaviour
         _InputVector.x = Input.GetAxis("Horizontal");
         _InputVector.z = Input.GetAxis("Vertical");
 
-        _Pos += _InputVector * Time.deltaTime;
+        if (_ControlType == ControlType.Kinematic)
+        {
+            _RB.isKinematic = true;
 
+            _Pos += _InputVector * Time.deltaTime;
+            transform.position = _Pos;
+        }
+        else
+        {
+            _RB.isKinematic = false;
 
-        transform.position = _Pos;
+            _RB.AddForce(_InputVector * _Speed);
+        }      
     }
 
     private void OnDrawGizmos()

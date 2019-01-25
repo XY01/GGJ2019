@@ -6,6 +6,7 @@ using UnityEngine;
 public class EchidnaController : MonoBehaviour
 {
     public float _ControllableRadius = 1.5f;
+    public float _PerceptionRadius = 1.5f;
 
     float _CurrentScale = .4f;
     float _BaseScale = .4f;
@@ -22,8 +23,18 @@ public class EchidnaController : MonoBehaviour
         
     }
 
+    public bool IsInControllableRange(Vector3 pos)
+    {
+        return Vector3.Distance(pos, transform.position) < _ControllableRadius;
+    }
+
+    public bool IsInPerceptionRange(Vector3 pos)
+    {
+        return Vector3.Distance(pos, transform.position) < _ControllableRadius;
+    }
+
     private void OnDrawGizmos()
     {
-        Gizmos.DrawSphere(transform.position, transform.localScale.x * _ControllableRadius);
+        Gizmos.DrawWireSphere(transform.position, transform.localScale.x * _ControllableRadius);
     }
 }
