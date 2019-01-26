@@ -44,14 +44,6 @@ public class Interactable_Breakable : MonoBehaviour, iInteractable
 
     public void EndInteraction(PlayerController player)
     {
-        GetComponent<MeshRenderer>().enabled = false;
-        GetComponent<BoxCollider>().enabled = false;
-
-        foreach (GameObject segment in _Segments)
-        {
-            segment.SetActive(true);
-            segment.GetComponent<Rigidbody>().isKinematic = false;
-        }
 
     }
 
@@ -62,9 +54,18 @@ public class Interactable_Breakable : MonoBehaviour, iInteractable
     void ReduceHealth()
     {
         _Health -= _InteractionStrength;
+        print(_Health);
 
-        if (_Health >= 0f)
+        if (_Health <= 0f)
         {
+            GetComponent<MeshRenderer>().enabled = false;
+            GetComponent<BoxCollider>().enabled = false;
+
+            foreach (GameObject segment in _Segments)
+            {
+                segment.SetActive(true);
+                segment.GetComponent<Rigidbody>().isKinematic = false;
+            }
             _InteractingPlayer.InteractableActionComplete();
         }
     }
