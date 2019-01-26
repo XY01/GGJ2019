@@ -17,7 +17,7 @@ public class Speech : MonoBehaviour
     }
     private void Update()
     {
-        transform.position = _Echidna.transform.position;
+        transform.position = FindObjectOfType<EchidnaController>().gameObject.transform.position;
         timer += Time.deltaTime;
         if (timer >= randoTimeTillTalk)
         {
