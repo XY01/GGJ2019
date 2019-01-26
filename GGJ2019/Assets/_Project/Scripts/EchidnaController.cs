@@ -66,7 +66,7 @@ public class EchidnaController : MonoBehaviour, iInteractable
             if (_StateTimer >= _IdleTimeoutDuration)
                 SetState(State.Wander);
 
-            _DebugText.text = "Echidna - State: Idle.  Timer: " + _StateTimer + " / " + _IdleTimeoutDuration;
+            ExperienceManager.Instance._DebugText[1].text = "Echidna - State: Idle.  Timer: " + _StateTimer + " / " + _IdleTimeoutDuration;
         }
         else if (_State == State.BeingPushed)
         {
@@ -93,7 +93,7 @@ public class EchidnaController : MonoBehaviour, iInteractable
             AddPerlinForce(transform.position, _BasePerlfieldScaler, _BasePerlForceScaler, _PerlOffset);
 
             // if stuck in one spot too long change the perl offset
-            _DebugText.text = "Echidna - State: Wandering.";
+            ExperienceManager.Instance._DebugText[2].text = "Echidna - State: Wandering.";
         }
     }
 
