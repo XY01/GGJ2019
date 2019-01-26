@@ -53,6 +53,8 @@ public class PlayerController : MonoBehaviour
     Ray _FwdRay;
     bool _IsMoveBlocked = false;
 
+    public LayerMask _LayerMask;
+
     // Debug
     public bool _LogInteractables = false;
     public Text _DebugText;
@@ -117,7 +119,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit hit;
         _FwdRay = new Ray(transform.position, newInputVec);
 
-        if (Physics.Raycast(_FwdRay, out hit))
+        if (Physics.Raycast(_FwdRay, out hit, _Radius * 5, _LayerMask, QueryTriggerInteraction.Ignore))
         {
             _RaycastHitObject = hit.collider.gameObject;
             _RayCastHitDist = hit.distance;
@@ -132,7 +134,9 @@ public class PlayerController : MonoBehaviour
         if (!_IsMoveBlocked)
         {
             if (_RaycastHitObject != null && _RaycastHitObject.layer != SRLayers.Terrain && _RayCastHitDist < _Radius * 1.2f)
-                print("Raycast hit object: " + _RaycastHitObject.name);
+                _InputMagScaler = Mathf.Clamp01(10 - _RaycastHitObject.GetComponent<Rigidbody>().mass);
+            else
+                _InputMagScaler = 1;
 
             // Update pos
             _RB.isKinematic = true;
@@ -350,15 +354,6 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.layer == SRLayers.Echidna)
         {
-            collision.gameObject.GetComponent<EchidnaController>().BeginInteraction(this);
-            SetState(State.PushingEchidna);
-        }
-    }
-
-    void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.layer == SRLayers.Echidna)
-        {           
             collision.gameObject.GetComponent<EchidnaController>().BeginInteraction(this);
             SetState(State.PushingEchidna);
         }
