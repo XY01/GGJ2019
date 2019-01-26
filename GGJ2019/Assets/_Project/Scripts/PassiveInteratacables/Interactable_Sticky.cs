@@ -9,6 +9,7 @@ public class Interactable_Sticky : Interactable_Passive
     public override void BeginInteraction(PlayerController player)
     {
         base.BeginInteraction(player);
+        player.StartStickyZone();
     }
 
     public override void ContinueInteraction(PlayerController player)
@@ -19,6 +20,7 @@ public class Interactable_Sticky : Interactable_Passive
     public override void EndInteraction(PlayerController player)
     {
         base.EndInteraction(player);
+        player._Debug_StickyMove = false;
     }
     #endregion
 }

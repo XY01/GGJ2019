@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
             newInputMag = Mathf.Lerp(_InputMagnitude, newInputMag * .9f, Time.deltaTime * .5f);
 
             // Set input dir
-            newInputDir = Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 6);
+            newInputDir = Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 10);
         }
         else if (_Debug_SlipperyMove) //TODO 
         {
@@ -104,8 +104,8 @@ public class PlayerController : MonoBehaviour
             newInputDir = Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 6);
         }
 
-        _InputDirection = Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 8);
-        _InputMagnitude = Mathf.Lerp(_InputMagnitude, newInputMag, Time.deltaTime * 8);
+        _InputDirection = newInputDir;// Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 10);
+        _InputMagnitude = Mathf.Lerp(_InputMagnitude, newInputMag, Time.deltaTime * 10);
 
         // Rotation
         if (InputVector != Vector3.zero)
@@ -188,6 +188,19 @@ public class PlayerController : MonoBehaviour
         {
             _State = newState;
         }
+    }
+
+
+    public void StartStickyZone()
+    {
+        _InputMagnitude *= .5f;
+        _Debug_StickyMove = true;
+    }
+
+    public void EndStickyZone()
+    {
+        _InputMagnitude *= 2;
+        _Debug_StickyMove = false;
     }
 
     #region Interaction methods
