@@ -215,10 +215,18 @@ public class PlayerController : MonoBehaviour
     {
         if (other.GetComponent<iInteractable>() != null)
         {
+            if (other.GetComponent<Interactable_Passive>())
+            {
+                other.GetComponent<Interactable_Passive>().BeginInteraction(this);
+            }
+            else
+            {
+                _InteractablesInRange.Add(other.GetComponent<iInteractable>());
+            }
+
             if (_LogInteractables)
                 print(other.GetComponent<iInteractable>().GetGameObject().name + " in range");
 
-            _InteractablesInRange.Add(other.GetComponent<iInteractable>());
         }
     }
 

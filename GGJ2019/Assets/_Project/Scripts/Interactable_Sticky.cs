@@ -8,15 +8,20 @@ public class Interactable_Sticky : Interactable_Passive, iInteractable
 
     public override void BeginInteraction(PlayerController player)
     {
+        base.BeginInteraction(player);
         print("begun interaction");
     }
 
     public override void ContinueInteraction(PlayerController player)
     {
+        base.ContinueInteraction(player);
+
     }
 
     public override void EndInteraction(PlayerController player)
     {
+        base.EndInteraction(player);
+
 
     }
     #endregion
