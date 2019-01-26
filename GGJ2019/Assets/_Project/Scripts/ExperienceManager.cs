@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-
 public enum State
 {
     Menu,
@@ -23,8 +22,6 @@ public class ExperienceManager : MonoBehaviour
 
     public static ExperienceManager Instance;
 
-    public GameObject _ScoreScreen;
-
     // HUD
     public Text _TimeReadout;
 
@@ -39,24 +36,24 @@ public class ExperienceManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            LevelComplete();
-        }
-    }
-
-    private void LevelComplete()
-    {
-        // Display score UI
-        _State = State.Complete;
-        _ScoreScreen.SetActive(true);
-    }
-
     public void Restart()
     {
-        SceneManager.LoadScene("Master", LoadSceneMode.Single);
+        SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
+    }
+
+    public void Quit()
+    {
+        //If we are running in a standalone build of the game
+        #if UNITY_STANDALONE
+            //Quit the application
+            Application.Quit();
+        #endif
+
+        //If we are running in the editor
+        #if UNITY_EDITOR
+            //Stop playing the scene
+            UnityEditor.EditorApplication.isPlaying = false;
+        #endif
     }
 
 
