@@ -8,7 +8,7 @@ public class Speech : MonoBehaviour
     public string[] _SpeechText;
     public Text _OutputSpeech;
     public Animator _SpeechAnim;
-    public GameObject _Echidna;
+    public GameObject _ObjectToFollow;
     float timer = 0;
     int randoTimeTillTalk;
     private void Start()
@@ -17,7 +17,7 @@ public class Speech : MonoBehaviour
     }
     private void Update()
     {
-        transform.position = _Echidna.transform.position;
+        transform.position = _ObjectToFollow.transform.position;
         timer += Time.deltaTime;
         if (timer >= randoTimeTillTalk)
         {

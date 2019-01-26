@@ -8,6 +8,7 @@ public class Chaser : MonoBehaviour
     public float _RangeMax;
     private NavMeshAgent _Nav;
     public PlayerController[] _Players;
+    public ParticleSystem _AlertParticle;
     // Update is called once per frame
     private void Start()
     {
@@ -25,6 +26,7 @@ public class Chaser : MonoBehaviour
             if(Vector3.Distance(player.transform.position, StarterPoint.transform.position) < _RangeMax)
             {
                 _Nav.destination = player.transform.position;
+                _AlertParticle.Emit(1);
                 Debug.Log("Should be moving");
             }
             else
