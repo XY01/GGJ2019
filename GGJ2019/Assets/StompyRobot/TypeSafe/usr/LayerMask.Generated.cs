@@ -36,4 +36,10 @@ public sealed class SRLayerMask {
     public const int UI = 32;
     
     public const int PostProcessing = 256;
+    
+    public const int Terrain = 512;
+    
+    public const int Echidna = 1024;
+    
+    public const int Interactables = 2048;
 }
