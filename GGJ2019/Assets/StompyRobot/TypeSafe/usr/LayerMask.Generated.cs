@@ -42,4 +42,6 @@ public sealed class SRLayerMask {
     public const int Echidna = 1024;
     
     public const int Interactables = 2048;
+    
+    public const int Players = 4096;
 }
