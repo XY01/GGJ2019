@@ -165,12 +165,12 @@ public class PlayerController : MonoBehaviour
             Ray rayToInteractable = new Ray(transform.position, i.gameObject.transform.position - transform.position);
 
             // Raycast out to find objects that will block movement. Ignore triggers
-            if (Physics.Raycast(rayToInteractable, out interactableHit, _Radius * 2f, _InteractableLayerMask, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(rayToInteractable, out interactableHit, _Radius * 2.5f, _InteractableLayerMask, QueryTriggerInteraction.Ignore))
             {
                 if(_Debug)
                     print("Hit : " + interactableHit.collider.name +   "   dist: " + interactableHit.distance);
 
-                if (Vector3.Dot(rayToInteractable.direction, transform.forward) > .5f)
+                if (Vector3.Dot(rayToInteractable.direction, transform.forward) > .3f)
                 {
                     lowerScalerFound = true;
                     float newScaler = MassToVelocityScaler( i.gameObject.GetComponent<Rigidbody>().mass );

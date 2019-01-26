@@ -1936,12 +1936,12 @@ PrefabInstance:
     - target: {fileID: 1951176792879214951, guid: 4b1d4cb76d114fc429db3a4912066637,
         type: 3}
       propertyPath: _LogInteractables
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1951176792879214951, guid: 4b1d4cb76d114fc429db3a4912066637,
         type: 3}
       propertyPath: _Debug
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8408771349586746114, guid: 4b1d4cb76d114fc429db3a4912066637,
         type: 3}
