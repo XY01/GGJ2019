@@ -361,17 +361,13 @@ public class PlayerController : MonoBehaviour
     {
         if (_Debug)
             print(name + " begun interaction with " + interactable.gameObject.name  + "  from layer " + interactable.gameObject.layer.ToString());
-
-        /*
+                
         if (interactable.gameObject.layer == SRLayers.Echidna)
         {
             SetState(State.InteractingEchidna);
             EchidnaController echidna = _ActiveInteractable.gameObject.GetComponent<EchidnaController>();
         }
-        else 
-        */
-        
-        if (interactable.gameObject.layer == SRLayers.Interactables)
+        else if (interactable.gameObject.layer == SRLayers.Interactables)
         {
             SetState(State.InteractingEnvironment);
         }
@@ -465,9 +461,10 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == SRLayers.Echidna)
+        EchidnaController echidna = collision.gameObject.GetComponent<EchidnaController>();
+        if (echidna != null)
         {
-            collision.gameObject.GetComponent<EchidnaController>().BeginInteraction(this);
+            echidna.BeginInteraction(this);
             SetState(State.PushingEchidna);
         }
     }
@@ -480,6 +477,11 @@ public class PlayerController : MonoBehaviour
         {
             foreach (Interactable i in _InteractablesInRange)
                 Gizmos.DrawWireSphere(i.transform.position, .3f);
+        }
+
+        if(_ActiveInteractable != null)
+        {
+            Gizmos.DrawSphere(_ActiveInteractable.transform.position, .4f);
         }
 
         Gizmos.DrawLine(transform.position, transform.position + FinalMovementVector);
