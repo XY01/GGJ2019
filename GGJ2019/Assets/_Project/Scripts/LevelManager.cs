@@ -25,7 +25,7 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
-        if (ExperienceManager.Instance._State == State.Playing)
+        if (ExperienceManager.Instance != null &&  ExperienceManager.Instance._State == State.Playing)
         {
             _TimeTaken += Time.deltaTime;
             ExperienceManager.Instance._TimeReadout.text = _TimeTaken.ToString("F2");
