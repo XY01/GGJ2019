@@ -230,6 +230,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.GetComponent<iInteractable>() != null)
+        {
+            if (other.GetComponent<Interactable_Passive>())
+            {
+                other.GetComponent<Interactable_Passive>().ContinueInteraction(this);
+            }
+            else
+            {
+                _InteractablesInRange.Add(other.GetComponent<iInteractable>());
+            }
+
+        }
+    }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.GetComponent<iInteractable>() != null)

@@ -16,7 +16,7 @@ public class Interactable_Passive : MonoBehaviour, iInteractable
     {
         _InteractingPlayer = player;
 
-        print("Interaction begun");
+        print("Begun passive interaction");
     }
 
     public virtual void ContinueInteraction(PlayerController player)
