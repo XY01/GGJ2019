@@ -48,7 +48,6 @@ public class EchidnaController : MonoBehaviour, iInteractable
 
     // DEBUG
     public bool _DebugPerlinField = false;
-    public Text _DebugText;
 
     void Start()
     {
@@ -66,7 +65,7 @@ public class EchidnaController : MonoBehaviour, iInteractable
             if (_StateTimer >= _IdleTimeoutDuration)
                 SetState(State.Wander);
 
-            ExperienceManager.Instance._DebugText[1].text = "Echidna - State: Idle.  Timer: " + _StateTimer + " / " + _IdleTimeoutDuration;
+            ExperienceManager.Instance._DebugReadouts[0].text = "Echidna - State: Idle.  Timer: " + _StateTimer + " / " + _IdleTimeoutDuration;
         }
         else if (_State == State.BeingPushed)
         {
@@ -77,14 +76,11 @@ public class EchidnaController : MonoBehaviour, iInteractable
             if (_StateTimer >= _PushingTimeoutDuration)
                 SetState(State.Idle);
 
-            // if being pushed don't do anything yet
-            // potentially seek if find something sufficiently appealing
-            _DebugText.text = "Echidna - State: Being Pushed.";
         }
         else if (_State == State.Seeking)
         {
             // Seek toward target distraction
-            _DebugText.text = "Echidna - State: Seeking. Active Distraction Object: ";
+            ExperienceManager.Instance._DebugReadouts[1].text = "Echidna - State: Seeking. Active Distraction Object: ";
         }
         else if (_State == State.Wander)
         {
@@ -93,7 +89,7 @@ public class EchidnaController : MonoBehaviour, iInteractable
             AddPerlinForce(transform.position, _BasePerlfieldScaler, _BasePerlForceScaler, _PerlOffset);
 
             // if stuck in one spot too long change the perl offset
-            ExperienceManager.Instance._DebugText[2].text = "Echidna - State: Wandering.";
+            ExperienceManager.Instance._DebugReadouts[2].text = "Echidna - State: Wandering.";
         }
     }
 
