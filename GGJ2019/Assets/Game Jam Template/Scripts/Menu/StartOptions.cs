@@ -9,7 +9,6 @@ public class StartOptions : MonoBehaviour {
 
 
     public MenuSettings menuSettingsData;
-	public int sceneToStart = 1;										//Index number in build settings of scene to load if changeScenes is true
 	public bool changeScenes;											//If true, load a new scene when Start is pressed, if false, fade out UI and continue in single scene
 	public bool changeMusicOnStart;										//Choose whether to continue playing menu music or start a new music clip
     public CanvasGroup fadeOutImageCanvasGroup;                         //Canvas group used to fade alpha of image which fades in before changing scenes
@@ -97,8 +96,9 @@ public class StartOptions : MonoBehaviour {
 		//Hide the main menu UI element
 		showPanels.HideMenu ();
 
-		//Load the selected scene, by scene index number in build settings
-		SceneManager.LoadScene (sceneToStart);
+        SceneManager.LoadScene( 1, LoadSceneMode.Additive);
+
+        print("fired");
 	}
 
 	public void HideDelayed()

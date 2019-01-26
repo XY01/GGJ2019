@@ -4,6 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum State
+{
+    Menu,
+    LevelSelect,
+    Playing,
+    Paused,
+    Cutscene,
+}
+
 public class ExperienceManager : MonoBehaviour
 {
     public static ExperienceManager Instance;
@@ -20,21 +29,11 @@ public class ExperienceManager : MonoBehaviour
         Instance = this;
     }
 
-    public enum State
-    {
-        Menu,
-        LevelSelect,
-        Playing,
-        Paused,
-        Cutscene,
-    }
-
-    State _State = State.Playing;
-    State CurrentState { get { return _State; } }
+    public State _State;
 
     void Update()
     {
-        if(CurrentState == State.Playing)
+        if(_State == State.Playing)
         {
             _TimeTaken += Time.deltaTime;
             _TimeReadout.text = _TimeTaken.ToString("F2");

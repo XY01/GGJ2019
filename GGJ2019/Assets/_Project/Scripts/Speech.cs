@@ -11,10 +11,12 @@ public class Speech : MonoBehaviour
     public GameObject _Echidna;
     float timer = 0;
     int randoTimeTillTalk;
+
     private void Start()
     {
         SetRandoTime();
     }
+
     private void Update()
     {
         transform.position = FindObjectOfType<EchidnaController>().gameObject.transform.position;
@@ -25,10 +27,12 @@ public class Speech : MonoBehaviour
             timer = 0;
         }
     }
+
     void SetRandoTime()
     {
         randoTimeTillTalk = Random.Range(4, 20);
     }
+
     void Talk()
     {
         int selectedSpeech = Random.Range(0, _SpeechText.Length);
