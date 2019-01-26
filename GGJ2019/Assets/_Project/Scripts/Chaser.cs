@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.AI;
 public class Chaser : MonoBehaviour
 {
-    public GameObject StarterPoint;
+    private Vector3 _StarterPoint;
     public float _RangeMax;
     private NavMeshAgent _Nav;
     public PlayerController[] _Players;
     // Update is called once per frame
     private void Start()
     {
+        _StarterPoint = transform.position;
         _Nav = GetComponent<NavMeshAgent>();
         _Players = FindObjectsOfType<PlayerController>();
     }
@@ -21,15 +22,15 @@ public class Chaser : MonoBehaviour
 
         foreach (PlayerController player in _Players)
         {
-            Debug.Log(Vector3.Distance(player.transform.position, StarterPoint.transform.position));
-            if(Vector3.Distance(player.transform.position, StarterPoint.transform.position) < _RangeMax)
+            Debug.Log(Vector3.Distance(player.transform.position, _StarterPoint));
+            if(Vector3.Distance(player.transform.position, _StarterPoint) < _RangeMax)
             {
                 _Nav.destination = player.transform.position;
                 Debug.Log("Should be moving");
             }
             else
             {
-                _Nav.destination = StarterPoint.transform.position;
+                _Nav.destination = _StarterPoint;
             }
         }
     }
