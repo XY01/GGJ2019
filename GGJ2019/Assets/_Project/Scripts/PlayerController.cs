@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour
         Roaming,
         InteractingEnvironment,
         InteractingEchidna,
+        PushingEchidna,
     }
 
     // States
@@ -30,6 +32,7 @@ public class PlayerController : MonoBehaviour
 
     public Transform _PickupPosition;
 
+    EchidnaController _Echidna;
     iInteractable _ActiveInteractable;
     List<iInteractable> _InteractablesInRange = new List<iInteractable>();
 
@@ -49,11 +52,13 @@ public class PlayerController : MonoBehaviour
 
     // Debug
     public bool _LogInteractables = false;
+    public Text _DebugText;
 
     void Start()
     {
         _RB = GetComponent<Rigidbody>();
         _Pos = transform.position;
+        _Echidna = FindObjectOfType<EchidnaController>();
     }
 
     void Update()
@@ -116,6 +121,16 @@ public class PlayerController : MonoBehaviour
                 EndInteraction();
         }
         #endregion
+
+        // if pushing the echidna
+        if (_State == State.PushingEchidna) 
+        {
+            // if echidna isnt being push set state back to roaming
+            if (_Echidna.CurrentState != EchidnaController.State.BeingPushed)
+                SetState(State.Roaming);
+        }
+
+        _DebugText.text = name + " State: " + _State.ToString();
     }
 
     void SetState(State newState)
@@ -129,6 +144,10 @@ public class PlayerController : MonoBehaviour
             _State = newState;
         }
         else if (newState == State.InteractingEchidna)
+        {
+            _State = newState;
+        }
+        else if (newState == State.PushingEchidna)
         {
             _State = newState;
         }
@@ -172,6 +191,8 @@ public class PlayerController : MonoBehaviour
         if(interactable.GetGameObject().layer == SRLayers.Echidna)
         {
             SetState(State.InteractingEchidna);
+
+            EchidnaController echidna = _ActiveInteractable.GetGameObject().GetComponent<EchidnaController>();
         }
         else if(interactable.GetGameObject().layer == SRLayers.Interactables)
         {
@@ -254,6 +275,27 @@ public class PlayerController : MonoBehaviour
                 print(other.GetComponent<iInteractable>().GetGameObject().name + " out of range");
 
             _InteractablesInRange.Remove(other.GetComponent<iInteractable>());
+
+            // if the trigger is the echidna and you are pushing
+            if (_State == State.PushingEchidna && other.GetComponent<iInteractable>().GetGameObject().GetComponent<EchidnaController>())
+                SetState(State.Roaming);
+        }
+    }
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.layer == SRLayers.Echidna)
+        {
+            collision.gameObject.GetComponent<EchidnaController>().BeginInteraction(this);
+            SetState(State.PushingEchidna);
+        }
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.layer == SRLayers.Echidna)
+        {           
+            collision.gameObject.GetComponent<EchidnaController>().BeginInteraction(this);
+            SetState(State.PushingEchidna);
         }
     }
     #endregion
