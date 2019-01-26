@@ -16,6 +16,7 @@ ModelImporter:
     400008: LogAll
     400010: pCylinder2
     2100000: lambert1
+    2100002: lambert2
     2300000: Log1
     2300002: Log2
     2300004: Log3
