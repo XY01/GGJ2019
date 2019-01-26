@@ -5,9 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Interactable_Breakable : MonoBehaviour, iInteractable
 {
-    Rigidbody _RB;
-    Collider _Collider;
-    Transform _OriginalParent;
 
     PlayerController _InteractingPlayer;
 
@@ -15,14 +12,6 @@ public class Interactable_Breakable : MonoBehaviour, iInteractable
     public float _Health;
     public float _InteractionStrength;
     public GameObject[] _Segments;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        _RB = GetComponent<Rigidbody>();
-        _Collider = GetComponent<Collider>();
-        _OriginalParent = transform.parent;
-    }
 
     #region Interactable interface methods
     public GameObject GetGameObject()
@@ -44,14 +33,6 @@ public class Interactable_Breakable : MonoBehaviour, iInteractable
 
     public void EndInteraction(PlayerController player)
     {
-        GetComponent<MeshRenderer>().enabled = false;
-        GetComponent<BoxCollider>().enabled = false;
-
-        foreach (GameObject segment in _Segments)
-        {
-            segment.SetActive(true);
-            segment.GetComponent<Rigidbody>().isKinematic = false;
-        }
 
     }
 
@@ -62,9 +43,18 @@ public class Interactable_Breakable : MonoBehaviour, iInteractable
     void ReduceHealth()
     {
         _Health -= _InteractionStrength;
+        print(_Health);
 
-        if (_Health >= 0f)
+        if (_Health <= 0f)
         {
+            GetComponent<MeshRenderer>().enabled = false;
+            GetComponent<BoxCollider>().enabled = false;
+
+            foreach (GameObject segment in _Segments)
+            {
+                segment.SetActive(true);
+                segment.GetComponent<Rigidbody>().isKinematic = false;
+            }
             _InteractingPlayer.InteractableActionComplete();
         }
     }
