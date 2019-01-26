@@ -38,7 +38,8 @@ public class PlayerController : MonoBehaviour
     Vector3 _InputDirection;
     float _InputMagnitude;
     public float _InputMagScaler = 1;
-    Vector3 InputVector { get { return _InputDirection * _InputMagnitude * _InputMagScaler; } }
+    public float _TerrainVelocityScaler = 1;
+    Vector3 InputVector { get { return _InputDirection * _InputMagnitude * _InputMagScaler * _TerrainVelocityScaler; } }
 
     GameObject _RaycastHitObject;
     GameObject _LastRaycastHitObject;
@@ -100,14 +101,20 @@ public class PlayerController : MonoBehaviour
         // Modulate input vector in case in passive trigger areas      TODO works for now but needs modulation
         if (_Debug_StickyMove)
         {
+            _TerrainVelocityScaler = .3f;
+
+            /*
             // Smooth the input mag
             newInputMag = Mathf.Lerp(_InputMagnitude, newInputMag * .9f, Time.deltaTime * .5f);
 
             // Set input dir
             newInputDir = Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 10);
+            */
         }
         else if (_Debug_SlipperyMove) //TODO 
         {
+            _TerrainVelocityScaler = 2f;
+
             // Smooth the input mag
             newInputMag = newInputMag * 2f;// Mathf.Lerp(_InputMagnitude, newInputMag * 2f, Time.deltaTime * 6);
 
@@ -123,6 +130,7 @@ public class PlayerController : MonoBehaviour
         if (InputVector != Vector3.zero)
             transform.LookAt(transform.position + InputVector);
 
+        
         // Raycast forward to see if we are blocked by terrain
         RaycastHit forwardHit;
         _FwdRay = new Ray(transform.position, _InputDirection);
@@ -140,6 +148,7 @@ public class PlayerController : MonoBehaviour
         {
             _RaycastHitObject = null;
         }
+        
 
         
         // raycast out to all the local interactables and find if any are slowing down the velociutyt scaler    
@@ -179,7 +188,7 @@ public class PlayerController : MonoBehaviour
 
 
         // Update pos
-            _RB.isKinematic = true;
+        _RB.isKinematic = true;
         _Pos += InputVector * Time.deltaTime * _Speed;
         transform.position = _Pos;
         
@@ -348,9 +357,9 @@ public class PlayerController : MonoBehaviour
     {
         if (other.GetComponent<iInteractable>() != null)
         {
-            if (other.GetComponent<Interactable_Passive>())
+            if (other.GetComponent<TerrainZone>())
             {
-                other.GetComponent<Interactable_Passive>().BeginInteraction(this);
+                other.GetComponent<TerrainZone>().BeginInteraction(this);
             }
             else
             {
@@ -367,9 +376,9 @@ public class PlayerController : MonoBehaviour
     {
         if (other.GetComponent<iInteractable>() != null)
         {
-            if (other.GetComponent<Interactable_Passive>())
+            if (other.GetComponent<TerrainZone>())
             {
-                other.GetComponent<Interactable_Passive>().ContinueInteraction(this);
+                other.GetComponent<TerrainZone>().ContinueInteraction(this);
             }
         }
     }
@@ -379,9 +388,9 @@ public class PlayerController : MonoBehaviour
         if (other.GetComponent<iInteractable>() != null)
         {
 
-            if (other.GetComponent<Interactable_Passive>())
+            if (other.GetComponent<TerrainZone>())
             {
-                other.GetComponent<Interactable_Passive>().EndInteraction(this);
+                other.GetComponent<TerrainZone>().EndInteraction(this);
             }
             else
             {
