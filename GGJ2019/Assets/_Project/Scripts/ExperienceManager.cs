@@ -11,8 +11,7 @@ public class ExperienceManager : MonoBehaviour
     private float _TimeTaken;
 
     public Text _EchidnaDebug;
-    public Text _PlayerOneDebug;
-    public Text _PlayerTwoDebug;
+    public Text[] _PlayerDebugs;
     public Text _Message;
 
 

@@ -181,7 +181,7 @@ public class PlayerController : MonoBehaviour
                 SetState(State.Roaming);
         }
 
-            ExperienceManager.Instance._PlayerOneDebug.text = name + " State: " + _State.ToString();
+            ExperienceManager.Instance._PlayerDebugs[(int)_Player].text = name + " State: " + _State.ToString();
     }
 
     void SetState(State newState)
