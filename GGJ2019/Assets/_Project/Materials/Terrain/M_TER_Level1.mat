@@ -113,13 +113,13 @@ Material:
     - _Mode: 0
     - _Occlusion: 0
     - _Occlusion2: 0
-    - _Occlusion3: 1
+    - _Occlusion3: 0
     - _OcclusionStrength: 1
     - _Parallax: -0.05
-    - _Parallax2: -0.01
-    - _Parallax3: -0.01
+    - _Parallax2: -0.05
+    - _Parallax3: -0.05
     - _ParallaxInterpolation: 15
-    - _Smoothness: 0
+    - _Smoothness: 1
     - _Smoothness2: 0
     - _Smoothness3: 0
     - _SmoothnessTextureChannel: 0
@@ -143,9 +143,9 @@ Material:
     - _useFlowMap3: 0
     - _useFlowMapGlobal: 0
     - _useHeightBasedBlending: 0
-    - _useP1_2: 1
-    - _useP1_3: 1
-    - _useParallax: 1
+    - _useP1_2: 0
+    - _useP1_3: 0
+    - _useParallax: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
