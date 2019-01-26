@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4130082714623260637}
   - component: {fileID: 4130082714623260636}
   - component: {fileID: 1637859116}
+  - component: {fileID: 8283850106507472937}
   m_Layer: 10
   m_Name: Echidna
   m_TagString: Untagged
@@ -125,13 +126,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _BasePerlForceScaler: 8
   _BasePerlfieldScaler: 0.3
-  _IdleTimeoutDuration: 3
+  _IdleTimeoutDuration: 30
   _PushingTimeoutDuration: 2
   _ControllableRadius: 1.5
   _PerceptionRadius: 1.5
   _DebugPerlinField: 0
   _DebugText: {fileID: 0}
 --- !u!135 &1637859116
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4130082714623260614}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &8283850106507472937
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
