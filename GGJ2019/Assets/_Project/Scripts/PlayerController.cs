@@ -365,6 +365,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_Debug)
             print(_ActiveInteractable.gameObject.name + " interaction complete");
+
         EndInteraction();
     }
     #endregion
