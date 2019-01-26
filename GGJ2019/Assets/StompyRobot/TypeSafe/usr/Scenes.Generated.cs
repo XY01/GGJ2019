@@ -21,35 +21,42 @@ public sealed class SRScenes {
     
     private const string _tsInternal = "1.3.2-Unity5";
     
-    public static global::TypeSafe.Scene Master {
+    public static global::TypeSafe.Scene TitleScreen {
         get {
             return @__all[0];
         }
     }
     
-    public static global::TypeSafe.Scene Proto_Movement {
+    public static global::TypeSafe.Scene LevelOne {
         get {
             return @__all[1];
         }
     }
     
-    public static global::TypeSafe.Scene TitleScreen {
+    public static global::TypeSafe.Scene ScoreScreen {
         get {
             return @__all[2];
         }
     }
     
-    public static global::TypeSafe.Scene ScoreScreen {
+    public static global::TypeSafe.Scene Master {
         get {
             return @__all[3];
         }
     }
     
+    public static global::TypeSafe.Scene Proto_Movement {
+        get {
+            return @__all[4];
+        }
+    }
+    
     private static global::System.Collections.Generic.IList<global::TypeSafe.Scene> @__all = new global::System.Collections.ObjectModel.ReadOnlyCollection<global::TypeSafe.Scene>(new global::TypeSafe.Scene[] {
-                new global::TypeSafe.Scene("Master", 0),
-                new global::TypeSafe.Scene("Proto Movement", 1),
-                new global::TypeSafe.Scene("TitleScreen", 2),
-                new global::TypeSafe.Scene("ScoreScreen", 3)});
+                new global::TypeSafe.Scene("TitleScreen", 0),
+                new global::TypeSafe.Scene("LevelOne", 1),
+                new global::TypeSafe.Scene("ScoreScreen", 2),
+                new global::TypeSafe.Scene("Master", 3),
+                new global::TypeSafe.Scene("Proto Movement", 4)});
     
     public static global::System.Collections.Generic.IList<global::TypeSafe.Scene> All {
         get {
