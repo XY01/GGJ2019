@@ -23,12 +23,14 @@ public class EchidnaController : MonoBehaviour, iInteractable
     float _DrunkenessNorm = 0;  // How much booze he has drank
     float _FullnessNorm = 0;    // How much food he has eaten
 
+    float _MaxSpeed = 2;
+    
+
     // Movement noise
     float _PerlinOffset = 0;
     public float _BasePerlForceScaler = 1;
     public float _BasePerlfieldScaler = 1;
     float _PerlOffset = 0;
-
 
     // State vars - Idle
     [Header("State variables")]
@@ -73,6 +75,10 @@ public class EchidnaController : MonoBehaviour, iInteractable
         }
         else if (_State == State.BeingPushed)
         {
+            //LimitVelocity();
+            //_RB.AddForce(GetPerlinForce(transform.position, _BasePerlfieldScaler, _BasePerlForceScaler, _PerlinOffset));
+            
+
             // Don't move while idle timer accumulates
             _StateTimer += Time.deltaTime;
 
@@ -158,6 +164,14 @@ public class EchidnaController : MonoBehaviour, iInteractable
         }
 
         print(name + " State set to: " + _State.ToString());
+    }
+      
+    void LimitVelocity()
+    {
+        if(_RB.velocity.magnitude > _MaxSpeed)
+        {
+            _RB.velocity = _RB.velocity.normalized * _MaxSpeed;
+        }
     }
 
     Vector3 GetDirectionTowardInteractable()
