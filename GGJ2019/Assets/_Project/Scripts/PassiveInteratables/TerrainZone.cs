@@ -5,6 +5,7 @@ using UnityEngine;
 public class TerrainZone : MonoBehaviour, iInteractable
 {
     public float _TerrainVelocityScaler = .5f;
+    public Vector3 _Force = Vector3.zero;
 
     #region Interactable interface methods
     public GameObject GetGameObject()
