@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
         InteractingEnvironment,
         InteractingEchidna,
         PushingEchidna,
+        OutOfControl,
     }
     public enum ControlType
     {
@@ -73,6 +74,15 @@ public class PlayerController : MonoBehaviour
     public bool _Debug_StickyMove = false;
     public bool _Debug_SlipperyMove = false;
 
+    // Testing
+    void AddForce(Vector3 force)
+    {
+        _RB.isKinematic = false;
+        //_RB.AddForce(force);
+        _RB.velocity = force;
+        SetState(State.OutOfControl);
+    }
+
     void Start()
     {
         _RB = GetComponent<Rigidbody>();
@@ -84,7 +94,22 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // clean interactables list
         _InteractablesInRange.RemoveAll(item => item == null);
+
+        if (Input.GetKeyDown(KeyCode.F))
+            AddForce(new Vector3(Random.insideUnitCircle.x, 0, Random.insideUnitCircle.y) * 2);
+
+        if (_State == State.OutOfControl)
+        {
+            if(_RB.velocity.magnitude < .001f)
+            {
+                SetState(State.Roaming);
+            }
+
+            return;
+        }
+
 
         #region movement
         Vector3 newInputVec = Vector3.zero;
@@ -283,8 +308,8 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        if(ExperienceManager.Instance != null)
-            ExperienceManager.Instance._PlayerDebugs[(int)_Player].text = name + " State: " + _State.ToString();
+        if(ExperienceManager.Instance != null && _Debug)
+            ExperienceManager.Instance._PlayerDebugs[0].text = name + " State: " + _State.ToString();
     }
 
     float MassToVelocityScaler(float mass)
@@ -310,8 +335,12 @@ public class PlayerController : MonoBehaviour
         {
             _State = newState;
         }
+        else if (newState == State.OutOfControl)
+        {
+            _State = newState;
+        }
 
-        if(_Debug)
+        if (_Debug)
             print(name + " state set to : " + _State.ToString());
     }
 
