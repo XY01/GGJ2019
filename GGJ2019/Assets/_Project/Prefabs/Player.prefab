@@ -34,7 +34,7 @@ Transform:
   m_Children:
   - {fileID: 1951176794252454448}
   - {fileID: 1770680184916935584}
-  - {fileID: 512515064569649956}
+  - {fileID: 8290754220949252560}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -110,10 +110,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _State: 0
   _Player: 0
-  _ControlType: 1
   _PickupPosition: {fileID: 1770680184916935584}
   _Speed: 10
+  _InputMagScaler: 1
   _Radius: 0.15
+  _LogInteractables: 0
+  _DebugText: {fileID: 0}
+  _Debug_StickyMove: 0
+  _Debug_SlipperyMove: 0
 --- !u!54 &1951176792879214948
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -284,7 +288,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!1001 &512515064569512356
+--- !u!1001 &8290754220949648208
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -301,7 +305,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f096c6b826959b144a97bb4323484d0b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.484
+      value: -0.256
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: f096c6b826959b144a97bb4323484d0b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -341,9 +345,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f096c6b826959b144a97bb4323484d0b, type: 3}
---- !u!4 &512515064569649956 stripped
+--- !u!4 &8290754220949252560 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: f096c6b826959b144a97bb4323484d0b,
     type: 3}
-  m_PrefabInstance: {fileID: 512515064569512356}
+  m_PrefabInstance: {fileID: 8290754220949648208}
   m_PrefabAsset: {fileID: 0}
