@@ -86,22 +86,22 @@ public class PlayerController : MonoBehaviour
         newInputMag = newInputVec.magnitude;
         newInputDir = newInputVec.normalized;
 
-        // Modulate input vector in case in passive trigger areas
+        // Modulate input vector in case in passive trigger areas      TODO works for now but needs modulation
         if (_Debug_StickyMove)
         {
             // Smooth the input mag
-            newInputMag = Mathf.Lerp(_InputMagnitude, newInputMag * .65f, Time.deltaTime * .5f);
+            newInputMag = Mathf.Lerp(_InputMagnitude, newInputMag * .9f, Time.deltaTime * .5f);
 
             // Set input dir
-            // = newInputDir;// Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 1);
+            newInputDir = Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 6);
         }
-        else if (_Debug_SlipperyMove)
+        else if (_Debug_SlipperyMove) //TODO 
         {
             // Smooth the input mag
-            newInputMag = Mathf.Lerp(_InputMagnitude, newInputMag * 2f, Time.deltaTime * 6);
+            newInputMag = newInputMag * 2f;// Mathf.Lerp(_InputMagnitude, newInputMag * 2f, Time.deltaTime * 6);
 
             // Smooth the input dir
-            newInputDir = Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 1);
+            newInputDir = Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 6);
         }
 
         _InputDirection = Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 8);
