@@ -173,7 +173,7 @@ public class PlayerController : MonoBehaviour
         #endregion
 
         _InputDirection = newInputDir;// Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 10);
-        _InputMagnitude = Mathf.Lerp(_InputMagnitude, newInputMag, Time.deltaTime * 10);
+        _InputMagnitude = newInputMag;// Mathf.Lerp(_InputMagnitude, newInputMag, Time.deltaTime * 10);
 
         // Rotation
         if (FinalMovementVector != Vector3.zero)
@@ -247,7 +247,7 @@ public class PlayerController : MonoBehaviour
         
 
         // Raycast down so we stay on ground. TO DO smooth out later        
-        Ray rayDown = new Ray(transform.position, Vector3.down);        
+        Ray rayDown = new Ray(transform.position + (Vector3.up * _Radius), Vector3.down);        
         if (Physics.Raycast(rayDown, out forwardHit, 10, _ForwardRaycastLayerMask, QueryTriggerInteraction.Ignore))
         {
             transform.position = forwardHit.point + (Vector3.up * _Radius);
