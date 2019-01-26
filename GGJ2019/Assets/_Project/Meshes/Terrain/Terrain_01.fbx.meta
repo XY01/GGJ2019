@@ -5,12 +5,18 @@ ModelImporter:
   fileIDToRecycleName:
     100000: COL_Terrain
     100002: //RootNode
+    100004: COL_Terrain_01
     400000: COL_Terrain
     400002: //RootNode
+    400004: COL_Terrain_01
     2100000: phong1
     2300000: COL_Terrain
+    2300002: COL_Terrain_01
     3300000: COL_Terrain
+    3300002: COL_Terrain_01
     4300000: COL_Terrain
+    4300002: COL_Terrain_01
+    2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
     importMaterials: 1

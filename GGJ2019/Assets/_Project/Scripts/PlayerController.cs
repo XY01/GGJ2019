@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     Vector3 InputVector { get { return _InputDirection * _InputMagnitude * _InputMagScaler; } }
 
     GameObject _RaycastHitObject;
+    GameObject _LastRaycastHitObject;
     float _RayCastHitDist = 100;
 
     // Height Y
@@ -53,7 +54,9 @@ public class PlayerController : MonoBehaviour
     Ray _FwdRay;
     //bool _IsMoveBlocked = false;
 
-    public LayerMask _MovementBlockingLayerMask;
+    public LayerMask _ForwardRaycastLayerMask;
+    public LayerMask _DownwardRaycastLayerMask;
+    public LayerMask _InteractableLayerMask;
 
     // Debug
     public bool _LogInteractables = false;
@@ -120,51 +123,61 @@ public class PlayerController : MonoBehaviour
             transform.LookAt(transform.position + InputVector);
 
         // Raycast forward to see if we are blocked by terrain
-        RaycastHit hit;
-        _FwdRay = new Ray(transform.position, newInputVec);
+        RaycastHit forwardHit;
+        _FwdRay = new Ray(transform.position, _InputDirection);
 
         // Raycast out to find objects that will block movement. Ignore triggers
-        if (Physics.Raycast(_FwdRay, out hit, _Radius * 3, _MovementBlockingLayerMask, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(_FwdRay, out forwardHit, _Radius * 3, _ForwardRaycastLayerMask, QueryTriggerInteraction.Ignore))
         {
-            _RaycastHitObject = hit.collider.gameObject;
-            _RayCastHitDist = hit.distance;
-
-            if(hit.distance < _Radius)
-                _InputDirection += hit.normal;
+            _RaycastHitObject = forwardHit.collider.gameObject;
+            _RayCastHitDist = forwardHit.distance;
+            
+            if (forwardHit.distance < _Radius)
+                _InputDirection += forwardHit.normal;
         }
         else
         {
             _RaycastHitObject = null;
         }
-
         
-        // Update input scaler
-        //if (!_IsMoveBlocked)
+        // raycast out to all the local interactables and find if any are slowing down the velociutyt scaler    
+        // TO DO dot the forward with the ray to see if it is in front of roughly
+        bool lowerScalerFound = false;
+        foreach(iInteractable i in _InteractablesInRange)
         {
-            /*
-            if (_RaycastHitObject != null && _RaycastHitObject.layer != SRLayers.Terrain && _RayCastHitDist < _Radius * 3f)
-            {               
-                float newScaler = Mathf.Clamp01(1 - (_RaycastHitObject.GetComponent<Rigidbody>().mass/10));
+            // Raycast forward to see if we are blocked by terrain
+            RaycastHit interactableHit;
+            Ray rayToInteractable = new Ray(transform.position, i.GetGameObject().transform.position - transform.position);
 
-                if (newScaler < _InputMagScaler) _InputMagScaler = newScaler;
+            // Raycast out to find objects that will block movement. Ignore triggers
+            if (Physics.Raycast(rayToInteractable, out interactableHit, _Radius * 1.2f, _InteractableLayerMask, QueryTriggerInteraction.Ignore))
+            {
+                if (Vector3.Dot(rayToInteractable.direction, transform.forward) > .3f)
+                {
 
-                print("In mass range of  " + newScaler);
-            }
-            else
-                _InputMagScaler = Mathf.Lerp(_InputMagScaler, 1, Time.deltaTime * 16);
-            */
-
-            // Update pos
-            _RB.isKinematic = true;
-            _Pos += InputVector * Time.deltaTime * _Speed;
-            transform.position = _Pos;
+                    lowerScalerFound = true;
+                    float newScaler = Mathf.Clamp01(1 - (i.GetGameObject().GetComponent<Rigidbody>().mass / 10));
+                    if (newScaler < _InputMagScaler) _InputMagScaler = newScaler;
+                    break;
+                }
+            }            
         }
+
+        if(!lowerScalerFound)
+            _InputMagScaler = Mathf.Lerp(_InputMagScaler, 1, Time.deltaTime * 8);
+          
+
+        // Update pos
+        _RB.isKinematic = true;
+        _Pos += InputVector * Time.deltaTime * _Speed;
+        transform.position = _Pos;
+        
 
         // Raycast down so we stay on ground. TO DO smooth out later        
         Ray rayDown = new Ray(transform.position, Vector3.down);        
-        if (Physics.Raycast(rayDown, out hit, 10, _MovementBlockingLayerMask, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(rayDown, out forwardHit, 10, _ForwardRaycastLayerMask, QueryTriggerInteraction.Ignore))
         {
-            transform.position = hit.point + (Vector3.up * _Radius);
+            transform.position = forwardHit.point + (Vector3.up * _Radius);
         }
         #endregion
 
@@ -380,6 +393,7 @@ public class PlayerController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawLine(transform.position, transform.position + InputVector);
+        Gizmos.DrawWireSphere(transform.position, _Radius * 2);
 
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(transform.position, transform.position + _FwdRay.direction);
