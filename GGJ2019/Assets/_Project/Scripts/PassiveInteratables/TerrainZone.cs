@@ -7,7 +7,12 @@ public class TerrainZone : MonoBehaviour
     public float _TerrainVelocityScaler = .5f;
     public Vector3 _LocalizedForce = Vector3.zero;
     public Vector3 WorldSpaceForce { get { return transform.TransformDirection(_LocalizedForce); } }
-    
+
+    private void Start()
+    {
+        gameObject.layer = SRLayers.Interactables;
+    }
+
     public void BeginInteraction(PlayerController player)
     {
         

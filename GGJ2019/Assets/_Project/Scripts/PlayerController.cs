@@ -186,8 +186,11 @@ public class PlayerController : MonoBehaviour
             Ray rayToInteractable = new Ray(transform.position, i.gameObject.transform.position - transform.position);
 
             // Raycast out to find objects that will block movement. Ignore triggers
-            if (Physics.Raycast(rayToInteractable, out interactableHit, _Radius * 1.2f, _InteractableLayerMask, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(rayToInteractable, out interactableHit, _Radius * 2.5f, _InteractableLayerMask, QueryTriggerInteraction.Ignore))
             {
+                if(_Debug)
+                    print("Hit : " + interactableHit.collider.name +   "   dist: " + interactableHit.distance);
+
                 if (Vector3.Dot(rayToInteractable.direction, transform.forward) > .3f)
                 {
                     lowerScalerFound = true;
@@ -308,7 +311,8 @@ public class PlayerController : MonoBehaviour
             _State = newState;
         }
 
-        print(name + " state set to : " + _State.ToString());
+        if(_Debug)
+            print(name + " state set to : " + _State.ToString());
     }
 
 
@@ -327,7 +331,8 @@ public class PlayerController : MonoBehaviour
     #region Interaction methods
     void TryInteract()
     {
-        print(name + " trying to interact. Interactables in range: " + _InteractablesInRange.Count);
+        if (_Debug)
+            print(name + " trying to interact. Interactables in range: " + _InteractablesInRange.Count);
 
         if(_InteractablesInRange.Count == 0)
         {
@@ -354,7 +359,8 @@ public class PlayerController : MonoBehaviour
 
     void BeginInteraction(Interactable interactable)
     {
-        print(name + " begun interaction with " + interactable.gameObject.name  + "  from layer " + interactable.gameObject.layer.ToString());
+        if (_Debug)
+            print(name + " begun interaction with " + interactable.gameObject.name  + "  from layer " + interactable.gameObject.layer.ToString());
 
         /*
         if (interactable.gameObject.layer == SRLayers.Echidna)
@@ -383,7 +389,8 @@ public class PlayerController : MonoBehaviour
     {
         if (_ActiveInteractable != null)
         {
-            print(name + " ended interaction with " + _ActiveInteractable.gameObject.name);
+            if (_Debug)
+                print(name + " ended interaction with " + _ActiveInteractable.gameObject.name);
             _ActiveInteractable.EndInteraction(this);
             _ActiveInteractable = null;
         }
@@ -394,17 +401,21 @@ public class PlayerController : MonoBehaviour
     void FailToInteract()
     {
         // TODO play animation / particles
-        print(name + " failed to interact. No interactables in range");
+        if (_Debug)
+            print(name + " failed to interact. No interactables in range");
     }
 
     // Called by interactables once actions are complete
     public void InteractableActionComplete()
     {
-        print(_ActiveInteractable.gameObject.name + " interaction complete");
+        if (_Debug)
+            print(_ActiveInteractable.gameObject.name + " interaction complete");
+
         EndInteraction();
     }
     #endregion
-    
+
+    public bool _Debug = false;
     #region Triggers
     private void OnTriggerEnter(Collider other)
     {
@@ -465,6 +476,12 @@ public class PlayerController : MonoBehaviour
     #region Debug
     private void OnDrawGizmos()
     {
+        if (_Debug)
+        {
+            foreach (Interactable i in _InteractablesInRange)
+                Gizmos.DrawWireSphere(i.transform.position, .3f);
+        }
+
         Gizmos.DrawLine(transform.position, transform.position + FinalMovementVector);
         Gizmos.DrawWireSphere(transform.position, _Radius * 2);
 

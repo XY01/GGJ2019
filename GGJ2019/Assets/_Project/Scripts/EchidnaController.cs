@@ -117,7 +117,8 @@ public class EchidnaController : Interactable
             // If idle timeout is up then start to wander
             if (_StateTimer >= _StateTimeoutDuration)
             {
-                print(name + " consuming finsihed with timer at: " + _StateTimer + "   " + _StateTimeoutDuration);
+                if (_Debug)
+                    print(name + " consuming finsihed with timer at: " + _StateTimer + "   " + _StateTimeoutDuration);
                 SetState(State.Wander);
             }
         }
@@ -166,9 +167,10 @@ public class EchidnaController : Interactable
             _StateTimer = 0;
         }
 
-        print(name + " State set to: " + _State.ToString());
+        if(_Debug)
+            print(name + " State set to: " + _State.ToString());
     }
-      
+    public bool _Debug = false;
     void LimitVelocity()
     {
         if(_RB.velocity.magnitude > ScaledMaxSpeed)
@@ -236,7 +238,8 @@ public class EchidnaController : Interactable
 
     void Consume(EchidnaInteractable interactable)
     {
-        print(name + "Consumed: " + interactable.name);
+        if (_Debug)
+            print(name + "Consumed: " + interactable.name);
 
         if(interactable._Type == EchidnaInteractable.Type.Food)
         {
