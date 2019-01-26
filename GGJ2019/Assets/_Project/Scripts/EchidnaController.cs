@@ -141,7 +141,7 @@ public class EchidnaController : MonoBehaviour, iInteractable
 
     Vector3 GetDirectionTowardInteractable()
     {
-        return (transform.position - _ActiveInteractable.transform.position);
+        return (_ActiveInteractable.transform.position - transform.position);
     }
 
     EchidnaInteractable SearchForClosestInteractable()
