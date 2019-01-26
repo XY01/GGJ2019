@@ -26,8 +26,8 @@ public class PlayerController : MonoBehaviour
     public Transform _PickupPosition;
 
     EchidnaController _Echidna;
-    iInteractable _ActiveInteractable;
-    List<iInteractable> _InteractablesInRange = new List<iInteractable>();
+    Interactable _ActiveInteractable;
+    List<Interactable> _InteractablesInRange = new List<Interactable>();
 
     // Translation X Z
     Rigidbody _RB;
@@ -77,6 +77,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        _InteractablesInRange.RemoveAll(item => item == null);
+
         #region movement
         Vector3 newInputVec = Vector3.zero;
         Vector3 newInputDir = Vector3.zero;
@@ -148,17 +150,18 @@ public class PlayerController : MonoBehaviour
         {
             _RaycastHitObject = null;
         }
-        
 
-        
+
+
         // raycast out to all the local interactables and find if any are slowing down the velociutyt scaler    
         // TO DO dot the forward with the ray to see if it is in front of roughly
+        
         bool lowerScalerFound = false;
-        foreach (iInteractable i in _InteractablesInRange)
+        foreach (Interactable i in _InteractablesInRange)
         {
             // Raycast forward to see if we are blocked by terrain
             RaycastHit interactableHit;
-            Ray rayToInteractable = new Ray(transform.position, i.GetGameObject().transform.position - transform.position);
+            Ray rayToInteractable = new Ray(transform.position, i.gameObject.transform.position - transform.position);
 
             // Raycast out to find objects that will block movement. Ignore triggers
             if (Physics.Raycast(rayToInteractable, out interactableHit, _Radius * 1.2f, _InteractableLayerMask, QueryTriggerInteraction.Ignore))
@@ -166,7 +169,7 @@ public class PlayerController : MonoBehaviour
                 if (Vector3.Dot(rayToInteractable.direction, transform.forward) > .3f)
                 {
                     lowerScalerFound = true;
-                    float newScaler = MassToVelocityScaler( i.GetGameObject().GetComponent<Rigidbody>().mass );
+                    float newScaler = MassToVelocityScaler( i.gameObject.GetComponent<Rigidbody>().mass );
                     if (newScaler < _InputMagScaler) _InputMagScaler = newScaler;
                     break;
                 }
@@ -180,7 +183,7 @@ public class PlayerController : MonoBehaviour
 
         if (_State == State.InteractingEnvironment)
         {
-            float interactableInputScaler = MassToVelocityScaler(_ActiveInteractable.GetGameObject().GetComponent<Rigidbody>().mass);
+            float interactableInputScaler = MassToVelocityScaler(_ActiveInteractable.gameObject.GetComponent<Rigidbody>().mass);
 
             if (interactableInputScaler < _InputMagScaler)
                 _InputMagScaler = interactableInputScaler;
@@ -288,10 +291,10 @@ public class PlayerController : MonoBehaviour
 
         // Find closest interactable
         float closestDist = 999;
-        iInteractable closestInteractable = null;
+        Interactable closestInteractable = null;
         for (int i = 0; i < _InteractablesInRange.Count; i++)
         {
-            float dist = Vector3.Distance(transform.position, _InteractablesInRange[0].GetGameObject().transform.position);
+            float dist = Vector3.Distance(transform.position, _InteractablesInRange[0].gameObject.transform.position);
 
             if(dist < closestDist)
             {
@@ -303,16 +306,16 @@ public class PlayerController : MonoBehaviour
         BeginInteraction(closestInteractable);
     }
 
-    void BeginInteraction(iInteractable interactable)
+    void BeginInteraction(Interactable interactable)
     {
-        print(name + " begun interaction with " + interactable.GetGameObject().name  + "  from layer " + interactable.GetGameObject().layer.ToString());
+        print(name + " begun interaction with " + interactable.gameObject.name  + "  from layer " + interactable.gameObject.layer.ToString());
 
-        if (interactable.GetGameObject().layer == SRLayers.Echidna)
+        if (interactable.gameObject.layer == SRLayers.Echidna)
         {
             SetState(State.InteractingEchidna);
-            EchidnaController echidna = _ActiveInteractable.GetGameObject().GetComponent<EchidnaController>();
+            EchidnaController echidna = _ActiveInteractable.gameObject.GetComponent<EchidnaController>();
         }
-        else if (interactable.GetGameObject().layer == SRLayers.Interactables)
+        else if (interactable.gameObject.layer == SRLayers.Interactables)
         {
             SetState(State.InteractingEnvironment);
         }
@@ -330,7 +333,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_ActiveInteractable != null)
         {
-            print(name + " ended interaction with " + _ActiveInteractable.GetGameObject().name);
+            print(name + " ended interaction with " + _ActiveInteractable.gameObject.name);
             _ActiveInteractable.EndInteraction(this);
             _ActiveInteractable = null;
         }
@@ -347,7 +350,7 @@ public class PlayerController : MonoBehaviour
     // Called by interactables once actions are complete
     public void InteractableActionComplete()
     {
-        print(_ActiveInteractable.GetGameObject().name + " interaction complete");
+        print(_ActiveInteractable.gameObject.name + " interaction complete");
         EndInteraction();
     }
     #endregion
@@ -355,7 +358,7 @@ public class PlayerController : MonoBehaviour
     #region Triggers
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<iInteractable>() != null)
+        if (other.GetComponent<Interactable>() != null)
         {
             if (other.GetComponent<TerrainZone>())
             {
@@ -363,18 +366,18 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                _InteractablesInRange.Add(other.GetComponent<iInteractable>());
+                _InteractablesInRange.Add(other.GetComponent<Interactable>());
             }
 
             if (_LogInteractables)
-                print(other.GetComponent<iInteractable>().GetGameObject().name + " in range");
+                print(other.GetComponent<Interactable>().gameObject.name + " in range");
 
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.GetComponent<iInteractable>() != null)
+        if (other.GetComponent<Interactable>() != null)
         {
             if (other.GetComponent<TerrainZone>())
             {
@@ -385,7 +388,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<iInteractable>() != null)
+        if (other.GetComponent<Interactable>() != null)
         {
 
             if (other.GetComponent<TerrainZone>())
@@ -394,14 +397,14 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                _InteractablesInRange.Remove(other.GetComponent<iInteractable>());
+                _InteractablesInRange.Remove(other.GetComponent<Interactable>());
             }
 
             if (_LogInteractables)
-                print(other.GetComponent<iInteractable>().GetGameObject().name + " out of range");
+                print(other.GetComponent<Interactable>().gameObject.name + " out of range");
 
             // if the trigger is the echidna and you are pushing
-            if (_State == State.PushingEchidna && other.GetComponent<iInteractable>().GetGameObject().GetComponent<EchidnaController>())
+            if (_State == State.PushingEchidna && other.GetComponent<Interactable>().gameObject.GetComponent<EchidnaController>())
                 SetState(State.Roaming);
         }
     }

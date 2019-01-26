@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
-public class EchidnaController : MonoBehaviour, iInteractable
+public class EchidnaController : Interactable
 {
     public enum State
     {

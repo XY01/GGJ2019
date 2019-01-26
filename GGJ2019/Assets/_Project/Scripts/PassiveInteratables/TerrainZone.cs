@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TerrainZone : MonoBehaviour, iInteractable
+public class TerrainZone : Interactable
 {
     public float _TerrainVelocityScaler = .5f;
     public Vector3 _Force = Vector3.zero;
@@ -13,17 +13,17 @@ public class TerrainZone : MonoBehaviour, iInteractable
         return gameObject;
     }
 
-    public void BeginInteraction(PlayerController player)
+    public override void BeginInteraction(PlayerController player)
     {
         player._TerrainVelocityScaler = _TerrainVelocityScaler;
     }
 
-    public void ContinueInteraction(PlayerController player)
+    public override void ContinueInteraction(PlayerController player)
     {
 
     }
 
-    public void EndInteraction(PlayerController player)
+    public override void EndInteraction(PlayerController player)
     {
         player._TerrainVelocityScaler = 1;
     }

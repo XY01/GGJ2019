@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Interactable_PickAndPlace : MonoBehaviour, iInteractable
+public class Interactable_PickAndPlace : Interactable
 {
     Rigidbody _RB;
     Collider _Collider;
@@ -19,13 +19,8 @@ public class Interactable_PickAndPlace : MonoBehaviour, iInteractable
         _OriginalParent = transform.parent;
     }
 
-    #region Interactable interface methods
-    public GameObject GetGameObject()
-    {
-        return gameObject;
-    }
-
-    public void BeginInteraction(PlayerController player)
+    #region Interactable interface methods  
+    public override void BeginInteraction(PlayerController player)
     {
         transform.SetParent(player._PickupPosition);
         transform.localPosition = Vector3.zero;
@@ -38,11 +33,7 @@ public class Interactable_PickAndPlace : MonoBehaviour, iInteractable
         // play pick up particles or animation
     }
 
-    public void ContinueInteraction(PlayerController player)
-    {
-    }
-
-    public void EndInteraction(PlayerController player)
+    public override void EndInteraction(PlayerController player)
     {
         transform.SetParent(_OriginalParent);
         _RB.isKinematic = false;
