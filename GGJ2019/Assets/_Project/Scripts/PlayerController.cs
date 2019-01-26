@@ -33,7 +33,13 @@ public class PlayerController : MonoBehaviour
     Rigidbody _RB;
     Vector3 _Pos;
     public float _Speed = 10;
-    Vector3 _InputVector;
+
+    
+    Vector3 _InputDirection;
+    float _InputMagnitude;
+    Vector3 InputVector { get { return _InputDirection * _InputMagnitude; } }
+
+
 
     // Height Y
     public float _Radius = .15f;
@@ -49,6 +55,9 @@ public class PlayerController : MonoBehaviour
     public bool _LogInteractables = false;
     public Text _DebugText;
 
+    public bool _Debug_StickyMove = false;
+    public bool _Debug_SlipperyMove = false;
+
     void Start()
     {
         _RB = GetComponent<Rigidbody>();
@@ -59,24 +68,52 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         #region movement
+        Vector3 newInputVec = Vector3.zero;
+        Vector3 newInputDir = Vector3.zero;
+        float newInputMag = 0;
+
         if (_Player == Player.Player1)
         {
-            _InputVector.x = Input.GetAxis("HorizontalP1");
-            _InputVector.z = Input.GetAxis("VerticalP1");
+            newInputVec.x = Input.GetAxis("HorizontalP1");
+            newInputVec.z = Input.GetAxis("VerticalP1");
         }
         else
         {
-            _InputVector.x = Input.GetAxis("HorizontalP2");
-            _InputVector.z = Input.GetAxis("VerticalP2");
+            newInputVec.x = Input.GetAxis("HorizontalP2");
+            newInputVec.z = Input.GetAxis("VerticalP2");
         }
 
+        newInputMag = newInputVec.magnitude;
+        newInputDir = newInputVec.normalized;
+
+        // Modulate input vector in case in passive trigger areas
+        if (_Debug_StickyMove)
+        {
+            // Smooth the input mag
+            newInputMag = Mathf.Lerp(_InputMagnitude, newInputMag * .65f, Time.deltaTime * .5f);
+
+            // Set input dir
+            // = newInputDir;// Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 1);
+        }
+        else if (_Debug_SlipperyMove)
+        {
+            // Smooth the input mag
+            newInputMag = Mathf.Lerp(_InputMagnitude, newInputMag * 2f, Time.deltaTime * 6);
+
+            // Smooth the input dir
+            newInputDir = Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 1);
+        }
+
+        _InputDirection = Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 8);
+        _InputMagnitude = Mathf.Lerp(_InputMagnitude, newInputMag, Time.deltaTime * 8);
+
         // Rotation
-        if (_InputVector != Vector3.zero)
-            transform.LookAt(transform.position + _InputVector);
+        if (InputVector != Vector3.zero)
+            transform.LookAt(transform.position + InputVector);
 
         // Raycast forward so we stay on ground. TO DO smooth out later
         RaycastHit hit;
-        _FwdRay = new Ray(transform.position, _InputVector);
+        _FwdRay = new Ray(transform.position, InputVector);
         
         if (Physics.Raycast(_FwdRay, out hit))
             _IsMoveBlocked = hit.collider.gameObject.layer == SRLayers.Terrain && hit.distance < _Radius * 1.5f;
@@ -85,7 +122,7 @@ public class PlayerController : MonoBehaviour
         {
             // update pos
             _RB.isKinematic = true;
-            _Pos += _InputVector * Time.deltaTime * _Speed;
+            _Pos += InputVector * Time.deltaTime * _Speed;
             transform.position = _Pos;
         }
 
@@ -306,6 +343,8 @@ public class PlayerController : MonoBehaviour
     #region Debug
     private void OnDrawGizmos()
     {
+        Gizmos.DrawLine(transform.position, transform.position + InputVector);
+
         Gizmos.color = _IsMoveBlocked ? Color.red : Color.blue;
         Gizmos.DrawLine(transform.position, transform.position + _FwdRay.direction);
     }

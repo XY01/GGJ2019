@@ -16,8 +16,7 @@ public class ExperienceManager : MonoBehaviour
     State _State = State.Playing;
     State CurrentState { get { return _State; } }
 
-
-
+    
     void Start()
     {
         

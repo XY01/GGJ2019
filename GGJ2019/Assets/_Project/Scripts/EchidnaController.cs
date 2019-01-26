@@ -18,7 +18,6 @@ public class EchidnaController : MonoBehaviour, iInteractable
     public State CurrentState { get { return _State; } }
     Rigidbody _RB;
 
-  
 
     float _DrunkenessNorm = 0;  // How much booze he has drank
     float _FullnessNorm = 0;    // How much food he has eaten
