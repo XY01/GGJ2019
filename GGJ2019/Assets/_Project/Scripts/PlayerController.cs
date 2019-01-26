@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
 
     // Height Y
     public float _Radius = .15f;
-    float _YOffset = 0;
+    public float _HeightOffset = 0;
     
     // Rotation
     float _RotationSmoothing = 8;
@@ -148,7 +148,7 @@ public class PlayerController : MonoBehaviour
         
         if (Physics.Raycast(ray, out hit))
         {
-            transform.position = hit.point + (Vector3.up * _Radius);
+            transform.position = hit.point + (Vector3.up * _HeightOffset);
         }
         #endregion
 
