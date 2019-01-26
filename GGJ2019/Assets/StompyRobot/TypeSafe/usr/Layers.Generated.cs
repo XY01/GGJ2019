@@ -81,6 +81,12 @@ public sealed class SRLayers {
         }
     }
     
+    public static global::TypeSafe.Layer PickedUpInteractable {
+        get {
+            return @__all[10];
+        }
+    }
+    
     private static global::System.Collections.Generic.IList<global::TypeSafe.Layer> @__all = new global::System.Collections.ObjectModel.ReadOnlyCollection<global::TypeSafe.Layer>(new global::TypeSafe.Layer[] {
                 new global::TypeSafe.Layer("Default", 0),
                 new global::TypeSafe.Layer("TransparentFX", 1),
@@ -91,7 +97,8 @@ public sealed class SRLayers {
                 new global::TypeSafe.Layer("Terrain", 9),
                 new global::TypeSafe.Layer("Echidna", 10),
                 new global::TypeSafe.Layer("Interactables", 11),
-                new global::TypeSafe.Layer("Players", 12)});
+                new global::TypeSafe.Layer("Players", 12),
+                new global::TypeSafe.Layer("PickedUpInteractable", 13)});
     
     public static global::System.Collections.Generic.IList<global::TypeSafe.Layer> All {
         get {

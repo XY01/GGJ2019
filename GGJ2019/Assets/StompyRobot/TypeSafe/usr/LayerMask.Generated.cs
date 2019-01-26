@@ -44,4 +44,6 @@ public sealed class SRLayerMask {
     public const int Interactables = 2048;
     
     public const int Players = 4096;
+    
+    public const int PickedUpInteractable = 8192;
 }

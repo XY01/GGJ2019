@@ -7,5 +7,5 @@ public interface iInteractable
     void BeginInteraction(PlayerController player);
     void ContinueInteraction(PlayerController player);
     void EndInteraction(PlayerController player);    
-    GameObject GetGameObject();   
+    GameObject GetGameObject();
 }
