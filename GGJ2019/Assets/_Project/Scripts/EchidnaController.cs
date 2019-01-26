@@ -39,6 +39,8 @@ public class EchidnaController : MonoBehaviour, iInteractable
     public float _PushingTimeoutDuration = 2;
     int _PushingCount = 0;
 
+    EchidnaInteractable _ActiveInteractable;
+    List<EchidnaInteractable> _InteractablesInRange = new List<EchidnaInteractable>();
 
     public float _ControllableRadius = 1.5f;
     public float _PerceptionRadius = 1.5f;
@@ -65,7 +67,8 @@ public class EchidnaController : MonoBehaviour, iInteractable
             if (_StateTimer >= _IdleTimeoutDuration)
                 SetState(State.Wander);
 
-            ExperienceManager.Instance._EchidnaDebug.text = "Echidna - State: Idle.  Timer: " + _StateTimer + " / " + _IdleTimeoutDuration;
+            if(ExperienceManager.Instance != null)
+                ExperienceManager.Instance._EchidnaDebug.text = "Echidna - State: Idle.  Timer: " + _StateTimer + " / " + _IdleTimeoutDuration;
         }
         else if (_State == State.BeingPushed)
         {
@@ -77,11 +80,6 @@ public class EchidnaController : MonoBehaviour, iInteractable
                 SetState(State.Idle);
 
         }
-        else if (_State == State.Seeking)
-        {
-            // Seek toward target distraction
-            ExperienceManager.Instance._EchidnaDebug.text = "Echidna - State: Seeking. Active Distraction Object: ";
-        }
         else if (_State == State.Wander)
         {
             // Wander aimlessly until you come across a distraction
@@ -90,8 +88,22 @@ public class EchidnaController : MonoBehaviour, iInteractable
 
             // if stuck in one spot too long change the perl offset
             ExperienceManager.Instance._EchidnaDebug.text = "Echidna - State: Wandering.";
+
+            // Search for closest interactabl;e
+            EchidnaInteractable interactable = SearchForClosestInteractable();
+            if (interactable != null)
+            {
+                _ActiveInteractable = interactable;
+                SetState(State.Seeking);
+            }
         }
-    }
+        else if (_State == State.Seeking)
+        {
+            _RB.AddForce( GetDirectionTowardInteractable() );
+            // Seek toward target distraction
+            ExperienceManager.Instance._EchidnaDebug.text = "Echidna - State: Seeking. Active Distraction Object: ";
+        }        
+    }   
 
     void SetState(State state)
     {
@@ -105,18 +117,56 @@ public class EchidnaController : MonoBehaviour, iInteractable
             _State = state;
             _StateTimer = 0;
         }
-        else if(state == State.Seeking)
-        {
-            _State = state;
-            _StateTimer = 0;
-        }
         else if (state == State.Wander)
         {
             _State = state;
             _StateTimer = 0;
+
+            EchidnaInteractable interactable = SearchForClosestInteractable();
+            if (interactable != null)
+            {
+                _ActiveInteractable = interactable;
+                SetState(State.Seeking);
+            }
+        }
+        else if(state == State.Seeking)
+        {
+            _State = state;
+            _StateTimer = 0;
+
         }
 
         //print(name + " State set to: " + _State.ToString());
+    }
+
+    Vector3 GetDirectionTowardInteractable()
+    {
+        return (transform.position - _ActiveInteractable.transform.position);
+    }
+
+    EchidnaInteractable SearchForClosestInteractable()
+    {
+        print("Searching for interactable: " + _InteractablesInRange.Count);
+
+        EchidnaInteractable interactable = null;
+
+        if (_InteractablesInRange.Count > 0)
+        {
+            float closestDist = 999;
+            // Look for interactable in range
+            foreach (EchidnaInteractable e in _InteractablesInRange)
+            {
+                float newDist = Vector3.Distance(e.transform.position, transform.position);
+
+                if (newDist < closestDist)
+                {
+                    closestDist = newDist;
+                    interactable = e;
+                }
+            }
+        }
+
+        return interactable;
     }
 
     // Perlin force and movement
@@ -167,6 +217,24 @@ public class EchidnaController : MonoBehaviour, iInteractable
 
         if (_PushingCount == 0)
             SetState(State.Idle);
+    }
+    #endregion
+
+    #region Triggers
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<EchidnaInteractable>() != null)
+        {
+            _InteractablesInRange.Add(other.GetComponent<EchidnaInteractable>());
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<EchidnaInteractable>() != null)
+        {
+            _InteractablesInRange.Remove(other.GetComponent<EchidnaInteractable>());
+        }
     }
     #endregion
 
