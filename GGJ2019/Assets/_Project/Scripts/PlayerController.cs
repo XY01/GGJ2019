@@ -39,7 +39,8 @@ public class PlayerController : MonoBehaviour
     float _InputMagnitude;
     public float _InputMagScaler = 1;
     public float _TerrainVelocityScaler = 1;
-    Vector3 InputVector { get { return _InputDirection * _InputMagnitude * _InputMagScaler * _TerrainVelocityScaler; } }
+    Vector3 _ExternalForceVector = Vector3.zero;
+    Vector3 FinalMovementVector { get { return (_InputDirection * _InputMagnitude * _InputMagScaler * _TerrainVelocityScaler * _Speed) + (_ExternalForceVector); } }
 
     GameObject _RaycastHitObject;
     GameObject _LastRaycastHitObject;
@@ -129,8 +130,8 @@ public class PlayerController : MonoBehaviour
         _InputMagnitude = Mathf.Lerp(_InputMagnitude, newInputMag, Time.deltaTime * 10);
 
         // Rotation
-        if (InputVector != Vector3.zero)
-            transform.LookAt(transform.position + InputVector);
+        if (FinalMovementVector != Vector3.zero)
+            transform.LookAt(transform.position + FinalMovementVector);
 
         
         // Raycast forward to see if we are blocked by terrain
@@ -192,7 +193,7 @@ public class PlayerController : MonoBehaviour
 
         // Update pos
         _RB.isKinematic = true;
-        _Pos += InputVector * Time.deltaTime * _Speed;
+        _Pos += FinalMovementVector * Time.deltaTime;
         transform.position = _Pos;
         
 
@@ -379,9 +380,10 @@ public class PlayerController : MonoBehaviour
     {
         if (other.GetComponent<Interactable>() != null)
         {
-            if (other.GetComponent<TerrainZone>())
+            TerrainZone zone = other.GetComponent<TerrainZone>();
+            if (zone != null)
             {
-                other.GetComponent<TerrainZone>().ContinueInteraction(this);
+                _ExternalForceVector = zone.WorldSpaceForce;                
             }
         }
     }
@@ -390,10 +392,11 @@ public class PlayerController : MonoBehaviour
     {
         if (other.GetComponent<Interactable>() != null)
         {
-
-            if (other.GetComponent<TerrainZone>())
+            TerrainZone zone = other.GetComponent<TerrainZone>();
+            if (zone != null)
             {
-                other.GetComponent<TerrainZone>().EndInteraction(this);
+                _ExternalForceVector = Vector3.zero;
+                _TerrainVelocityScaler = 1;
             }
             else
             {
@@ -422,7 +425,7 @@ public class PlayerController : MonoBehaviour
     #region Debug
     private void OnDrawGizmos()
     {
-        Gizmos.DrawLine(transform.position, transform.position + InputVector);
+        Gizmos.DrawLine(transform.position, transform.position + FinalMovementVector);
         Gizmos.DrawWireSphere(transform.position, _Radius * 2);
 
         Gizmos.color = Color.blue;

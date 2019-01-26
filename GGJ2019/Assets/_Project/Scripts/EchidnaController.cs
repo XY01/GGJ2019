@@ -298,7 +298,11 @@ public class EchidnaController : Interactable
 
     private void OnTriggerStay(Collider other)
     {
-        print(other.name);
+        TerrainZone zone = other.GetComponent<TerrainZone>();
+        if (zone != null)
+        {
+            _RB.AddForce(zone.WorldSpaceForce);
+        }
     }
 
     private void OnTriggerExit(Collider other)

@@ -8,7 +8,6 @@ public class Interactable_PickAndPlace : Interactable
     Rigidbody _RB;
     Collider _Collider;
     Transform _OriginalParent;
-
     public float _NormalizedMass = .8f;
 
     // Start is called before the first frame update
@@ -26,7 +25,6 @@ public class Interactable_PickAndPlace : Interactable
         transform.localPosition = Vector3.zero;
 
         gameObject.layer = SRLayers.PickedUpInteractable;
-
         _RB.isKinematic = true;
 
         // turn rb to is kinematic
@@ -37,7 +35,6 @@ public class Interactable_PickAndPlace : Interactable
     {
         transform.SetParent(_OriginalParent);
         _RB.isKinematic = false;
-
         gameObject.layer = SRLayers.Interactables;
 
         // turn rb to isnt kinematic

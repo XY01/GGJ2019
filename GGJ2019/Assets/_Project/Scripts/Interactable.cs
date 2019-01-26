@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Interactable : MonoBehaviour
-{
+{    
+
     public virtual void BeginInteraction(PlayerController player)
     {
         print(name + " doesn't override interaction");
@@ -11,7 +12,7 @@ public class Interactable : MonoBehaviour
 
     public virtual void ContinueInteraction(PlayerController player)
     {
-        print(name + " doesn't override interaction");
+        //print(name + " doesn't override interaction");
     }
 
     public virtual void EndInteraction(PlayerController player)

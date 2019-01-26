@@ -5,7 +5,8 @@ using UnityEngine;
 public class TerrainZone : Interactable
 {
     public float _TerrainVelocityScaler = .5f;
-    public Vector3 _Force = Vector3.zero;
+    public Vector3 _LocalizedForce = Vector3.zero;
+    public Vector3 WorldSpaceForce { get { return transform.TransformDirection(_LocalizedForce); } }
 
     #region Interactable interface methods
     public GameObject GetGameObject()
@@ -25,7 +26,6 @@ public class TerrainZone : Interactable
 
     public override void EndInteraction(PlayerController player)
     {
-        player._TerrainVelocityScaler = 1;
     }
 
     public float GetNormalizedMass()
@@ -33,4 +33,9 @@ public class TerrainZone : Interactable
         return 1;
     }
     #endregion
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(transform.position, transform.TransformPoint(_LocalizedForce));
+    }
 }
