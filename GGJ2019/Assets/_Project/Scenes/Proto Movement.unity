@@ -1422,12 +1422,17 @@ PrefabInstance:
     - target: {fileID: 8112339470325384712, guid: 21d84f71600f0e14d8e5a06916873a7e,
         type: 3}
       propertyPath: m_Mass
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8112339470325384712, guid: 21d84f71600f0e14d8e5a06916873a7e,
         type: 3}
       propertyPath: m_Drag
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8112339470325384714, guid: 21d84f71600f0e14d8e5a06916873a7e,
+        type: 3}
+      propertyPath: m_Radius
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 21d84f71600f0e14d8e5a06916873a7e, type: 3}
@@ -2973,7 +2978,7 @@ PrefabInstance:
     - target: {fileID: 8112339470325384712, guid: 21d84f71600f0e14d8e5a06916873a7e,
         type: 3}
       propertyPath: m_Mass
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8112339470325384712, guid: 21d84f71600f0e14d8e5a06916873a7e,
         type: 3}
@@ -2984,6 +2989,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8112339470325384714, guid: 21d84f71600f0e14d8e5a06916873a7e,
+        type: 3}
+      propertyPath: m_Radius
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8112339470325384713, guid: 21d84f71600f0e14d8e5a06916873a7e,
         type: 3}

@@ -40,7 +40,8 @@ public class PlayerController : MonoBehaviour
     public float _InputMagScaler = 1;
     Vector3 InputVector { get { return _InputDirection * _InputMagnitude * _InputMagScaler; } }
 
-
+    GameObject _RaycastHitObject;
+    float _RayCastHitDist = 100;
 
     // Height Y
     public float _Radius = .15f;
@@ -118,26 +119,22 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(_FwdRay, out hit))
         {
-            if (hit.distance < _Radius)
-            {
-                if (hit.collider.gameObject.layer == SRLayers.Terrain)
-                {
-                    _IsMoveBlocked = true;
-                }
-                else
-                {
-                    _IsMoveBlocked = false;
-                }
-            }
-            else
-            {
-                _IsMoveBlocked = false;
-            }
+            _RaycastHitObject = hit.collider.gameObject;
+            _RayCastHitDist = hit.distance;
+
+            _IsMoveBlocked = hit.collider.gameObject.layer == SRLayers.Terrain && hit.distance < _Radius ? true : false;
+        }
+        else
+        {
+            _RaycastHitObject = null;
         }
 
         if (!_IsMoveBlocked)
         {
-            // update pos
+            if (_RaycastHitObject != null && _RaycastHitObject.layer != SRLayers.Terrain && _RayCastHitDist < _Radius * 1.2f)
+                print("Raycast hit object: " + _RaycastHitObject.name);
+
+            // Update pos
             _RB.isKinematic = true;
             _Pos += InputVector * Time.deltaTime * _Speed;
             transform.position = _Pos;
@@ -355,12 +352,6 @@ public class PlayerController : MonoBehaviour
         {
             collision.gameObject.GetComponent<EchidnaController>().BeginInteraction(this);
             SetState(State.PushingEchidna);
-        }
-
-        iInteractable interactable = collision.gameObject.GetComponent<iInteractable>();
-        if (interactable!=null)
-        {
-            _InputMagScaler = Mathf.Clamp01(10 - interactable.GetGameObject().GetComponent<Rigidbody>().mass);
         }
     }
 
