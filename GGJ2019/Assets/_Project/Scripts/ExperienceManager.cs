@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 public enum State
 {
@@ -11,14 +13,22 @@ public enum State
     Playing,
     Paused,
     Cutscene,
+    Complete
 }
 
 public class ExperienceManager : MonoBehaviour
 {
-    public static ExperienceManager Instance;
-    public Text _TimeReadout;
-    private float _TimeTaken;
+    [HideInInspector]
+    public State _State;
 
+    public static ExperienceManager Instance;
+
+    public GameObject _ScoreScreen;
+
+    // HUD
+    public Text _TimeReadout;
+
+    // Debug
     public Text _EchidnaDebug;
     public Text[] _PlayerDebugs;
     public Text _Message;
@@ -29,16 +39,25 @@ public class ExperienceManager : MonoBehaviour
         Instance = this;
     }
 
-    [HideInInspector]
-    public State _State;
-
-    void Update()
+    private void Update()
     {
-        if(_State == State.Playing)
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            _TimeTaken += Time.deltaTime;
-            _TimeReadout.text = _TimeTaken.ToString("F2");
+            LevelComplete();
         }
     }
+
+    private void LevelComplete()
+    {
+        // Display score UI
+        _State = State.Complete;
+        _ScoreScreen.SetActive(true);
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("Master", LoadSceneMode.Single);
+    }
+
 
 }
