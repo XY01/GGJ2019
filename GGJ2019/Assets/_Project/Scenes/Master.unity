@@ -636,11 +636,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _TimeReadout: {fileID: 205510983}
-  _DebugReadouts:
-  - {fileID: 5346654505384721386}
+  _EchidnaDebug: {fileID: 5346654505384721386}
+  _PlayerDebugs:
   - {fileID: 1001240325}
   - {fileID: 1605642690}
-  - {fileID: 1790232051}
+  _Message: {fileID: 1790232051}
 --- !u!4 &1678334608
 Transform:
   m_ObjectHideFlags: 0
@@ -835,7 +835,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Debug
+  m_Text: 'Message:'
 --- !u!222 &1790232052
 CanvasRenderer:
   m_ObjectHideFlags: 0
