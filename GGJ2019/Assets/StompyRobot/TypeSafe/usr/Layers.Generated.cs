@@ -57,13 +57,34 @@ public sealed class SRLayers {
         }
     }
     
+    public static global::TypeSafe.Layer Terrain {
+        get {
+            return @__all[6];
+        }
+    }
+    
+    public static global::TypeSafe.Layer Echidna {
+        get {
+            return @__all[7];
+        }
+    }
+    
+    public static global::TypeSafe.Layer Interactables {
+        get {
+            return @__all[8];
+        }
+    }
+    
     private static global::System.Collections.Generic.IList<global::TypeSafe.Layer> @__all = new global::System.Collections.ObjectModel.ReadOnlyCollection<global::TypeSafe.Layer>(new global::TypeSafe.Layer[] {
                 new global::TypeSafe.Layer("Default", 0),
                 new global::TypeSafe.Layer("TransparentFX", 1),
                 new global::TypeSafe.Layer("Ignore Raycast", 2),
                 new global::TypeSafe.Layer("Water", 4),
                 new global::TypeSafe.Layer("UI", 5),
-                new global::TypeSafe.Layer("PostProcessing", 8)});
+                new global::TypeSafe.Layer("PostProcessing", 8),
+                new global::TypeSafe.Layer("Terrain", 9),
+                new global::TypeSafe.Layer("Echidna", 10),
+                new global::TypeSafe.Layer("Interactables", 11)});
     
     public static global::System.Collections.Generic.IList<global::TypeSafe.Layer> All {
         get {

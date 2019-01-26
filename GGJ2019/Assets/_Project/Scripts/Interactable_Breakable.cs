@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Interactable_PickAndPlace : MonoBehaviour, iInteractable
+public class Interactable_Breakable : MonoBehaviour, iInteractable
 {
     Rigidbody _RB;
     Collider _Collider;
     Transform _OriginalParent;
+
+    PlayerController _InteractingPlayer;
+
+    // Life float
 
     // Start is called before the first frame update
     void Start()
@@ -25,26 +29,22 @@ public class Interactable_PickAndPlace : MonoBehaviour, iInteractable
 
     public void BeginInteraction(PlayerController player)
     {
-        transform.SetParent(player._PickupPosition);
-        transform.localPosition = Vector3.zero;
+        _InteractingPlayer = player;
+        // Spawn particles for visual feedback
 
-        _RB.isKinematic = true;
-
-        // turn rb to is kinematic
-        // play pick up particles or animation
+        // Reduce life over time
+        // If not life left Tell player that interation is complete
     }
 
     public void ContinueInteraction(PlayerController player)
     {
+        // Reduce life over time
+        // If not life left Tell player that interation is complete
     }
 
     public void EndInteraction(PlayerController player)
     {
-        transform.SetParent(_OriginalParent);
-        _RB.isKinematic = false;
-
-        // turn rb to isnt kinematic
-        // play put down particles or animation
+       // Stop particles for feedback
     }
     #endregion
 }

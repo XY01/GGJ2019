@@ -73,7 +73,6 @@ public class PlayerController : MonoBehaviour
         if (_ControlType == ControlType.Kinematic)
         {
             _RB.isKinematic = true;
-
             _Pos += _InputVector * Time.deltaTime;
             transform.position = _Pos;
         }
@@ -83,14 +82,11 @@ public class PlayerController : MonoBehaviour
             _RB.AddForce(_InputVector * _Speed);
         }
 
-        //transform.Rotate(Vector3.up * 10);
-
+        // Rotation
         if (_InputVector != Vector3.zero)
             transform.LookAt(transform.position + _InputVector);
 
-        //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(_InputVector), Time.deltaTime * _RotationSmoothing);
-
-        //raycast down so we stay on ground
+        // Raycast down so we stay on ground. TO DO smooth out later
         RaycastHit hit;
         Ray ray = new Ray(transform.position, Vector3.down);
         
@@ -105,6 +101,8 @@ public class PlayerController : MonoBehaviour
         {
             if(Input.GetButtonDown("InteractP1"))            
                 TryInteract();
+            else if(Input.GetButton("InteractP1") && _ActiveInteractable != null)
+                ContinueInteraction();
             else if (Input.GetButtonUp("InteractP1"))
                 EndInteraction();
         }
@@ -112,25 +110,27 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetButtonDown("InteractP2"))
                 TryInteract();
+            else if (Input.GetButton("InteractP2") && _ActiveInteractable != null)
+                ContinueInteraction();
             else if (Input.GetButtonUp("InteractP2"))
                 EndInteraction();
         }
         #endregion
     }
 
-    void SetState(State state)
+    void SetState(State newState)
     {
-        if (state == State.Roaming)
+        if (newState == State.Roaming)
         {
-            _State = state;
+            _State = newState;
         }
-        else if (state == State.InteractingEnvironment)
+        else if (newState == State.InteractingEnvironment)
         {
-            _State = state;
+            _State = newState;
         }
-        else if (state == State.InteractingEchidna)
+        else if (newState == State.InteractingEchidna)
         {
-            _State = state;
+            _State = newState;
         }
     }
 
@@ -159,27 +159,29 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        BeginInteraction(true, closestInteractable);
+        BeginInteraction(closestInteractable);
     }
 
-    void BeginInteraction(bool beginInteraction, iInteractable interactable)
+    void BeginInteraction(iInteractable interactable)
     {
-        if(beginInteraction)
+        print(name + " begun interaction with " + interactable.GetGameObject().name);
+
+        _ActiveInteractable = interactable;
+        _ActiveInteractable.BeginInteraction(this);
+
+        if(interactable.GetGameObject().layer == SRLayers.Echidna)
         {
-            print(name + " begun interaction with " + interactable.GetGameObject().name);
+            SetState(State.InteractingEchidna);
+        }
+        else if(interactable.GetGameObject().layer == SRLayers.Interactables)
+        {
+            SetState(State.InteractingEnvironment);
+        }        
+    }
 
-            _ActiveInteractable = interactable;
-            _ActiveInteractable.BeginInteraction(this);
-
-            //if(interactable.GetGameObject().layer)
-            {
-                SetState(State.InteractingEchidna);
-            }
-            //else if(interactable.GetGameObject().layer)
-            {
-                SetState(State.InteractingEnvironment);
-            }
-        } 
+    void ContinueInteraction()
+    {
+        _ActiveInteractable.ContinueInteraction(this);
     }
 
     void EndInteraction()
@@ -187,7 +189,7 @@ public class PlayerController : MonoBehaviour
         if (_ActiveInteractable != null)
         {
             print(name + " ended interaction with " + _ActiveInteractable.GetGameObject().name);
-            _ActiveInteractable.StopInteraction(this);
+            _ActiveInteractable.EndInteraction(this);
             _ActiveInteractable = null;
         }
 
@@ -199,9 +201,15 @@ public class PlayerController : MonoBehaviour
         // TODO play animation / particles
         print(name + " failed to interact. No interactables in range");
     }
+
+    // Called by interactables once actions are complete
+    public void InteractableActionComplete()
+    {
+        print(_ActiveInteractable.GetGameObject().name + " interaction complete");
+        EndInteraction();
+    }
     #endregion
-
-
+    
     #region Triggers
     private void OnTriggerEnter(Collider other)
     {
@@ -211,7 +219,6 @@ public class PlayerController : MonoBehaviour
                 print(other.GetComponent<iInteractable>().GetGameObject().name + " in range");
 
             _InteractablesInRange.Add(other.GetComponent<iInteractable>());
-            print("Entered echidna trigger");
         }
     }
 
@@ -223,7 +230,6 @@ public class PlayerController : MonoBehaviour
                 print(other.GetComponent<iInteractable>().GetGameObject().name + " out of range");
 
             _InteractablesInRange.Remove(other.GetComponent<iInteractable>());
-            print("Exited echidna trigger");
         }
     }
     #endregion

@@ -43,7 +43,11 @@ public class EchidnaController : MonoBehaviour, iInteractable
         // play pick up particles or animation
     }
 
-    public void StopInteraction(PlayerController player)
+    public void ContinueInteraction(PlayerController player)
+    {
+    }
+
+    public void EndInteraction(PlayerController player)
     {
         // turn rb to isnt kinematic
         // play put down particles or animation
