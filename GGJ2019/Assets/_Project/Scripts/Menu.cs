@@ -25,4 +25,9 @@ public class Menu : MonoBehaviour
     {
         SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
     }
+    public void Score()
+    {
+        
+        SceneManager.LoadScene("ScoreScreen", LoadSceneMode.Single);
+    }
 }

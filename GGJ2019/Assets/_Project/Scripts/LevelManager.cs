@@ -5,10 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
+
     public float _TimeTaken;
 
     void Start()
     {
+        PlayerPrefs.SetFloat("Score", 0);
         Scene master = SceneManager.GetSceneByName("Master");
 
         if (!master.isLoaded)
@@ -22,6 +24,7 @@ public class LevelManager : MonoBehaviour
         if (ExperienceManager.Instance != null &&  ExperienceManager.Instance._State == State.Playing)
         {
             _TimeTaken += Time.deltaTime;
+            PlayerPrefs.SetFloat("Score", _TimeTaken);
             ExperienceManager.Instance._TimeReadout.text = _TimeTaken.ToString("F1");
         }
     }
