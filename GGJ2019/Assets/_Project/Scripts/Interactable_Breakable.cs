@@ -11,7 +11,10 @@ public class Interactable_Breakable : MonoBehaviour, iInteractable
 
     PlayerController _InteractingPlayer;
 
-    // Life float
+    // Mechanic specific
+    public float _Health;
+    public float _InteractionStrength;
+    public GameObject[] _Segments;
 
     // Start is called before the first frame update
     void Start()
@@ -30,21 +33,40 @@ public class Interactable_Breakable : MonoBehaviour, iInteractable
     public void BeginInteraction(PlayerController player)
     {
         _InteractingPlayer = player;
-        // Spawn particles for visual feedback
 
-        // Reduce life over time
-        // If not life left Tell player that interation is complete
+        ReduceHealth();
     }
 
     public void ContinueInteraction(PlayerController player)
     {
-        // Reduce life over time
-        // If not life left Tell player that interation is complete
+        ReduceHealth();
     }
 
     public void EndInteraction(PlayerController player)
     {
-       // Stop particles for feedback
+        GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<BoxCollider>().enabled = false;
+
+        foreach (GameObject segment in _Segments)
+        {
+            segment.SetActive(true);
+            segment.GetComponent<Rigidbody>().isKinematic = false;
+        }
+
     }
+
     #endregion
+
+    // Reduce life over time
+    // If no life left tell player that interation is complete
+    void ReduceHealth()
+    {
+        _Health -= _InteractionStrength;
+
+        if (_Health >= 0f)
+        {
+            _InteractingPlayer.InteractableActionComplete();
+        }
+    }
+
 }
