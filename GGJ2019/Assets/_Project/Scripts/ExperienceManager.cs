@@ -9,7 +9,12 @@ public class ExperienceManager : MonoBehaviour
     public static ExperienceManager Instance;
     public Text _TimeReadout;
     private float _TimeTaken;
-    public Text[] _DebugReadouts;
+
+    public Text _EchidnaDebug;
+    public Text _PlayerOneDebug;
+    public Text _PlayerTwoDebug;
+    public Text _Message;
+
 
     private void Awake()
     {
