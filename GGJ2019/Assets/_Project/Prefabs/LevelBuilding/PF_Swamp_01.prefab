@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 1034063698547160080}
   - component: {fileID: 563940009736108454}
   - component: {fileID: 3581186986283330437}
+  - component: {fileID: 137018510822628874}
   m_Layer: 0
   m_Name: COL_Swamp_01
   m_TagString: Untagged
@@ -170,3 +171,15 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300002, guid: d09ac4a04675083438ae0fd17326f6a3, type: 3}
+--- !u!114 &137018510822628874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7207584259424931186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b40f0e42720fbe2409558ff4f17ab5da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
