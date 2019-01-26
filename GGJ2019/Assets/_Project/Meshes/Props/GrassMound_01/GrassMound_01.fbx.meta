@@ -1,27 +1,22 @@
 fileFormatVersion: 2
-guid: 4bbbe986c207d804fb894093a9206519
+guid: dbda9e350b314eb4eaaffb68bd06b634
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: COL_Terrain
+    100000: COL_GrassMound_01
     100002: //RootNode
-    100004: COL_Terrain_01
-    100006: Terrain_01 1
-    400000: COL_Terrain
+    400000: COL_GrassMound_01
     400002: //RootNode
-    400004: COL_Terrain_01
-    400006: Terrain_01 1
-    2100000: phong1
-    2300000: COL_Terrain
-    2300002: COL_Terrain_01
-    2300004: Terrain_01 1
-    3300000: COL_Terrain
-    3300002: COL_Terrain_01
-    3300004: Terrain_01 1
-    4300000: COL_Terrain
-    4300002: COL_Terrain_01
-    4300004: Terrain_01
-    2186277476908879412: ImportLogs
+    2100000: M_Grass
+    2100002: M_Dirt
+    2100004: M_ColourPallet_01
+    2100006: M_COL
+    2300000: COL_GrassMound_01
+    2300002: //RootNode
+    3300000: COL_GrassMound_01
+    3300002: //RootNode
+    4300000: GrassMound_01
+    4300002: COL_GrassMound_01
   externalObjects: {}
   materials:
     importMaterials: 1
