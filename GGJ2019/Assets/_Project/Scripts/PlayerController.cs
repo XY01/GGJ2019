@@ -10,13 +10,7 @@ public class PlayerController : MonoBehaviour
         Player1,
         Player2,
     }
-
-    public enum ControlType
-    {
-        Physics,
-        Kinematic,    
-    }
-
+    
     public enum State
     {
         Roaming,
@@ -28,7 +22,6 @@ public class PlayerController : MonoBehaviour
     // States
     public State _State = State.Roaming;
     public Player _Player = Player.Player1;
-    public ControlType _ControlType = ControlType.Kinematic;
 
     public Transform _PickupPosition;
 
@@ -49,6 +42,8 @@ public class PlayerController : MonoBehaviour
     // Rotation
     float _RotationSmoothing = 8;
 
+    Ray _FwdRay;
+    bool _IsMoveBlocked = false;
 
     // Debug
     public bool _LogInteractables = false;
@@ -75,24 +70,29 @@ public class PlayerController : MonoBehaviour
             _InputVector.z = Input.GetAxis("VerticalP2");
         }
 
-        if (_ControlType == ControlType.Kinematic)
-        {
-            _RB.isKinematic = true;
-            _Pos += _InputVector * Time.deltaTime;
-            transform.position = _Pos;
-        }
-        else
-        {
-            _RB.isKinematic = false;
-            _RB.AddForce(_InputVector * _Speed);
-        }
-
         // Rotation
         if (_InputVector != Vector3.zero)
             transform.LookAt(transform.position + _InputVector);
 
-        // Raycast down so we stay on ground. TO DO smooth out later
+        // Raycast forward so we stay on ground. TO DO smooth out later
         RaycastHit hit;
+        _FwdRay = new Ray(transform.position, _InputVector);
+        
+        if (Physics.Raycast(_FwdRay, out hit))
+            _IsMoveBlocked = hit.collider.gameObject.layer == SRLayers.Terrain && hit.distance < _Radius * 1.5f;
+
+        if (!_IsMoveBlocked)
+        {
+            // update pos
+            _RB.isKinematic = true;
+            _Pos += _InputVector * Time.deltaTime * _Speed;
+            transform.position = _Pos;
+        }
+
+
+
+
+        // Raycast down so we stay on ground. TO DO smooth out later        
         Ray ray = new Ray(transform.position, Vector3.down);
         
         if (Physics.Raycast(ray, out hit))
@@ -306,7 +306,8 @@ public class PlayerController : MonoBehaviour
     #region Debug
     private void OnDrawGizmos()
     {
-        Gizmos.DrawLine(transform.position, transform.position + _InputVector);
+        Gizmos.color = _IsMoveBlocked ? Color.red : Color.blue;
+        Gizmos.DrawLine(transform.position, transform.position + _FwdRay.direction);
     }
     #endregion
 }
