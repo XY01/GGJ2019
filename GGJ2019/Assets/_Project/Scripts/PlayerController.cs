@@ -18,10 +18,16 @@ public class PlayerController : MonoBehaviour
         InteractingEchidna,
         PushingEchidna,
     }
+    public enum ControlType
+    {
+        Keyboard,
+        Controller,
+    }
 
     // States
     public State _State = State.Roaming;
     public Player _Player = Player.Player1;
+    public ControlType _ControlType = ControlType.Keyboard;
 
     public Transform _PickupPosition;
 
@@ -84,16 +90,31 @@ public class PlayerController : MonoBehaviour
         Vector3 newInputVec = Vector3.zero;
         Vector3 newInputDir = Vector3.zero;
         float newInputMag = 0;
-
-        if (_Player == Player.Player1)
+        if (_ControlType == ControlType.Keyboard)
         {
-            newInputVec.x = Input.GetAxis("HorizontalP1");
-            newInputVec.z = Input.GetAxis("VerticalP1");
+            if (_Player == Player.Player1)
+            {
+                newInputVec.x = Input.GetAxis("HorizontalP1Keyboard");
+                newInputVec.z = Input.GetAxis("VerticalP1Keyboard");
+            }
+            else
+            {
+                newInputVec.x = Input.GetAxis("HorizontalP2Keyboard");
+                newInputVec.z = Input.GetAxis("VerticalP2Keyboard");
+            }
         }
-        else
+        if (_ControlType == ControlType.Controller)
         {
-            newInputVec.x = Input.GetAxis("HorizontalP2");
-            newInputVec.z = Input.GetAxis("VerticalP2");
+            if (_Player == Player.Player1)
+            {
+                newInputVec.x = Input.GetAxis("HorizontalP1Controller");
+                newInputVec.z = Input.GetAxis("VerticalP1Controller");
+            }
+            else
+            {
+                newInputVec.x = Input.GetAxis("HorizontalP2Controller");
+                newInputVec.z = Input.GetAxis("VerticalP2Controller");
+            }
         }
 
         newInputDir = newInputVec.normalized;
@@ -206,23 +227,47 @@ public class PlayerController : MonoBehaviour
         #endregion
 
         #region Interaction
-        if (_Player == Player.Player1)
+        if (_ControlType == ControlType.Keyboard)
         {
-            if(Input.GetButtonDown("InteractP1"))            
-                TryInteract();
-            else if(Input.GetButton("InteractP1") && _ActiveInteractable != null)
-                ContinueInteraction();
-            else if (Input.GetButtonUp("InteractP1"))
-                EndInteraction();
+            if (_Player == Player.Player1)
+            {
+                if (Input.GetButtonDown("InteractP1Keyboard"))
+                    TryInteract();
+                else if (Input.GetButton("InteractP1Keyboard") && _ActiveInteractable != null)
+                    ContinueInteraction();
+                else if (Input.GetButtonUp("InteractP1Keyboard"))
+                    EndInteraction();
+            }
+            else
+            {
+                if (Input.GetButtonDown("InteractP2Keyboard"))
+                    TryInteract();
+                else if (Input.GetButton("InteractP2Keyboard") && _ActiveInteractable != null)
+                    ContinueInteraction();
+                else if (Input.GetButtonUp("InteractP2Keyboard"))
+                    EndInteraction();
+            }
         }
-        else
+        if (_ControlType == ControlType.Controller)
         {
-            if (Input.GetButtonDown("InteractP2"))
-                TryInteract();
-            else if (Input.GetButton("InteractP2") && _ActiveInteractable != null)
-                ContinueInteraction();
-            else if (Input.GetButtonUp("InteractP2"))
-                EndInteraction();
+            if (_Player == Player.Player1)
+            {
+                if (Input.GetButtonDown("InteractP1Controller"))
+                    TryInteract();
+                else if (Input.GetButton("InteractP1Controller") && _ActiveInteractable != null)
+                    ContinueInteraction();
+                else if (Input.GetButtonUp("InteractP1Controller"))
+                    EndInteraction();
+            }
+            else
+            {
+                if (Input.GetButtonDown("InteractP2Controller"))
+                    TryInteract();
+                else if (Input.GetButton("InteractP2Controller") && _ActiveInteractable != null)
+                    ContinueInteraction();
+                else if (Input.GetButtonUp("InteractP2Controller"))
+                    EndInteraction();
+            }
         }
         #endregion
 
