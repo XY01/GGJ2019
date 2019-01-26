@@ -7,23 +7,23 @@ public class Interactable_Passive : MonoBehaviour, iInteractable
     PlayerController _InteractingPlayer;
 
     #region Interactable interface methods
-    public GameObject GetGameObject()
+    public virtual GameObject GetGameObject()
     {
         return gameObject;
     }
 
-    public void BeginInteraction(PlayerController player)
+    public virtual void BeginInteraction(PlayerController player)
     {
         _InteractingPlayer = player;
 
         print("Interaction begun");
     }
 
-    public void ContinueInteraction(PlayerController player)
+    public virtual void ContinueInteraction(PlayerController player)
     {
     }
 
-    public void EndInteraction(PlayerController player)
+    public virtual void EndInteraction(PlayerController player)
     {
 
     }
