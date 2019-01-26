@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
 public class EchidnaController : MonoBehaviour, iInteractable
 {
-    enum State
+    public enum State
     {
         Idle,
         Wander,
@@ -14,10 +15,10 @@ public class EchidnaController : MonoBehaviour, iInteractable
     }
 
     State _State = State.Idle;
+    public State CurrentState { get { return _State; } }
     Rigidbody _RB;
 
-    public float _IdleTimeoutDuration = 3;
-    float _IdleTimer = 0;
+  
 
     float _DrunkenessNorm = 0;  // How much booze he has drank
     float _FullnessNorm = 0;    // How much food he has eaten
@@ -26,6 +27,18 @@ public class EchidnaController : MonoBehaviour, iInteractable
     float _PerlinOffset = 0;
     public float _BasePerlForceScaler = 1;
     public float _BasePerlfieldScaler = 1;
+    float _PerlOffset = 0;
+
+
+    // State vars - Idle
+    [Header("State variables")]
+    float _StateTimer = 0;
+    public float _IdleTimeoutDuration = 3;
+
+    // Pushing
+    public float _PushingTimeoutDuration = 2;
+    int _PushingCount = 0;
+
 
     public float _ControllableRadius = 1.5f;
     public float _PerceptionRadius = 1.5f;
@@ -35,6 +48,7 @@ public class EchidnaController : MonoBehaviour, iInteractable
 
     // DEBUG
     public bool _DebugPerlinField = false;
+    public Text _DebugText;
 
     void Start()
     {
@@ -43,63 +57,83 @@ public class EchidnaController : MonoBehaviour, iInteractable
 
     void Update()
     {
-        AddPerlinForce(transform.position, _BasePerlfieldScaler, _BasePerlForceScaler);
-        /*
         if (_State == State.Idle)
         {
-            // Don't move. 
-            _IdleTimer += Time.deltaTime;
+            // Don't move while idle timer accumulates
+            _StateTimer += Time.deltaTime;
 
             // If idle timeout is up then start to wander
-            if (_IdleTimer >= _IdleTimeoutDuration)
+            if (_StateTimer >= _IdleTimeoutDuration)
                 SetState(State.Wander);
+
+            _DebugText.text = "Echidna - State: Idle.  Timer: " + _StateTimer + " / " + _IdleTimeoutDuration;
         }
         else if (_State == State.BeingPushed)
         {
+            // Don't move while idle timer accumulates
+            _StateTimer += Time.deltaTime;
 
+            // If idle timeout is up then start to wander
+            if (_StateTimer >= _PushingTimeoutDuration)
+                SetState(State.Idle);
+
+            // if being pushed don't do anything yet
+            // potentially seek if find something sufficiently appealing
+            _DebugText.text = "Echidna - State: Being Pushed.";
         }
         else if (_State == State.Seeking)
         {
-
+            // Seek toward target distraction
+            _DebugText.text = "Echidna - State: Seeking. Active Distraction Object: ";
         }
         else if (_State == State.Wander)
         {
+            // Wander aimlessly until you come across a distraction
+            _PerlOffset = Time.time * .1f;
+            AddPerlinForce(transform.position, _BasePerlfieldScaler, _BasePerlForceScaler, _PerlOffset);
 
+            // if stuck in one spot too long change the perl offset
+            _DebugText.text = "Echidna - State: Wandering.";
         }
-        */
     }
 
     void SetState(State state)
     {
         if(state == State.Idle)
         {
-
+            _State = state;
+            _StateTimer = 0;
         }
         else if (state == State.BeingPushed)
         {
-
+            _State = state;
+            _StateTimer = 0;
         }
         else if(state == State.Seeking)
         {
-
+            _State = state;
+            _StateTimer = 0;
         }
         else if (state == State.Wander)
         {
-
+            _State = state;
+            _StateTimer = 0;
         }
+
+        //print(name + " State set to: " + _State.ToString());
     }
 
     // Perlin force and movement
-    void AddPerlinForce(Vector3 pos, float perlfieldScaler, float forceScaler)
+    void AddPerlinForce(Vector3 pos, float perlfieldScaler, float forceScaler, float offset)
     {
-        _RB.AddForce(GetPerlinForce(pos, perlfieldScaler, forceScaler));
+        _RB.AddForce(GetPerlinForce(pos, perlfieldScaler, forceScaler, offset));
     }
 
-    Vector3 GetPerlinForce(Vector3 pos, float perlfieldScaler, float forceScaler)
+    Vector3 GetPerlinForce(Vector3 pos, float perlfieldScaler, float forceScaler, float offset)
     {
         Vector3 perlForce = Vector3.zero;
-        perlForce.x = Mathf.PerlinNoise(pos.x * perlfieldScaler, pos.z * perlfieldScaler).ScaleFrom01(-1f, 1f);
-        perlForce.z = Mathf.PerlinNoise((pos.x + 1.234f) * perlfieldScaler, (pos.z - 2.3454f) * perlfieldScaler).ScaleFrom01(-1f, 1f);
+        perlForce.x = Mathf.PerlinNoise((pos.x * perlfieldScaler) + offset, (pos.z * perlfieldScaler) + offset).ScaleFrom01(-1f, 1f);
+        perlForce.z = Mathf.PerlinNoise(((pos.x + 1.234f) * perlfieldScaler) + offset, ((pos.z - 2.3454f) * perlfieldScaler) + offset).ScaleFrom01(-1f, 1f);
 
         return perlForce * forceScaler;
     }   
@@ -122,18 +156,21 @@ public class EchidnaController : MonoBehaviour, iInteractable
 
     public void BeginInteraction(PlayerController player)
     {
-        // turn rb to is kinematic
-        // play pick up particles or animation
+        _PushingCount++;
+        SetState(State.BeingPushed);
     }
 
     public void ContinueInteraction(PlayerController player)
     {
+
     }
 
     public void EndInteraction(PlayerController player)
     {
-        // turn rb to isnt kinematic
-        // play put down particles or animation
+        _PushingCount--;
+
+        if (_PushingCount == 0)
+            SetState(State.Idle);
     }
     #endregion
 
@@ -157,7 +194,7 @@ public class EchidnaController : MonoBehaviour, iInteractable
                     Vector3 vecPos = startPos;
                     vecPos.x = startPos.x + (x * cellsize);
                     vecPos.z = startPos.z + (z * cellsize);
-                    Debug.DrawLine(vecPos, vecPos + GetPerlinForce(vecPos, _BasePerlfieldScaler, _BasePerlForceScaler) * .2f);
+                    Debug.DrawLine(vecPos, vecPos + GetPerlinForce(vecPos, _BasePerlfieldScaler, _BasePerlForceScaler, _PerlOffset) * .2f);
                 }
             }
         }
