@@ -12,12 +12,12 @@ public class EchidnaController : MonoBehaviour, iInteractable
         Wander,
         Seeking,
         BeingPushed,
+        Consuming,
     }
 
     State _State = State.Idle;
     public State CurrentState { get { return _State; } }
     Rigidbody _RB;
-
   
 
     float _DrunkenessNorm = 0;  // How much booze he has drank
@@ -38,6 +38,9 @@ public class EchidnaController : MonoBehaviour, iInteractable
     // Pushing
     public float _PushingTimeoutDuration = 2;
     int _PushingCount = 0;
+
+    //Consuming
+    public float _ConsumeDuration = 3;
 
     EchidnaInteractable _ActiveInteractable;
     List<EchidnaInteractable> _InteractablesInRange = new List<EchidnaInteractable>();
@@ -67,7 +70,7 @@ public class EchidnaController : MonoBehaviour, iInteractable
             if (_StateTimer >= _IdleTimeoutDuration)
                 SetState(State.Wander);
 
-            if(ExperienceManager.Instance != null)
+            if (ExperienceManager.Instance != null)
                 ExperienceManager.Instance._EchidnaDebug.text = "Echidna - State: Idle.  Timer: " + _StateTimer + " / " + _IdleTimeoutDuration;
         }
         else if (_State == State.BeingPushed)
@@ -99,11 +102,20 @@ public class EchidnaController : MonoBehaviour, iInteractable
         }
         else if (_State == State.Seeking)
         {
-            _RB.AddForce( GetDirectionTowardInteractable() );
+            _RB.AddForce(GetDirectionTowardInteractable());
             // Seek toward target distraction
             ExperienceManager.Instance._EchidnaDebug.text = "Echidna - State: Seeking. Active Distraction Object: ";
-        }        
-    }   
+        }
+        else if (_State == State.Consuming)
+        {
+            // Don't move while idle timer accumulates
+            _StateTimer += Time.deltaTime;
+
+            // If idle timeout is up then start to wander
+            if (_StateTimer >= _ConsumeDuration)
+                SetState(State.Wander);
+        }
+    }
 
     void SetState(State state)
     {
@@ -134,6 +146,11 @@ public class EchidnaController : MonoBehaviour, iInteractable
             _State = state;
             _StateTimer = 0;
 
+        }
+        else if(state == State.Consuming)
+        {
+            _State = state;
+            _StateTimer = 0;
         }
 
         //print(name + " State set to: " + _State.ToString());
@@ -194,6 +211,24 @@ public class EchidnaController : MonoBehaviour, iInteractable
         return Vector3.Distance(pos, transform.position) < _ControllableRadius;
     }
 
+    void Consume(EchidnaInteractable interactable)
+    {
+        if(interactable._Type == EchidnaInteractable.Type.Food)
+        {
+            _FullnessNorm += interactable._EffectStrength;           
+        }
+        else if (interactable._Type == EchidnaInteractable.Type.Booze)
+        {
+            _DrunkenessNorm += interactable._EffectStrength;
+        }
+
+        _ConsumeDuration = interactable.TimeToConsume;
+        interactable.gameObject.SetActive(false);
+        _InteractablesInRange.Remove(interactable);
+
+        SetState(State.Consuming);
+    }
+
     #region Interactable interface methods
     public GameObject GetGameObject()
     {
@@ -236,10 +271,23 @@ public class EchidnaController : MonoBehaviour, iInteractable
             _InteractablesInRange.Remove(other.GetComponent<EchidnaInteractable>());
         }
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.GetComponent<EchidnaInteractable>() != null)
+        {
+            Consume(collision.gameObject.GetComponent<EchidnaInteractable>());
+        }
+    }
     #endregion
 
     private void OnDrawGizmos()
     {
+        if (_State == State.Seeking)
+        {
+            Gizmos.DrawLine(transform.position, _ActiveInteractable.transform.position);
+        }
+
         Gizmos.DrawWireSphere(transform.position, transform.localScale.x * _ControllableRadius);
 
         int pointCount = 10;

@@ -36,7 +36,6 @@ public class ExperienceManager : MonoBehaviour
     {
         if(_State == State.Playing)
         {
-            print("test");
             _TimeTaken += Time.deltaTime;
             _TimeReadout.text = _TimeTaken.ToString("F2");
         }
