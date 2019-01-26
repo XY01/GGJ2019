@@ -119,7 +119,7 @@ Material:
     - _Parallax2: -0.05
     - _Parallax3: -0.05
     - _ParallaxInterpolation: 15
-    - _Smoothness: 1
+    - _Smoothness: 0
     - _Smoothness2: 0
     - _Smoothness3: 0
     - _SmoothnessTextureChannel: 0
