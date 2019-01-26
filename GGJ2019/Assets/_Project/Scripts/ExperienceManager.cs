@@ -7,11 +7,9 @@ using UnityEngine.SceneManagement;
 
 public enum State
 {
-    Menu,
-    LevelSelect,
-    Playing,
+    TitleScreen,
     Paused,
-    Cutscene,
+    Playing,
     Complete
 }
 
@@ -36,24 +34,12 @@ public class ExperienceManager : MonoBehaviour
         Instance = this;
     }
 
-    public void Restart()
+    private void Update()
     {
-        SceneManager.LoadScene("TitleScreen", LoadSceneMode.Single);
-    }
-
-    public void Quit()
-    {
-        //If we are running in a standalone build of the game
-        #if UNITY_STANDALONE
-            //Quit the application
-            Application.Quit();
-        #endif
-
-        //If we are running in the editor
-        #if UNITY_EDITOR
-            //Stop playing the scene
-            UnityEditor.EditorApplication.isPlaying = false;
-        #endif
+        if (Input.GetKey(KeyCode.E))
+        {
+            SceneManager.LoadScene("ScoreScreen", LoadSceneMode.Single);
+        }
     }
 
 
