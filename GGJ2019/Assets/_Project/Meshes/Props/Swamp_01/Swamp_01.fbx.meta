@@ -9,6 +9,7 @@ ModelImporter:
     400002: //RootNode
     2100000: phong1
     2100002: M_COL
+    2100004: M_ColourPallet_01
     2300000: COL_Swamp_01
     2300002: //RootNode
     3300000: COL_Swamp_01
