@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Interactable : MonoBehaviour
-{    
+{
+    private void Awake()
+    {
+        gameObject.layer = SRLayers.Interactables;
+    }
 
     public virtual void BeginInteraction(PlayerController player)
     {
