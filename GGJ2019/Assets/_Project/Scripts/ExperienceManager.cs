@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 public enum State
 {
@@ -21,6 +23,8 @@ public class ExperienceManager : MonoBehaviour
 
     public static ExperienceManager Instance;
 
+    public GameObject _ScoreScreen;
+
     // HUD
     public Text _TimeReadout;
 
@@ -28,6 +32,7 @@ public class ExperienceManager : MonoBehaviour
     public Text _EchidnaDebug;
     public Text[] _PlayerDebugs;
     public Text _Message;
+
 
     private void Awake()
     {
@@ -45,8 +50,14 @@ public class ExperienceManager : MonoBehaviour
     private void LevelComplete()
     {
         // Display score UI
-
         _State = State.Complete;
+        _ScoreScreen.SetActive(true);
     }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("Master", LoadSceneMode.Single);
+    }
+
 
 }
