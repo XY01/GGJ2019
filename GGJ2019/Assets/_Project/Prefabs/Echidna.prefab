@@ -4721,15 +4721,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4130082714623260610}
-  - component: {fileID: 4130082714623260609}
   - component: {fileID: 4130082714623260637}
   - component: {fileID: 4130082714623260636}
+  - component: {fileID: 4130082714623260609}
   - component: {fileID: 1637859116}
-  - component: {fileID: 8283850106507472937}
-  - component: {fileID: 930820459960704301}
-  - component: {fileID: 4394517665762451133}
-  - component: {fileID: 1002022546501384321}
-  - component: {fileID: 5343703653517696761}
   m_Layer: 10
   m_Name: Echidna
   m_TagString: Untagged
@@ -4753,19 +4748,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &4130082714623260609
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4130082714623260614}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &4130082714623260637
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4801,6 +4783,19 @@ MonoBehaviour:
   _ControllableRadius: 1.5
   _PerceptionRadius: 1.5
   _DebugPerlinField: 0
+--- !u!135 &4130082714623260609
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4130082714623260614}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &1637859116
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -4812,72 +4807,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &8283850106507472937
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4130082714623260614}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &930820459960704301
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4130082714623260614}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &4394517665762451133
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4130082714623260614}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &1002022546501384321
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4130082714623260614}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &5343703653517696761
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4130082714623260614}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.5
+  m_Radius: 4
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &5832949876671133774
 PrefabInstance:
@@ -4886,10 +4816,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4130082714623260610}
     m_Modifications:
-    - target: {fileID: 100000, guid: 0ad3d1da3f56e894fb949bb468ed1a03, type: 3}
-      propertyPath: m_Name
-      value: Echidna_Anim
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0ad3d1da3f56e894fb949bb468ed1a03, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.016
@@ -4933,6 +4859,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 0ad3d1da3f56e894fb949bb468ed1a03, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 0ad3d1da3f56e894fb949bb468ed1a03, type: 3}
+      propertyPath: m_Name
+      value: Echidna_Anim
       objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: 0ad3d1da3f56e894fb949bb468ed1a03, type: 3}
       propertyPath: m_Controller
