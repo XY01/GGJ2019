@@ -5,9 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Interactable_Breakable : MonoBehaviour, iInteractable
 {
-    Rigidbody _RB;
-    Collider _Collider;
-    Transform _OriginalParent;
 
     PlayerController _InteractingPlayer;
 
@@ -15,14 +12,6 @@ public class Interactable_Breakable : MonoBehaviour, iInteractable
     public float _Health;
     public float _InteractionStrength;
     public GameObject[] _Segments;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        _RB = GetComponent<Rigidbody>();
-        _Collider = GetComponent<Collider>();
-        _OriginalParent = transform.parent;
-    }
 
     #region Interactable interface methods
     public GameObject GetGameObject()
