@@ -11,16 +11,30 @@ public class EchidnaController : MonoBehaviour, iInteractable
     float _CurrentScale = .4f;
     float _BaseScale = .4f;
 
-    // Start is called before the first frame update
     void Start()
     {
         
     }
 
-    // Update is called once per frame
     void Update()
     {
         
+    }
+    
+    public bool IsInControllableRange(Vector3 pos)
+    {
+        return Vector3.Distance(pos, transform.position) < _ControllableRadius;
+    }
+
+    public bool IsInPerceptionRange(Vector3 pos)
+    {
+        return Vector3.Distance(pos, transform.position) < _ControllableRadius;
+    }
+
+    #region Interactable interface methods
+    public GameObject GetGameObject()
+    {
+        return gameObject;
     }
 
     public void BeginInteraction(PlayerController player)
@@ -34,17 +48,7 @@ public class EchidnaController : MonoBehaviour, iInteractable
         // turn rb to isnt kinematic
         // play put down particles or animation
     }
-
-
-    public bool IsInControllableRange(Vector3 pos)
-    {
-        return Vector3.Distance(pos, transform.position) < _ControllableRadius;
-    }
-
-    public bool IsInPerceptionRange(Vector3 pos)
-    {
-        return Vector3.Distance(pos, transform.position) < _ControllableRadius;
-    }
+    #endregion
 
     private void OnDrawGizmos()
     {

@@ -16,28 +16,46 @@ public class PlayerController : MonoBehaviour
         Kinematic,    
     }
 
+    public enum State
+    {
+        Roaming,
+        InteractingEnvironment,
+        InteractingEchidna,
+    }
+
+    // States
+    public State _State = State.Roaming;
     public Player _Player = Player.Player1;
     public ControlType _ControlType = ControlType.Kinematic;
 
-    Rigidbody _RB;
+    public Transform _PickupPosition;
 
+    iInteractable _ActiveInteractable;
+    List<iInteractable> _InteractablesInRange = new List<iInteractable>();
+
+    // Translation X Z
+    Rigidbody _RB;
     Vector3 _Pos;
     public float _Speed = 10;
     Vector3 _InputVector;
+
+    // Height Y
     public float _Radius = .15f;
-
     float _YOffset = 0;
+    
+    // Rotation
+    float _RotationSmoothing = 8;
+   
 
-    // Start is called before the first frame update
     void Start()
     {
         _RB = GetComponent<Rigidbody>();
         _Pos = transform.position;
     }
 
-    // Update is called once per fram
     void Update()
     {
+        #region movement
         if (_Player == Player.Player1)
         {
             _InputVector.x = Input.GetAxis("HorizontalP1");
@@ -59,9 +77,10 @@ public class PlayerController : MonoBehaviour
         else
         {
             _RB.isKinematic = false;
-
             _RB.AddForce(_InputVector * _Speed);
         }
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(_InputVector), Time.deltaTime * _RotationSmoothing);
 
         //raycast down so we stay on ground
         RaycastHit hit;
@@ -71,20 +90,105 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = hit.point + (Vector3.up * _Radius);
         }
+        #endregion
+
+        #region Interaction
+        if (_Player == Player.Player1)
+        {
+            if(Input.GetButton("InteractP1"))            
+                TryInteract();            
+        }
+        else
+        {
+            if (Input.GetButton("InteractP2"))
+                TryInteract();
+        }
+        #endregion
     }
 
-    void Interact()
+    void SetState(State state)
     {
-
+        if (state == State.Roaming)
+        {
+            _State = state;
+        }
+        else if (state == State.InteractingEnvironment)
+        {
+            _State = state;
+        }
+        else if (state == State.InteractingEchidna)
+        {
+            _State = state;
+        }
     }
 
+    #region Interaction methods
+    void TryInteract()
+    {
+        if(_InteractablesInRange.Count == 0)
+        {
+            FailToInteract();
+        }
+
+        // Find closest interactable
+        float closestDist = 999;
+        iInteractable closestInteractable = null;
+        for (int i = 0; i < _InteractablesInRange.Count; i++)
+        {
+            float dist = Vector3.Distance(transform.position, _InteractablesInRange[0].GetGameObject().transform.position);
+
+            if(dist < closestDist)
+            {
+                closestDist = dist;
+                closestInteractable = _InteractablesInRange[i];
+            }
+        }
+
+        InteractWithInteractable(true, closestInteractable);
+    }
+
+    void InteractWithInteractable(bool beginInteraction, iInteractable interactable)
+    {
+        if(beginInteraction)
+        {
+            _ActiveInteractable = interactable;
+            _ActiveInteractable.BeginInteraction(this);
+
+            //if(interactable.GetGameObject().layer)
+            {
+                SetState(State.InteractingEchidna);
+            }
+            //else if(interactable.GetGameObject().layer)
+            {
+                SetState(State.InteractingEnvironment);
+            }
+        }
+        else
+        {
+            if (_ActiveInteractable != null)
+            {
+                _ActiveInteractable.StopInteraction(this);
+                _ActiveInteractable = null;
+            }
+
+            SetState(State.Roaming);           
+        }
+    }
+
+    void FailToInteract()
+    {
+        // TODO play animation / particles
+        print("Failed to interact. No interactables in range");
+    }
+    #endregion
 
 
-
+    #region Triggers
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<iInteractable>() != null)
         {
+            _InteractablesInRange.Add(other.GetComponent<iInteractable>());
             print("Entered echidna trigger");
         }
     }
@@ -93,12 +197,16 @@ public class PlayerController : MonoBehaviour
     {
         if (other.GetComponent<iInteractable>() != null)
         {
+            _InteractablesInRange.Remove(other.GetComponent<iInteractable>());
             print("Exited echidna trigger");
         }
     }
+    #endregion
 
+    #region Debug
     private void OnDrawGizmos()
     {
         Gizmos.DrawLine(transform.position, transform.position + _InputVector);
     }
+    #endregion
 }

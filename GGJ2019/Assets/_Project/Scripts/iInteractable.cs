@@ -6,4 +6,5 @@ public interface iInteractable
 {
     void BeginInteraction(PlayerController player);
     void StopInteraction(PlayerController player);
+    GameObject GetGameObject();
 }
