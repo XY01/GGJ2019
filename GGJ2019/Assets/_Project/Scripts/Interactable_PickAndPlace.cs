@@ -6,6 +6,7 @@ using UnityEngine;
 public class Interactable_PickAndPlace : MonoBehaviour, iInteractable
 {
     Rigidbody _RB;
+    Collider _Collider;
 
     Transform _OriginalParent;
 
@@ -13,6 +14,7 @@ public class Interactable_PickAndPlace : MonoBehaviour, iInteractable
     void Start()
     {
         _RB = GetComponent<Rigidbody>();
+        _Collider = GetComponent<Collider>();
         _OriginalParent = transform.parent;
     }
 
@@ -28,7 +30,7 @@ public class Interactable_PickAndPlace : MonoBehaviour, iInteractable
         transform.localPosition = Vector3.zero;
 
         _RB.isKinematic = true;
-        
+
         // turn rb to is kinematic
         // play pick up particles or animation
     }
@@ -37,6 +39,7 @@ public class Interactable_PickAndPlace : MonoBehaviour, iInteractable
     {
         transform.SetParent(_OriginalParent);
         _RB.isKinematic = false;
+
 
         // turn rb to isnt kinematic
         // play put down particles or animation

@@ -45,7 +45,10 @@ public class PlayerController : MonoBehaviour
     
     // Rotation
     float _RotationSmoothing = 8;
-   
+
+
+    // Debug
+    public bool _LogInteractables = false;
 
     void Start()
     {
@@ -80,7 +83,12 @@ public class PlayerController : MonoBehaviour
             _RB.AddForce(_InputVector * _Speed);
         }
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(_InputVector), Time.deltaTime * _RotationSmoothing);
+        //transform.Rotate(Vector3.up * 10);
+
+        if (_InputVector != Vector3.zero)
+            transform.LookAt(transform.position + _InputVector);
+
+        //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(_InputVector), Time.deltaTime * _RotationSmoothing);
 
         //raycast down so we stay on ground
         RaycastHit hit;
@@ -95,13 +103,17 @@ public class PlayerController : MonoBehaviour
         #region Interaction
         if (_Player == Player.Player1)
         {
-            if(Input.GetButton("InteractP1"))            
-                TryInteract();            
+            if(Input.GetButtonDown("InteractP1"))            
+                TryInteract();
+            else if (Input.GetButtonUp("InteractP1"))
+                EndInteraction();
         }
         else
         {
-            if (Input.GetButton("InteractP2"))
+            if (Input.GetButtonDown("InteractP2"))
                 TryInteract();
+            else if (Input.GetButtonUp("InteractP2"))
+                EndInteraction();
         }
         #endregion
     }
@@ -125,9 +137,12 @@ public class PlayerController : MonoBehaviour
     #region Interaction methods
     void TryInteract()
     {
+        print(name + " trying to interact. Interactables in range: " + _InteractablesInRange.Count);
+
         if(_InteractablesInRange.Count == 0)
         {
             FailToInteract();
+            return;
         }
 
         // Find closest interactable
@@ -144,13 +159,15 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        InteractWithInteractable(true, closestInteractable);
+        BeginInteraction(true, closestInteractable);
     }
 
-    void InteractWithInteractable(bool beginInteraction, iInteractable interactable)
+    void BeginInteraction(bool beginInteraction, iInteractable interactable)
     {
         if(beginInteraction)
         {
+            print(name + " begun interaction with " + interactable.GetGameObject().name);
+
             _ActiveInteractable = interactable;
             _ActiveInteractable.BeginInteraction(this);
 
@@ -162,23 +179,25 @@ public class PlayerController : MonoBehaviour
             {
                 SetState(State.InteractingEnvironment);
             }
-        }
-        else
-        {
-            if (_ActiveInteractable != null)
-            {
-                _ActiveInteractable.StopInteraction(this);
-                _ActiveInteractable = null;
-            }
+        } 
+    }
 
-            SetState(State.Roaming);           
+    void EndInteraction()
+    {
+        if (_ActiveInteractable != null)
+        {
+            print(name + " ended interaction with " + _ActiveInteractable.GetGameObject().name);
+            _ActiveInteractable.StopInteraction(this);
+            _ActiveInteractable = null;
         }
+
+        SetState(State.Roaming);
     }
 
     void FailToInteract()
     {
         // TODO play animation / particles
-        print("Failed to interact. No interactables in range");
+        print(name + " failed to interact. No interactables in range");
     }
     #endregion
 
@@ -188,6 +207,9 @@ public class PlayerController : MonoBehaviour
     {
         if (other.GetComponent<iInteractable>() != null)
         {
+            if (_LogInteractables)
+                print(other.GetComponent<iInteractable>().GetGameObject().name + " in range");
+
             _InteractablesInRange.Add(other.GetComponent<iInteractable>());
             print("Entered echidna trigger");
         }
@@ -197,6 +219,9 @@ public class PlayerController : MonoBehaviour
     {
         if (other.GetComponent<iInteractable>() != null)
         {
+            if (_LogInteractables)
+                print(other.GetComponent<iInteractable>().GetGameObject().name + " out of range");
+
             _InteractablesInRange.Remove(other.GetComponent<iInteractable>());
             print("Exited echidna trigger");
         }
