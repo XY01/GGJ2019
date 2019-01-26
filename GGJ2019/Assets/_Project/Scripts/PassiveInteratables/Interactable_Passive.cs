@@ -16,7 +16,7 @@ public class Interactable_Passive : MonoBehaviour, iInteractable
     {
         _InteractingPlayer = player;
 
-        print("Begun passive interaction");
+        print("Interaction begun");
     }
 
     public virtual void ContinueInteraction(PlayerController player)
@@ -25,7 +25,7 @@ public class Interactable_Passive : MonoBehaviour, iInteractable
 
     public virtual void EndInteraction(PlayerController player)
     {
-        print("Ended passive interaction");
+
     }
     #endregion
 }

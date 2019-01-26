@@ -5,7 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Interactable_Breakable : MonoBehaviour, iInteractable
 {
+
     PlayerController _InteractingPlayer;
+
+    // Mechanic specific
     public float _Health;
     public float _InteractionStrength;
     public GameObject[] _Segments;
