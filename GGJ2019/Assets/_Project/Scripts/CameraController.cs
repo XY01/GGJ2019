@@ -11,7 +11,7 @@ public class CameraController : MonoBehaviour
     Vector3 _BaseOffset;
     Vector3 _AveragePos;
 
-    bool _Initialised;
+    public bool _Initialised;
 
     void Initialise()
     {
@@ -26,7 +26,6 @@ public class CameraController : MonoBehaviour
         _BaseOffset = transform.position - _AveragePos;
 
         _Initialised = true;
-
     }
 
     // Update is called once per frame
@@ -34,12 +33,15 @@ public class CameraController : MonoBehaviour
     {
         if (!_Initialised)
         {
-            return;
-        }
-
-        if (ExperienceManager.Instance._State == State.Playing)
-        {
-            Initialise();
+            print(ExperienceManager.Instance._State);
+            if (_TransformsToKeepInFocus.Count != 3)
+            {
+                Initialise();
+            }
+            else
+            {
+                return;
+            }
         }
 
         UpdateAverage();
