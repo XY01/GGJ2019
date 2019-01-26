@@ -251,14 +251,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.GetComponent<iInteractable>() != null)
+        {
+            if (other.GetComponent<Interactable_Passive>())
+            {
+                other.GetComponent<Interactable_Passive>().ContinueInteraction(this);
+            }
+        }
+    }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.GetComponent<iInteractable>() != null)
         {
+
+            if (other.GetComponent<Interactable_Passive>())
+            {
+                other.GetComponent<Interactable_Passive>().EndInteraction(this);
+            }
+            else
+            {
+                _InteractablesInRange.Remove(other.GetComponent<iInteractable>());
+            }
+
             if (_LogInteractables)
                 print(other.GetComponent<iInteractable>().GetGameObject().name + " out of range");
-
-            _InteractablesInRange.Remove(other.GetComponent<iInteractable>());
 
             // if the trigger is the echidna and you are pushing
             if (_State == State.PushingEchidna && other.GetComponent<iInteractable>().GetGameObject().GetComponent<EchidnaController>())
