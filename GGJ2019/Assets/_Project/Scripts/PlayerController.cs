@@ -359,49 +359,40 @@ public class PlayerController : MonoBehaviour
     #region Triggers
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Interactable>() != null)
+        TerrainZone zone = other.GetComponent<TerrainZone>();
+        if (zone != null)
         {
-            if (other.GetComponent<TerrainZone>())
-            {
-                other.GetComponent<TerrainZone>().BeginInteraction(this);
-            }
-            else
-            {
-                _InteractablesInRange.Add(other.GetComponent<Interactable>());
-            }
+            _TerrainVelocityScaler = zone._TerrainVelocityScaler;
+        }
+        else if (other.GetComponent<Interactable>() != null)
+        {
+            _InteractablesInRange.Add(other.GetComponent<Interactable>());            
 
             if (_LogInteractables)
                 print(other.GetComponent<Interactable>().gameObject.name + " in range");
-
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.GetComponent<Interactable>() != null)
+        TerrainZone zone = other.GetComponent<TerrainZone>();
+        if (zone != null)
         {
-            TerrainZone zone = other.GetComponent<TerrainZone>();
-            if (zone != null)
-            {
-                _ExternalForceVector = zone.WorldSpaceForce;                
-            }
+            _ExternalForceVector = zone.WorldSpaceForce;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<Interactable>() != null)
+        TerrainZone zone = other.GetComponent<TerrainZone>();
+        if (zone != null)
         {
-            TerrainZone zone = other.GetComponent<TerrainZone>();
-            if (zone != null)
-            {
-                _ExternalForceVector = Vector3.zero;
-                _TerrainVelocityScaler = 1;
-            }
-            else
-            {
-                _InteractablesInRange.Remove(other.GetComponent<Interactable>());
-            }
+            _ExternalForceVector = Vector3.zero;
+            _TerrainVelocityScaler = 1;
+        }
+        else if (other.GetComponent<Interactable>() != null)
+        {            
+            _InteractablesInRange.Remove(other.GetComponent<Interactable>());
 
             if (_LogInteractables)
                 print(other.GetComponent<Interactable>().gameObject.name + " out of range");
