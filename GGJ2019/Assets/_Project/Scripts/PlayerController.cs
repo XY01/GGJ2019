@@ -92,8 +92,9 @@ public class PlayerController : MonoBehaviour
             newInputVec.z = Input.GetAxis("VerticalP2");
         }
 
-        newInputMag = newInputVec.magnitude;
         newInputDir = newInputVec.normalized;
+        newInputMag = newInputDir.magnitude;
+       
 
         #region Trigger areas
         // Modulate input vector in case in passive trigger areas      TODO works for now but needs modulation
@@ -139,11 +140,12 @@ public class PlayerController : MonoBehaviour
         {
             _RaycastHitObject = null;
         }
+
         
         // raycast out to all the local interactables and find if any are slowing down the velociutyt scaler    
         // TO DO dot the forward with the ray to see if it is in front of roughly
         bool lowerScalerFound = false;
-        foreach(iInteractable i in _InteractablesInRange)
+        foreach (iInteractable i in _InteractablesInRange)
         {
             // Raycast forward to see if we are blocked by terrain
             RaycastHit interactableHit;
@@ -154,21 +156,30 @@ public class PlayerController : MonoBehaviour
             {
                 if (Vector3.Dot(rayToInteractable.direction, transform.forward) > .3f)
                 {
-
                     lowerScalerFound = true;
-                    float newScaler = Mathf.Clamp01(1 - (i.GetGameObject().GetComponent<Rigidbody>().mass / 10));
+                    float newScaler = MassToVelocityScaler( i.GetGameObject().GetComponent<Rigidbody>().mass );
                     if (newScaler < _InputMagScaler) _InputMagScaler = newScaler;
                     break;
                 }
-            }            
+            }
         }
 
-        if(!lowerScalerFound)
+        if (!lowerScalerFound)
             _InputMagScaler = Mathf.Lerp(_InputMagScaler, 1, Time.deltaTime * 8);
-          
+
+
+
+        if (_State == State.InteractingEnvironment)
+        {
+            float interactableInputScaler = MassToVelocityScaler(_ActiveInteractable.GetGameObject().GetComponent<Rigidbody>().mass);
+
+            if (interactableInputScaler < _InputMagScaler)
+                _InputMagScaler = interactableInputScaler;
+        }
+
 
         // Update pos
-        _RB.isKinematic = true;
+            _RB.isKinematic = true;
         _Pos += InputVector * Time.deltaTime * _Speed;
         transform.position = _Pos;
         
@@ -210,8 +221,14 @@ public class PlayerController : MonoBehaviour
                 SetState(State.Roaming);
         }
 
-        //if(ExperienceManager.Instance != null)
-        //    ExperienceManager.Instance._DebugReadouts[0].text = name + " State: " + _State.ToString();
+
+        if(ExperienceManager.Instance != null)
+            ExperienceManager.Instance._PlayerDebugs[(int)_Player].text = name + " State: " + _State.ToString();
+    }
+
+    float MassToVelocityScaler(float mass)
+    {
+        return Mathf.Clamp01(1 - (mass / 10));
     }
 
     void SetState(State newState)
@@ -232,6 +249,8 @@ public class PlayerController : MonoBehaviour
         {
             _State = newState;
         }
+
+        print(name + " state set to : " + _State.ToString());
     }
 
 
@@ -277,21 +296,20 @@ public class PlayerController : MonoBehaviour
 
     void BeginInteraction(iInteractable interactable)
     {
-        print(name + " begun interaction with " + interactable.GetGameObject().name);
+        print(name + " begun interaction with " + interactable.GetGameObject().name  + "  from layer " + interactable.GetGameObject().layer.ToString());
+
+        if (interactable.GetGameObject().layer == SRLayers.Echidna)
+        {
+            SetState(State.InteractingEchidna);
+            EchidnaController echidna = _ActiveInteractable.GetGameObject().GetComponent<EchidnaController>();
+        }
+        else if (interactable.GetGameObject().layer == SRLayers.Interactables)
+        {
+            SetState(State.InteractingEnvironment);
+        }
 
         _ActiveInteractable = interactable;
         _ActiveInteractable.BeginInteraction(this);
-
-        if(interactable.GetGameObject().layer == SRLayers.Echidna)
-        {
-            SetState(State.InteractingEchidna);
-
-            EchidnaController echidna = _ActiveInteractable.GetGameObject().GetComponent<EchidnaController>();
-        }
-        else if(interactable.GetGameObject().layer == SRLayers.Interactables)
-        {
-            SetState(State.InteractingEnvironment);
-        }        
     }
 
     void ContinueInteraction()
