@@ -17,7 +17,6 @@ public class Interactable_Breakable : Interactable
     public override void BeginInteraction(PlayerController player)
     {
         _InteractingPlayer = player;
-
         ReduceHealth();
     }
 
@@ -37,10 +36,6 @@ public class Interactable_Breakable : Interactable
     }
     #endregion
 
-    public bool IsDestroyed()
-    {
-        return _IsDestroyed;
-    }
 
     // Reduce life over time
     // If no life left tell player that interation is complete

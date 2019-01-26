@@ -311,12 +311,16 @@ public class PlayerController : MonoBehaviour
     {
         print(name + " begun interaction with " + interactable.gameObject.name  + "  from layer " + interactable.gameObject.layer.ToString());
 
+        /*
         if (interactable.gameObject.layer == SRLayers.Echidna)
         {
             SetState(State.InteractingEchidna);
             EchidnaController echidna = _ActiveInteractable.gameObject.GetComponent<EchidnaController>();
         }
-        else if (interactable.gameObject.layer == SRLayers.Interactables)
+        else 
+        */
+        
+        if (interactable.gameObject.layer == SRLayers.Interactables)
         {
             SetState(State.InteractingEnvironment);
         }
