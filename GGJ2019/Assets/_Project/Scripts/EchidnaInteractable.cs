@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class EchidnaInteractable : MonoBehaviour
+public class EchidnaInteractable : Interactable
 {
     public enum Type
     {

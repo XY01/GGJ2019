@@ -21,21 +21,21 @@ public sealed class SRInput {
     
     private const string _tsInternal = "1.3.2-Unity5";
     
-    public static readonly global::TypeSafe.InputAxis HorizontalP1 = new global::TypeSafe.InputAxis("HorizontalP1");
+    public static readonly global::TypeSafe.InputAxis HorizontalP1Controller = new global::TypeSafe.InputAxis("HorizontalP1Controller");
     
-    public static readonly global::TypeSafe.InputAxis VerticalP1 = new global::TypeSafe.InputAxis("VerticalP1");
+    public static readonly global::TypeSafe.InputAxis VerticalP1Controller = new global::TypeSafe.InputAxis("VerticalP1Controller");
     
-    public static readonly global::TypeSafe.InputAxis InteractP1 = new global::TypeSafe.InputAxis("InteractP1");
+    public static readonly global::TypeSafe.InputAxis InteractP1Controller = new global::TypeSafe.InputAxis("InteractP1Controller");
     
     public static readonly global::TypeSafe.InputAxis Fire2 = new global::TypeSafe.InputAxis("Fire2");
     
     public static readonly global::TypeSafe.InputAxis Fire3 = new global::TypeSafe.InputAxis("Fire3");
     
-    public static readonly global::TypeSafe.InputAxis HorizontalP2 = new global::TypeSafe.InputAxis("HorizontalP2");
+    public static readonly global::TypeSafe.InputAxis HorizontalP2Keyboard = new global::TypeSafe.InputAxis("HorizontalP2Keyboard");
     
-    public static readonly global::TypeSafe.InputAxis VerticalP2 = new global::TypeSafe.InputAxis("VerticalP2");
+    public static readonly global::TypeSafe.InputAxis VerticalP2Keyboard = new global::TypeSafe.InputAxis("VerticalP2Keyboard");
     
-    public static readonly global::TypeSafe.InputAxis InteractP2 = new global::TypeSafe.InputAxis("InteractP2");
+    public static readonly global::TypeSafe.InputAxis InteractP2Keyboard = new global::TypeSafe.InputAxis("InteractP2Keyboard");
     
     public static readonly global::TypeSafe.InputAxis Jump = new global::TypeSafe.InputAxis("Jump");
     
@@ -46,4 +46,16 @@ public sealed class SRInput {
     public static readonly global::TypeSafe.InputAxis Horizontal = new global::TypeSafe.InputAxis("Horizontal");
     
     public static readonly global::TypeSafe.InputAxis Vertical = new global::TypeSafe.InputAxis("Vertical");
+    
+    public static readonly global::TypeSafe.InputAxis HorizontalP2Controller = new global::TypeSafe.InputAxis("HorizontalP2Controller");
+    
+    public static readonly global::TypeSafe.InputAxis VerticalP2Controller = new global::TypeSafe.InputAxis("VerticalP2Controller");
+    
+    public static readonly global::TypeSafe.InputAxis InteractP2Controller = new global::TypeSafe.InputAxis("InteractP2Controller");
+    
+    public static readonly global::TypeSafe.InputAxis HorizontalP1Keyboard = new global::TypeSafe.InputAxis("HorizontalP1Keyboard");
+    
+    public static readonly global::TypeSafe.InputAxis VerticalP1Keyboard = new global::TypeSafe.InputAxis("VerticalP1Keyboard");
+    
+    public static readonly global::TypeSafe.InputAxis InteractP1Keyboard = new global::TypeSafe.InputAxis("InteractP1Keyboard");
 }

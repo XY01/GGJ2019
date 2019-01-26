@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Interactable_Push : MonoBehaviour, iInteractable
+public class Interactable_Push : Interactable
 {
     #region Interactable interface methods
     public GameObject GetGameObject()
@@ -10,21 +10,16 @@ public class Interactable_Push : MonoBehaviour, iInteractable
         return gameObject;
     }
 
-    public void BeginInteraction(PlayerController player)
+    public override void BeginInteraction(PlayerController player)
     {
     }
 
-    public void ContinueInteraction(PlayerController player)
+    public override void ContinueInteraction(PlayerController player)
     {
     }
 
-    public void EndInteraction(PlayerController player)
+    public override void EndInteraction(PlayerController player)
     {
-    }
-
-    public float GetNormalizedMass()
-    {
-        return 0;
     }
     #endregion
 }

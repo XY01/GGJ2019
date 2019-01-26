@@ -2,35 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TerrainZone : MonoBehaviour, iInteractable
+public class TerrainZone : MonoBehaviour
 {
     public float _TerrainVelocityScaler = .5f;
-    public Vector3 _Force = Vector3.zero;
+    public Vector3 _LocalizedForce = Vector3.zero;
+    public Vector3 WorldSpaceForce { get { return transform.TransformDirection(_LocalizedForce); } }
 
-    #region Interactable interface methods
-    public GameObject GetGameObject()
+    private void Start()
     {
-        return gameObject;
+        gameObject.layer = SRLayers.Interactables;
     }
 
     public void BeginInteraction(PlayerController player)
     {
-        player._TerrainVelocityScaler = _TerrainVelocityScaler;
+        
     }
 
-    public void ContinueInteraction(PlayerController player)
+
+    private void OnDrawGizmos()
     {
-
+        Gizmos.DrawLine(transform.position, transform.TransformPoint(_LocalizedForce));
     }
-
-    public void EndInteraction(PlayerController player)
-    {
-        player._TerrainVelocityScaler = 1;
-    }
-
-    public float GetNormalizedMass()
-    {
-        return 1;
-    }
-    #endregion
 }
