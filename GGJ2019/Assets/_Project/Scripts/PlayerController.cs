@@ -67,6 +67,8 @@ public class PlayerController : MonoBehaviour
         _RB = GetComponent<Rigidbody>();
         _Pos = transform.position;
         _Echidna = FindObjectOfType<EchidnaController>();
+
+        gameObject.layer = SRLayers.Players;
     }
 
     void Update()
