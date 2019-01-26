@@ -33,6 +33,7 @@ public class EchidnaController : MonoBehaviour, iInteractable
     // State vars - Idle
     [Header("State variables")]
     float _StateTimer = 0;
+    float _StateTimeoutDuration = 1;
     public float _IdleTimeoutDuration = 3;
 
     // Pushing
@@ -67,11 +68,8 @@ public class EchidnaController : MonoBehaviour, iInteractable
             _StateTimer += Time.deltaTime;
 
             // If idle timeout is up then start to wander
-            if (_StateTimer >= _IdleTimeoutDuration)
+            if (_StateTimer >= _StateTimeoutDuration)
                 SetState(State.Wander);
-
-            if (ExperienceManager.Instance != null)
-                ExperienceManager.Instance._EchidnaDebug.text = "Echidna - State: Idle.  Timer: " + _StateTimer + " / " + _IdleTimeoutDuration;
         }
         else if (_State == State.BeingPushed)
         {
@@ -79,7 +77,7 @@ public class EchidnaController : MonoBehaviour, iInteractable
             _StateTimer += Time.deltaTime;
 
             // If idle timeout is up then start to wander
-            if (_StateTimer >= _PushingTimeoutDuration)
+            if (_StateTimer >= _StateTimeoutDuration)
                 SetState(State.Idle);
 
         }
@@ -89,8 +87,6 @@ public class EchidnaController : MonoBehaviour, iInteractable
             _PerlOffset = Time.time * .1f;
             AddPerlinForce(transform.position, _BasePerlfieldScaler, _BasePerlForceScaler, _PerlOffset);
 
-            // if stuck in one spot too long change the perl offset
-            ExperienceManager.Instance._EchidnaDebug.text = "Echidna - State: Wandering.";
 
             // Search for closest interactabl;e
             EchidnaInteractable interactable = SearchForClosestInteractable();
@@ -104,7 +100,7 @@ public class EchidnaController : MonoBehaviour, iInteractable
         {
             _RB.AddForce(GetDirectionTowardInteractable());
             // Seek toward target distraction
-            ExperienceManager.Instance._EchidnaDebug.text = "Echidna - State: Seeking. Active Distraction Object: ";
+           
         }
         else if (_State == State.Consuming)
         {
@@ -112,9 +108,15 @@ public class EchidnaController : MonoBehaviour, iInteractable
             _StateTimer += Time.deltaTime;
 
             // If idle timeout is up then start to wander
-            if (_StateTimer >= _ConsumeDuration)
+            if (_StateTimer >= _StateTimeoutDuration)
+            {
+                print(name + " consuming finsihed with timer at: " + _StateTimer + "   " + _StateTimeoutDuration);
                 SetState(State.Wander);
+            }
         }
+
+        if (ExperienceManager.Instance != null)
+            ExperienceManager.Instance._EchidnaDebug.text = "Echidna - State: " + _State + "  objects in range: " + _InteractablesInRange.Count + "Timer: " + _StateTimer + " / " + _StateTimeoutDuration;
     }
 
     void SetState(State state)
@@ -123,11 +125,13 @@ public class EchidnaController : MonoBehaviour, iInteractable
         {
             _State = state;
             _StateTimer = 0;
+            _StateTimeoutDuration = _IdleTimeoutDuration;
         }
         else if (state == State.BeingPushed)
         {
             _State = state;
             _StateTimer = 0;
+            _StateTimeoutDuration = _PushingTimeoutDuration;
         }
         else if (state == State.Wander)
         {
@@ -153,7 +157,7 @@ public class EchidnaController : MonoBehaviour, iInteractable
             _StateTimer = 0;
         }
 
-        //print(name + " State set to: " + _State.ToString());
+        print(name + " State set to: " + _State.ToString());
     }
 
     Vector3 GetDirectionTowardInteractable()
@@ -166,6 +170,8 @@ public class EchidnaController : MonoBehaviour, iInteractable
         print("Searching for interactable: " + _InteractablesInRange.Count);
 
         EchidnaInteractable interactable = null;
+
+        _InteractablesInRange.RemoveAll(item => item == null);
 
         if (_InteractablesInRange.Count > 0)
         {
@@ -213,6 +219,8 @@ public class EchidnaController : MonoBehaviour, iInteractable
 
     void Consume(EchidnaInteractable interactable)
     {
+        print(name + "Consumed: " + interactable.name);
+
         if(interactable._Type == EchidnaInteractable.Type.Food)
         {
             _FullnessNorm += interactable._EffectStrength;           
@@ -223,8 +231,10 @@ public class EchidnaController : MonoBehaviour, iInteractable
         }
 
         _ConsumeDuration = interactable.TimeToConsume;
-        interactable.gameObject.SetActive(false);
+        _ActiveInteractable = null;
         _InteractablesInRange.Remove(interactable);
+
+        Destroy(interactable.gameObject);    
 
         SetState(State.Consuming);
     }
