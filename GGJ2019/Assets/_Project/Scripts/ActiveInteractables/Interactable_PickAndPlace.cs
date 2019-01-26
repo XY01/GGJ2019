@@ -30,6 +30,8 @@ public class Interactable_PickAndPlace : MonoBehaviour, iInteractable
         transform.SetParent(player._PickupPosition);
         transform.localPosition = Vector3.zero;
 
+        gameObject.layer = SRLayers.PickedUpInteractable;
+
         _RB.isKinematic = true;
 
         // turn rb to is kinematic
@@ -44,6 +46,8 @@ public class Interactable_PickAndPlace : MonoBehaviour, iInteractable
     {
         transform.SetParent(_OriginalParent);
         _RB.isKinematic = false;
+
+        gameObject.layer = SRLayers.Interactables;
 
         // turn rb to isnt kinematic
         // play put down particles or animation
