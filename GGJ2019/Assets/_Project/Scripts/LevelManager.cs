@@ -11,6 +11,7 @@ public class LevelManager : MonoBehaviour
     void Start()
     {
         PlayerPrefs.SetFloat("Score", 0);
+
         Scene master = SceneManager.GetSceneByName("Master");
 
         if (!master.isLoaded)
@@ -20,12 +21,13 @@ public class LevelManager : MonoBehaviour
     }
 
     private void Update()
-    {
+    { 
+        
         if (ExperienceManager.Instance != null &&  ExperienceManager.Instance._State == State.Playing)
         {
             _TimeTaken += Time.deltaTime;
             PlayerPrefs.SetFloat("Score", _TimeTaken);
-            ExperienceManager.Instance._TimeReadout.text = _TimeTaken.ToString("F1");
+            ExperienceManager.Instance._TimeReadout.text = _TimeTaken.ToString("F1") + "s";
         }
     }
 

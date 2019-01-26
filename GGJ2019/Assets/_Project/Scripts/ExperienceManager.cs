@@ -36,7 +36,7 @@ public class ExperienceManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKey(KeyCode.P))
         {
             SceneManager.LoadScene("ScoreScreen", LoadSceneMode.Single);
         }
