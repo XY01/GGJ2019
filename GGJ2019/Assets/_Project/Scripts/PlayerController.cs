@@ -199,7 +199,7 @@ public class PlayerController : MonoBehaviour
         }
 
         if(ExperienceManager.Instance != null)
-            ExperienceManager.Instance._DebugText[0].text = name + " State: " + _State.ToString();
+            ExperienceManager.Instance._DebugReadouts[0].text = name + " State: " + _State.ToString();
     }
 
     void SetState(State newState)

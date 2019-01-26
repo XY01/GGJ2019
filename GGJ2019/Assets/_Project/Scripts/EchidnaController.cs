@@ -66,7 +66,7 @@ public class EchidnaController : MonoBehaviour, iInteractable
                 SetState(State.Wander);
 
             if(ExperienceManager.Instance != null)
-                ExperienceManager.Instance._DebugText[1].text = "Echidna - State: Idle.  Timer: " + _StateTimer + " / " + _IdleTimeoutDuration;
+                ExperienceManager.Instance._DebugReadouts[1].text = "Echidna - State: Idle.  Timer: " + _StateTimer + " / " + _IdleTimeoutDuration;
         }
         else if (_State == State.BeingPushed)
         {
