@@ -12,11 +12,11 @@ GameObject:
   - component: {fileID: 7855343286375602159}
   - component: {fileID: 7927421133769290573}
   m_Layer: 0
-  m_Name: PF_Swamp_01
+  m_Name: PF_Terrain Zone - Swamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &2013400913339611449
 Transform:
@@ -25,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1786916634966542972}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -91,12 +91,12 @@ GameObject:
   - component: {fileID: 563940009736108454}
   - component: {fileID: 3581186986283330437}
   - component: {fileID: 137018510822628874}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: COL_Swamp_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4582246540266274839
 Transform:
@@ -106,8 +106,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7207584259424931186}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.07235847, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0, y: 1.425, z: 0}
+  m_LocalScale: {x: 1, y: 11.87, z: 1}
   m_Children: []
   m_Father: {fileID: 2013400913339611449}
   m_RootOrder: 0
@@ -165,10 +165,10 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7207584259424931186}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 3
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300002, guid: d09ac4a04675083438ae0fd17326f6a3, type: 3}
 --- !u!114 &137018510822628874
@@ -183,3 +183,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b40f0e42720fbe2409558ff4f17ab5da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _TerrainVelocityScaler: 0.2
+  _LocalizedForce: {x: 0, y: 0, z: 0}
