@@ -138,6 +138,8 @@ public class StartOptions : MonoBehaviour {
 
         HideDelayed();
         GameObject.FindGameObjectWithTag("FadeImage").SetActive(false);
+        ExperienceManager.Instance._State = State.Playing;
+
     }
 
 

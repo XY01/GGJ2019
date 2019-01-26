@@ -13,4 +13,5 @@ public class EchidnaInteractable : MonoBehaviour
 
     public Type _Type = Type.Food;
     public float _EffectStrength = 1;
+    public float TimeToConsume { get { return _EffectStrength * 5; } }
 }

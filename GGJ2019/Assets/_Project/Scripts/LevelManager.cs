@@ -5,8 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
-
-    AsyncOperation asyncLoadLevel;
+    public float _TimeTaken;
 
     void Start()
     {
@@ -15,7 +14,7 @@ public class LevelManager : MonoBehaviour
 
     void Initialise()
     {
-
+        // Keep entry directly from scene working
         Scene master = SceneManager.GetSceneByName("Master");
 
         if (!master.isLoaded)
@@ -23,6 +22,18 @@ public class LevelManager : MonoBehaviour
             StartCoroutine(LoadMaster());
         }
     }
+
+    private void Update()
+    {
+        if (ExperienceManager.Instance._State == State.Playing)
+        {
+            _TimeTaken += Time.deltaTime;
+            ExperienceManager.Instance._TimeReadout.text = _TimeTaken.ToString("F2");
+        }
+    }
+
+
+    AsyncOperation asyncLoadLevel;
 
     IEnumerator LoadMaster()
     {
