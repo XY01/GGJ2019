@@ -36,8 +36,6 @@ public class Interactable_PickAndPlace : MonoBehaviour, iInteractable
     public void StopInteraction(PlayerController player)
     {
         transform.SetParent(_OriginalParent);
-        transform.localPosition = Vector3.zero;
-
         _RB.isKinematic = false;
 
         // turn rb to isnt kinematic
