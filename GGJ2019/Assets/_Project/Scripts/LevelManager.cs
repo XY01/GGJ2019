@@ -22,7 +22,7 @@ public class LevelManager : MonoBehaviour
         if (ExperienceManager.Instance != null &&  ExperienceManager.Instance._State == State.Playing)
         {
             _TimeTaken += Time.deltaTime;
-            ExperienceManager.Instance._TimeReadout.text = _TimeTaken.ToString("F2");
+            ExperienceManager.Instance._TimeReadout.text = _TimeTaken.ToString("F1");
         }
     }
 
