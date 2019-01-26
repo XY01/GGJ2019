@@ -5,24 +5,22 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Interactable_Breakable : Interactable
 {
-    bool _IsDestroyed = false;
     PlayerController _InteractingPlayer;
 
     // Mechanic specific
-    public float _Health;
-    public float _InteractionStrength;
+    public int _HitsToDestroy = 3;
     public GameObject[] _Segments;
 
     #region Interactable interface methods   
     public override void BeginInteraction(PlayerController player)
     {
         _InteractingPlayer = player;
-        ReduceHealth();
+        Hit();
     }
 
     public override void ContinueInteraction(PlayerController player)
     {
-        ReduceHealth();
+        //ReduceHealth();
     }
 
     public override void EndInteraction(PlayerController player)
@@ -39,18 +37,18 @@ public class Interactable_Breakable : Interactable
 
     // Reduce life over time
     // If no life left tell player that interation is complete
-    void ReduceHealth()
+    void Hit()
     {
-        _Health -= _InteractionStrength;
-        print(_Health);
+        _HitsToDestroy -= 1;
 
-        if (_Health <= 0f)
+        if (_HitsToDestroy <= 0f)
         {
             GetComponent<MeshRenderer>().enabled = false;
             GetComponent<BoxCollider>().enabled = false;
 
             foreach (GameObject segment in _Segments)
             {
+                segment.transform.SetParent(transform.parent);
                 segment.SetActive(true);
                 segment.GetComponent<Rigidbody>().isKinematic = false;
             }
