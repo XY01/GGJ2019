@@ -479,7 +479,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1622591050, guid: 9b088ca315410644b80d9c3221f00f05, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.25
+      value: -2.04
       objectReference: {fileID: 0}
     - target: {fileID: 1622591050, guid: 9b088ca315410644b80d9c3221f00f05, type: 3}
       propertyPath: m_LocalPosition.y
@@ -487,7 +487,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1622591050, guid: 9b088ca315410644b80d9c3221f00f05, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.68
+      value: 1.97
       objectReference: {fileID: 0}
     - target: {fileID: 1622591050, guid: 9b088ca315410644b80d9c3221f00f05, type: 3}
       propertyPath: m_LocalRotation.x
@@ -805,16 +805,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Terrain Zone - Swamp
       objectReference: {fileID: 0}
-    - target: {fileID: 1786916634966542972, guid: 400be621e8f121f4cadfcaa70cb28472,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1786916634966542972, guid: 400be621e8f121f4cadfcaa70cb28472,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2013400913339611449, guid: 400be621e8f121f4cadfcaa70cb28472,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -869,41 +859,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4582246540266274839, guid: 400be621e8f121f4cadfcaa70cb28472,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 11.87
-      objectReference: {fileID: 0}
-    - target: {fileID: 4582246540266274839, guid: 400be621e8f121f4cadfcaa70cb28472,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.425
-      objectReference: {fileID: 0}
-    - target: {fileID: 7207584259424931186, guid: 400be621e8f121f4cadfcaa70cb28472,
-        type: 3}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 7207584259424931186, guid: 400be621e8f121f4cadfcaa70cb28472,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 3581186986283330437, guid: 400be621e8f121f4cadfcaa70cb28472,
-        type: 3}
-      propertyPath: m_Convex
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3581186986283330437, guid: 400be621e8f121f4cadfcaa70cb28472,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 137018510822628874, guid: 400be621e8f121f4cadfcaa70cb28472,
-        type: 3}
-      propertyPath: _TerrainVelocityScaler
-      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 400be621e8f121f4cadfcaa70cb28472, type: 3}
@@ -1041,7 +996,7 @@ PrefabInstance:
     - target: {fileID: 4130082714623260610, guid: 2c93559438942df4886c985631eea22d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.32
+      value: 4.875
       objectReference: {fileID: 0}
     - target: {fileID: 4130082714623260610, guid: 2c93559438942df4886c985631eea22d,
         type: 3}
@@ -1051,7 +1006,7 @@ PrefabInstance:
     - target: {fileID: 4130082714623260610, guid: 2c93559438942df4886c985631eea22d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.07
+      value: -1.97
       objectReference: {fileID: 0}
     - target: {fileID: 4130082714623260610, guid: 2c93559438942df4886c985631eea22d,
         type: 3}
@@ -1111,7 +1066,12 @@ PrefabInstance:
     - target: {fileID: 4130082714623260636, guid: 2c93559438942df4886c985631eea22d,
         type: 3}
       propertyPath: _IdleTimeoutDuration
-      value: 3
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4130082714623260636, guid: 2c93559438942df4886c985631eea22d,
+        type: 3}
+      propertyPath: _BasePerlfieldScaler
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 4130082714623260608, guid: 2c93559438942df4886c985631eea22d,
         type: 3}
@@ -1120,7 +1080,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1637859116, guid: 2c93559438942df4886c985631eea22d, type: 3}
       propertyPath: m_Radius
-      value: 5.48
+      value: 4.82
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5343703653517696761, guid: 2c93559438942df4886c985631eea22d, type: 3}
@@ -1180,7 +1140,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1622591050, guid: 02ba690b1888247419fa362d37242538, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.07
+      value: -1.515
       objectReference: {fileID: 0}
     - target: {fileID: 1622591050, guid: 02ba690b1888247419fa362d37242538, type: 3}
       propertyPath: m_LocalPosition.y

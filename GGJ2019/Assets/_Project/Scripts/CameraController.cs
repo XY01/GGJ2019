@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour
     List<Transform> _TransformsToKeepInFocus = new List<Transform>();
     public float _Smoothing = 4;
 
-    Vector3 _BaseOffset;
+    public Vector3 _BaseOffset = new Vector3(0, 6, -6);
     Vector3 _AveragePos;
 
     public bool _Initialised;
@@ -23,7 +23,6 @@ public class CameraController : MonoBehaviour
         _TransformsToKeepInFocus.Add(players[1].transform);
 
         UpdateAverage();
-        _BaseOffset = transform.position - _AveragePos;
 
         _Initialised = true;
     }
@@ -52,10 +51,20 @@ public class CameraController : MonoBehaviour
     void UpdateAverage()
     {
         _AveragePos = Vector3.zero;
+
         for (int i = 0; i < _TransformsToKeepInFocus.Count; i++)
         {
             _AveragePos += _TransformsToKeepInFocus[i].position;
         }
         _AveragePos /= _TransformsToKeepInFocus.Count;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(_AveragePos, Vector3.one * .1f);
+        for (int i = 0; i < _TransformsToKeepInFocus.Count; i++)
+        {
+            Gizmos.DrawLine(_AveragePos, _TransformsToKeepInFocus[i].position);
+        }
     }
 }

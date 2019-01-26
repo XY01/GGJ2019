@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Project/Scenes/Proto Movement.unity
     guid: 4668d6369aeed8243b7cdeadf5c7638d
+  - enabled: 1
+    path: Assets/_Project/Scenes/TitleScreen.unity
+    guid: 106bcd187d5d3954f939f4f3ec38e2a5
+  - enabled: 1
+    path: Assets/_Project/Scenes/ScoreScreen.unity
+    guid: 7be7df93ad8595b4f81d46be1eb98b82
   m_configObjects: {}

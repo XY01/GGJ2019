@@ -52,6 +52,7 @@ public class Interactable_Breakable : Interactable
                 segment.SetActive(true);
                 segment.GetComponent<Rigidbody>().isKinematic = false;
             }
+
             _InteractingPlayer.InteractableActionComplete();
         }
     }

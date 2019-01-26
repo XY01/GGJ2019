@@ -9,12 +9,6 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
-        Initialise();
-    }
-
-    void Initialise()
-    {
-        // Keep entry directly from scene working
         Scene master = SceneManager.GetSceneByName("Master");
 
         if (!master.isLoaded)
@@ -33,12 +27,12 @@ public class LevelManager : MonoBehaviour
     }
 
 
-    AsyncOperation asyncLoadLevel;
+    AsyncOperation loadMaster;
 
     IEnumerator LoadMaster()
     {
-        asyncLoadLevel = SceneManager.LoadSceneAsync("Master", LoadSceneMode.Additive);
-        while (!asyncLoadLevel.isDone)
+        loadMaster = SceneManager.LoadSceneAsync("Master", LoadSceneMode.Additive);
+        while (!loadMaster.isDone)
         {
             yield return null;
         }
