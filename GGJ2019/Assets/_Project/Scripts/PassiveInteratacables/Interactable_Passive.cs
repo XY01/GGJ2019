@@ -27,5 +27,10 @@ public class Interactable_Passive : MonoBehaviour, iInteractable
     {
         print("Ended passive interaction");
     }
+
+    public float GetNormalizedMass()
+    {
+        return 0;
+    }
     #endregion
 }

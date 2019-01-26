@@ -37,7 +37,8 @@ public class PlayerController : MonoBehaviour
     
     Vector3 _InputDirection;
     float _InputMagnitude;
-    Vector3 InputVector { get { return _InputDirection * _InputMagnitude; } }
+    public float _InputMagScaler = 1;
+    Vector3 InputVector { get { return _InputDirection * _InputMagnitude * _InputMagScaler; } }
 
 
 
@@ -113,10 +114,26 @@ public class PlayerController : MonoBehaviour
 
         // Raycast forward so we stay on ground. TO DO smooth out later
         RaycastHit hit;
-        _FwdRay = new Ray(transform.position, InputVector);
-        
+        _FwdRay = new Ray(transform.position, newInputVec);
+
         if (Physics.Raycast(_FwdRay, out hit))
-            _IsMoveBlocked = hit.collider.gameObject.layer == SRLayers.Terrain && hit.distance < _Radius * 1.5f;
+        {
+            if (hit.distance < _Radius)
+            {
+                if (hit.collider.gameObject.layer == SRLayers.Terrain)
+                {
+                    _IsMoveBlocked = true;
+                }
+                else
+                {
+                    _IsMoveBlocked = false;
+                }
+            }
+            else
+            {
+                _IsMoveBlocked = false;
+            }
+        }
 
         if (!_IsMoveBlocked)
         {
@@ -125,9 +142,6 @@ public class PlayerController : MonoBehaviour
             _Pos += InputVector * Time.deltaTime * _Speed;
             transform.position = _Pos;
         }
-
-
-
 
         // Raycast down so we stay on ground. TO DO smooth out later        
         Ray ray = new Ray(transform.position, Vector3.down);
@@ -334,12 +348,19 @@ public class PlayerController : MonoBehaviour
                 SetState(State.Roaming);
         }
     }
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == SRLayers.Echidna)
         {
             collision.gameObject.GetComponent<EchidnaController>().BeginInteraction(this);
             SetState(State.PushingEchidna);
+        }
+
+        iInteractable interactable = collision.gameObject.GetComponent<iInteractable>();
+        if (interactable!=null)
+        {
+            _InputMagScaler = Mathf.Clamp01(10 - interactable.GetGameObject().GetComponent<Rigidbody>().mass);
         }
     }
 

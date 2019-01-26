@@ -22,5 +22,10 @@ public class Interactable_Sticky : Interactable_Passive
         base.EndInteraction(player);
         player._Debug_StickyMove = false;
     }
+
+    public float GetNormalizedMass()
+    {
+        return 1;
+    }
     #endregion
 }
