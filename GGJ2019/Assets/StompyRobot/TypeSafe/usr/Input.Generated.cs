@@ -38,4 +38,12 @@ public sealed class SRInput {
     public static readonly global::TypeSafe.InputAxis InteractP2 = new global::TypeSafe.InputAxis("InteractP2");
     
     public static readonly global::TypeSafe.InputAxis Jump = new global::TypeSafe.InputAxis("Jump");
+    
+    public static readonly global::TypeSafe.InputAxis Submit = new global::TypeSafe.InputAxis("Submit");
+    
+    public static readonly global::TypeSafe.InputAxis Cancel = new global::TypeSafe.InputAxis("Cancel");
+    
+    public static readonly global::TypeSafe.InputAxis Horizontal = new global::TypeSafe.InputAxis("Horizontal");
+    
+    public static readonly global::TypeSafe.InputAxis Vertical = new global::TypeSafe.InputAxis("Vertical");
 }
