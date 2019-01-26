@@ -9,6 +9,8 @@ public class Interactable_PickAndPlace : MonoBehaviour, iInteractable
     Collider _Collider;
     Transform _OriginalParent;
 
+    public float _NormalizedMass = .8f;
+
     // Start is called before the first frame update
     void Start()
     {

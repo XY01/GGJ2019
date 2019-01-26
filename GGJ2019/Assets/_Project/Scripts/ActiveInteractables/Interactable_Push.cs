@@ -21,5 +21,10 @@ public class Interactable_Push : MonoBehaviour, iInteractable
     public void EndInteraction(PlayerController player)
     {
     }
+
+    public float GetNormalizedMass()
+    {
+        return 0;
+    }
     #endregion
 }

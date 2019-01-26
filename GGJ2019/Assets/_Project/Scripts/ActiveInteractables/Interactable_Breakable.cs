@@ -36,6 +36,10 @@ public class Interactable_Breakable : MonoBehaviour, iInteractable
 
     }
 
+    public float GetNormalizedMass()
+    {
+        return 0;
+    }
     #endregion
 
     // Reduce life over time

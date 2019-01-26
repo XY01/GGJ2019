@@ -24,5 +24,10 @@ public class Interactable_Sticky : Interactable_Passive, iInteractable
 
 
     }
+
+    public float GetNormalizedMass()
+    {
+        return 1;
+    }
     #endregion
 }

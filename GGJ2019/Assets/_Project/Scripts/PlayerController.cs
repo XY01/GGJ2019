@@ -10,13 +10,7 @@ public class PlayerController : MonoBehaviour
         Player1,
         Player2,
     }
-
-    public enum ControlType
-    {
-        Physics,
-        Kinematic,    
-    }
-
+    
     public enum State
     {
         Roaming,
@@ -28,7 +22,6 @@ public class PlayerController : MonoBehaviour
     // States
     public State _State = State.Roaming;
     public Player _Player = Player.Player1;
-    public ControlType _ControlType = ControlType.Kinematic;
 
     public Transform _PickupPosition;
 
@@ -40,7 +33,15 @@ public class PlayerController : MonoBehaviour
     Rigidbody _RB;
     Vector3 _Pos;
     public float _Speed = 10;
-    Vector3 _InputVector;
+
+    
+    Vector3 _InputDirection;
+    float _InputMagnitude;
+    public float _InputMagScaler = 1;
+    Vector3 InputVector { get { return _InputDirection * _InputMagnitude * _InputMagScaler; } }
+
+    GameObject _RaycastHitObject;
+    float _RayCastHitDist = 100;
 
     // Height Y
     public float _Radius = .15f;
@@ -49,10 +50,17 @@ public class PlayerController : MonoBehaviour
     // Rotation
     float _RotationSmoothing = 8;
 
+    Ray _FwdRay;
+    bool _IsMoveBlocked = false;
+
+    public LayerMask _LayerMask;
 
     // Debug
     public bool _LogInteractables = false;
     public Text _DebugText;
+
+    public bool _Debug_StickyMove = false;
+    public bool _Debug_SlipperyMove = false;
 
     void Start()
     {
@@ -64,35 +72,79 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         #region movement
+        Vector3 newInputVec = Vector3.zero;
+        Vector3 newInputDir = Vector3.zero;
+        float newInputMag = 0;
+
         if (_Player == Player.Player1)
         {
-            _InputVector.x = Input.GetAxis("HorizontalP1");
-            _InputVector.z = Input.GetAxis("VerticalP1");
+            newInputVec.x = Input.GetAxis("HorizontalP1");
+            newInputVec.z = Input.GetAxis("VerticalP1");
         }
         else
         {
-            _InputVector.x = Input.GetAxis("HorizontalP2");
-            _InputVector.z = Input.GetAxis("VerticalP2");
+            newInputVec.x = Input.GetAxis("HorizontalP2");
+            newInputVec.z = Input.GetAxis("VerticalP2");
         }
 
-        if (_ControlType == ControlType.Kinematic)
+        newInputMag = newInputVec.magnitude;
+        newInputDir = newInputVec.normalized;
+
+        // Modulate input vector in case in passive trigger areas      TODO works for now but needs modulation
+        if (_Debug_StickyMove)
         {
-            _RB.isKinematic = true;
-            _Pos += _InputVector * Time.deltaTime;
-            transform.position = _Pos;
+            // Smooth the input mag
+            newInputMag = Mathf.Lerp(_InputMagnitude, newInputMag * .9f, Time.deltaTime * .5f);
+
+            // Set input dir
+            newInputDir = Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 10);
         }
-        else
+        else if (_Debug_SlipperyMove) //TODO 
         {
-            _RB.isKinematic = false;
-            _RB.AddForce(_InputVector * _Speed);
+            // Smooth the input mag
+            newInputMag = newInputMag * 2f;// Mathf.Lerp(_InputMagnitude, newInputMag * 2f, Time.deltaTime * 6);
+
+            // Smooth the input dir
+            newInputDir = Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 6);
         }
+
+        _InputDirection = newInputDir;// Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 10);
+        _InputMagnitude = Mathf.Lerp(_InputMagnitude, newInputMag, Time.deltaTime * 10);
 
         // Rotation
-        if (_InputVector != Vector3.zero)
-            transform.LookAt(transform.position + _InputVector);
+        if (InputVector != Vector3.zero)
+            transform.LookAt(transform.position + InputVector);
 
-        // Raycast down so we stay on ground. TO DO smooth out later
+        // Raycast forward so we stay on ground. TO DO smooth out later
         RaycastHit hit;
+        _FwdRay = new Ray(transform.position, newInputVec);
+
+        if (Physics.Raycast(_FwdRay, out hit, _Radius * 5, _LayerMask, QueryTriggerInteraction.Ignore))
+        {
+            _RaycastHitObject = hit.collider.gameObject;
+            _RayCastHitDist = hit.distance;
+
+            _IsMoveBlocked = hit.collider.gameObject.layer == SRLayers.Terrain && hit.distance < _Radius ? true : false;
+        }
+        else
+        {
+            _RaycastHitObject = null;
+        }
+
+        if (!_IsMoveBlocked)
+        {
+            if (_RaycastHitObject != null && _RaycastHitObject.layer != SRLayers.Terrain && _RayCastHitDist < _Radius * 1.2f)
+                _InputMagScaler = Mathf.Clamp01(10 - _RaycastHitObject.GetComponent<Rigidbody>().mass);
+            else
+                _InputMagScaler = 1;
+
+            // Update pos
+            _RB.isKinematic = true;
+            _Pos += InputVector * Time.deltaTime * _Speed;
+            transform.position = _Pos;
+        }
+
+        // Raycast down so we stay on ground. TO DO smooth out later        
         Ray ray = new Ray(transform.position, Vector3.down);
         
         if (Physics.Raycast(ray, out hit))
@@ -151,6 +203,19 @@ public class PlayerController : MonoBehaviour
         {
             _State = newState;
         }
+    }
+
+
+    public void StartStickyZone()
+    {
+        _InputMagnitude *= .5f;
+        _Debug_StickyMove = true;
+    }
+
+    public void EndStickyZone()
+    {
+        _InputMagnitude *= 2;
+        _Debug_StickyMove = false;
     }
 
     #region Interaction methods
@@ -251,33 +316,44 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.GetComponent<iInteractable>() != null)
+        {
+            if (other.GetComponent<Interactable_Passive>())
+            {
+                other.GetComponent<Interactable_Passive>().ContinueInteraction(this);
+            }
+        }
+    }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.GetComponent<iInteractable>() != null)
         {
+
+            if (other.GetComponent<Interactable_Passive>())
+            {
+                other.GetComponent<Interactable_Passive>().EndInteraction(this);
+            }
+            else
+            {
+                _InteractablesInRange.Remove(other.GetComponent<iInteractable>());
+            }
+
             if (_LogInteractables)
                 print(other.GetComponent<iInteractable>().GetGameObject().name + " out of range");
-
-            _InteractablesInRange.Remove(other.GetComponent<iInteractable>());
 
             // if the trigger is the echidna and you are pushing
             if (_State == State.PushingEchidna && other.GetComponent<iInteractable>().GetGameObject().GetComponent<EchidnaController>())
                 SetState(State.Roaming);
         }
     }
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.layer == SRLayers.Echidna)
         {
-            collision.gameObject.GetComponent<EchidnaController>().BeginInteraction(this);
-            SetState(State.PushingEchidna);
-        }
-    }
-
-    void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.layer == SRLayers.Echidna)
-        {           
             collision.gameObject.GetComponent<EchidnaController>().BeginInteraction(this);
             SetState(State.PushingEchidna);
         }
@@ -287,7 +363,10 @@ public class PlayerController : MonoBehaviour
     #region Debug
     private void OnDrawGizmos()
     {
-        Gizmos.DrawLine(transform.position, transform.position + _InputVector);
+        Gizmos.DrawLine(transform.position, transform.position + InputVector);
+
+        Gizmos.color = _IsMoveBlocked ? Color.red : Color.blue;
+        Gizmos.DrawLine(transform.position, transform.position + _FwdRay.direction);
     }
     #endregion
 }
