@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 1951176792879214946}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.548, y: 0.178, z: -0.836}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalScale: {x: 0.29999998, y: 0.29999998, z: 0.29999998}
   m_Children:
   - {fileID: 1951176794252454448}
   - {fileID: 1770680184916935584}
@@ -98,12 +98,15 @@ MonoBehaviour:
   _State: 0
   _Player: 0
   _PickupPosition: {fileID: 1770680184916935584}
-  _Speed: 10
+  _Speed: 2
   _InputMagScaler: 1
-  _Radius: 0.15
+  _Radius: 0.2
   _LayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 512
+  _MovementBlockingLayerMask:
+    serializedVersion: 2
+    m_Bits: 512
   _LogInteractables: 0
   _DebugText: {fileID: 0}
   _Debug_StickyMove: 0
@@ -185,7 +188,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1951176794252454451}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -262,7 +265,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8408771349586746114}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1

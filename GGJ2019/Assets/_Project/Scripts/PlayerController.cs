@@ -57,7 +57,6 @@ public class PlayerController : MonoBehaviour
 
     // Debug
     public bool _LogInteractables = false;
-    public Text _DebugText;
 
     public bool _Debug_StickyMove = false;
     public bool _Debug_SlipperyMove = false;
@@ -182,7 +181,8 @@ public class PlayerController : MonoBehaviour
                 SetState(State.Roaming);
         }
 
-        ExperienceManager.Instance._DebugText[0].text = name + " State: " + _State.ToString();
+        if(ExperienceManager.Instance != null)
+            ExperienceManager.Instance._DebugText[0].text = name + " State: " + _State.ToString();
     }
 
     void SetState(State newState)

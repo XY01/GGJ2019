@@ -9,7 +9,7 @@ public class ExperienceManager : MonoBehaviour
     public static ExperienceManager Instance;
     public Text _TimeReadout;
     private float _TimeTaken;
-    public Text[] _DebugText;
+    public Text[] _DebugReadouts;
 
     private void Awake()
     {
@@ -36,4 +36,5 @@ public class ExperienceManager : MonoBehaviour
             _TimeReadout.text = _TimeTaken.ToString("F2");
         }
     }
+
 }
