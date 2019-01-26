@@ -17,6 +17,6 @@ public class VelocityParticles : MonoBehaviour
     void Update()
     {
         _PsEmmission.rate = _Rb.velocity.magnitude * 30;
-        Debug.Log(_Rb.velocity.magnitude);
+      
     }
 }
