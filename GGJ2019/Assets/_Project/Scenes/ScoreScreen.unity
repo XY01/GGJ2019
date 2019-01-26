@@ -407,7 +407,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9110531614709456170, guid: c218554374cb4fb4688ac2776019f180,
+      - m_Target: {fileID: 3116480207512682508, guid: c218554374cb4fb4688ac2776019f180,
           type: 3}
         m_MethodName: Restart
         m_Mode: 1
@@ -906,6 +906,17 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6673555233927629927, guid: 5aa5ba5a75eed2e44b0a880af78daee4,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3116480207512682508, guid: c218554374cb4fb4688ac2776019f180,
+        type: 3}
+    - target: {fileID: 6673555233927629927, guid: 5aa5ba5a75eed2e44b0a880af78daee4,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Quit
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5aa5ba5a75eed2e44b0a880af78daee4, type: 3}
