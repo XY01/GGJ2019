@@ -42,7 +42,6 @@ public class LevelManager : MonoBehaviour
         {
             yield return null;
         }
-        GameObject.FindGameObjectWithTag("MenuUI").SetActive(false);
         ExperienceManager.Instance._State = State.Playing;
     }
 }
