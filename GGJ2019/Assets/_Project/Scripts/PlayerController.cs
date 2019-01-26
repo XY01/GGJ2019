@@ -26,8 +26,8 @@ public class PlayerController : MonoBehaviour
     public Transform _PickupPosition;
 
     EchidnaController _Echidna;
-    iInteractable _ActiveInteractable;
-    List<iInteractable> _InteractablesInRange = new List<iInteractable>();
+    Interactable _ActiveInteractable;
+    List<Interactable> _InteractablesInRange = new List<Interactable>();
 
     // Translation X Z
     Rigidbody _RB;
@@ -39,7 +39,8 @@ public class PlayerController : MonoBehaviour
     float _InputMagnitude;
     public float _InputMagScaler = 1;
     public float _TerrainVelocityScaler = 1;
-    Vector3 InputVector { get { return _InputDirection * _InputMagnitude * _InputMagScaler * _TerrainVelocityScaler; } }
+    Vector3 _ExternalForceVector = Vector3.zero;
+    Vector3 FinalMovementVector { get { return (_InputDirection * _InputMagnitude * _InputMagScaler * _TerrainVelocityScaler * _Speed) + (_ExternalForceVector); } }
 
     GameObject _RaycastHitObject;
     GameObject _LastRaycastHitObject;
@@ -77,6 +78,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        _InteractablesInRange.RemoveAll(item => item == null);
+
         #region movement
         Vector3 newInputVec = Vector3.zero;
         Vector3 newInputDir = Vector3.zero;
@@ -127,8 +130,8 @@ public class PlayerController : MonoBehaviour
         _InputMagnitude = Mathf.Lerp(_InputMagnitude, newInputMag, Time.deltaTime * 10);
 
         // Rotation
-        if (InputVector != Vector3.zero)
-            transform.LookAt(transform.position + InputVector);
+        if (FinalMovementVector != Vector3.zero)
+            transform.LookAt(transform.position + FinalMovementVector);
 
         
         // Raycast forward to see if we are blocked by terrain
@@ -148,25 +151,29 @@ public class PlayerController : MonoBehaviour
         {
             _RaycastHitObject = null;
         }
-        
 
-        
+
+
         // raycast out to all the local interactables and find if any are slowing down the velociutyt scaler    
         // TO DO dot the forward with the ray to see if it is in front of roughly
+        
         bool lowerScalerFound = false;
-        foreach (iInteractable i in _InteractablesInRange)
+        foreach (Interactable i in _InteractablesInRange)
         {
             // Raycast forward to see if we are blocked by terrain
             RaycastHit interactableHit;
-            Ray rayToInteractable = new Ray(transform.position, i.GetGameObject().transform.position - transform.position);
+            Ray rayToInteractable = new Ray(transform.position, i.gameObject.transform.position - transform.position);
 
             // Raycast out to find objects that will block movement. Ignore triggers
-            if (Physics.Raycast(rayToInteractable, out interactableHit, _Radius * 1.2f, _InteractableLayerMask, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(rayToInteractable, out interactableHit, _Radius * 2f, _InteractableLayerMask, QueryTriggerInteraction.Ignore))
             {
-                if (Vector3.Dot(rayToInteractable.direction, transform.forward) > .3f)
+                if(_Debug)
+                    print("Hit : " + interactableHit.collider.name +   "   dist: " + interactableHit.distance);
+
+                if (Vector3.Dot(rayToInteractable.direction, transform.forward) > .5f)
                 {
                     lowerScalerFound = true;
-                    float newScaler = MassToVelocityScaler( i.GetGameObject().GetComponent<Rigidbody>().mass );
+                    float newScaler = MassToVelocityScaler( i.gameObject.GetComponent<Rigidbody>().mass );
                     if (newScaler < _InputMagScaler) _InputMagScaler = newScaler;
                     break;
                 }
@@ -180,7 +187,7 @@ public class PlayerController : MonoBehaviour
 
         if (_State == State.InteractingEnvironment)
         {
-            float interactableInputScaler = MassToVelocityScaler(_ActiveInteractable.GetGameObject().GetComponent<Rigidbody>().mass);
+            float interactableInputScaler = MassToVelocityScaler(_ActiveInteractable.gameObject.GetComponent<Rigidbody>().mass);
 
             if (interactableInputScaler < _InputMagScaler)
                 _InputMagScaler = interactableInputScaler;
@@ -189,7 +196,7 @@ public class PlayerController : MonoBehaviour
 
         // Update pos
         _RB.isKinematic = true;
-        _Pos += InputVector * Time.deltaTime * _Speed;
+        _Pos += FinalMovementVector * Time.deltaTime;
         transform.position = _Pos;
         
 
@@ -259,7 +266,8 @@ public class PlayerController : MonoBehaviour
             _State = newState;
         }
 
-        print(name + " state set to : " + _State.ToString());
+        if(_Debug)
+            print(name + " state set to : " + _State.ToString());
     }
 
 
@@ -278,7 +286,8 @@ public class PlayerController : MonoBehaviour
     #region Interaction methods
     void TryInteract()
     {
-        print(name + " trying to interact. Interactables in range: " + _InteractablesInRange.Count);
+        if (_Debug)
+            print(name + " trying to interact. Interactables in range: " + _InteractablesInRange.Count);
 
         if(_InteractablesInRange.Count == 0)
         {
@@ -288,10 +297,10 @@ public class PlayerController : MonoBehaviour
 
         // Find closest interactable
         float closestDist = 999;
-        iInteractable closestInteractable = null;
+        Interactable closestInteractable = null;
         for (int i = 0; i < _InteractablesInRange.Count; i++)
         {
-            float dist = Vector3.Distance(transform.position, _InteractablesInRange[0].GetGameObject().transform.position);
+            float dist = Vector3.Distance(transform.position, _InteractablesInRange[0].gameObject.transform.position);
 
             if(dist < closestDist)
             {
@@ -303,16 +312,21 @@ public class PlayerController : MonoBehaviour
         BeginInteraction(closestInteractable);
     }
 
-    void BeginInteraction(iInteractable interactable)
+    void BeginInteraction(Interactable interactable)
     {
-        print(name + " begun interaction with " + interactable.GetGameObject().name  + "  from layer " + interactable.GetGameObject().layer.ToString());
+        if (_Debug)
+            print(name + " begun interaction with " + interactable.gameObject.name  + "  from layer " + interactable.gameObject.layer.ToString());
 
-        if (interactable.GetGameObject().layer == SRLayers.Echidna)
+        /*
+        if (interactable.gameObject.layer == SRLayers.Echidna)
         {
             SetState(State.InteractingEchidna);
-            EchidnaController echidna = _ActiveInteractable.GetGameObject().GetComponent<EchidnaController>();
+            EchidnaController echidna = _ActiveInteractable.gameObject.GetComponent<EchidnaController>();
         }
-        else if (interactable.GetGameObject().layer == SRLayers.Interactables)
+        else 
+        */
+        
+        if (interactable.gameObject.layer == SRLayers.Interactables)
         {
             SetState(State.InteractingEnvironment);
         }
@@ -330,7 +344,8 @@ public class PlayerController : MonoBehaviour
     {
         if (_ActiveInteractable != null)
         {
-            print(name + " ended interaction with " + _ActiveInteractable.GetGameObject().name);
+            if (_Debug)
+                print(name + " ended interaction with " + _ActiveInteractable.gameObject.name);
             _ActiveInteractable.EndInteraction(this);
             _ActiveInteractable = null;
         }
@@ -341,67 +356,63 @@ public class PlayerController : MonoBehaviour
     void FailToInteract()
     {
         // TODO play animation / particles
-        print(name + " failed to interact. No interactables in range");
+        if (_Debug)
+            print(name + " failed to interact. No interactables in range");
     }
 
     // Called by interactables once actions are complete
     public void InteractableActionComplete()
     {
-        print(_ActiveInteractable.GetGameObject().name + " interaction complete");
+        if (_Debug)
+            print(_ActiveInteractable.gameObject.name + " interaction complete");
         EndInteraction();
     }
     #endregion
-    
+
+    public bool _Debug = false;
     #region Triggers
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<iInteractable>() != null)
+        TerrainZone zone = other.GetComponent<TerrainZone>();
+        if (zone != null)
         {
-            if (other.GetComponent<TerrainZone>())
-            {
-                other.GetComponent<TerrainZone>().BeginInteraction(this);
-            }
-            else
-            {
-                _InteractablesInRange.Add(other.GetComponent<iInteractable>());
-            }
+            _TerrainVelocityScaler = zone._TerrainVelocityScaler;
+        }
+        else if (other.GetComponent<Interactable>() != null)
+        {
+            _InteractablesInRange.Add(other.GetComponent<Interactable>());            
 
             if (_LogInteractables)
-                print(other.GetComponent<iInteractable>().GetGameObject().name + " in range");
-
+                print(other.GetComponent<Interactable>().gameObject.name + " in range");
         }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.GetComponent<iInteractable>() != null)
+        TerrainZone zone = other.GetComponent<TerrainZone>();
+        if (zone != null)
         {
-            if (other.GetComponent<TerrainZone>())
-            {
-                other.GetComponent<TerrainZone>().ContinueInteraction(this);
-            }
+            _ExternalForceVector = zone.WorldSpaceForce;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<iInteractable>() != null)
+        TerrainZone zone = other.GetComponent<TerrainZone>();
+        if (zone != null)
         {
-
-            if (other.GetComponent<TerrainZone>())
-            {
-                other.GetComponent<TerrainZone>().EndInteraction(this);
-            }
-            else
-            {
-                _InteractablesInRange.Remove(other.GetComponent<iInteractable>());
-            }
+            _ExternalForceVector = Vector3.zero;
+            _TerrainVelocityScaler = 1;
+        }
+        else if (other.GetComponent<Interactable>() != null)
+        {            
+            _InteractablesInRange.Remove(other.GetComponent<Interactable>());
 
             if (_LogInteractables)
-                print(other.GetComponent<iInteractable>().GetGameObject().name + " out of range");
+                print(other.GetComponent<Interactable>().gameObject.name + " out of range");
 
             // if the trigger is the echidna and you are pushing
-            if (_State == State.PushingEchidna && other.GetComponent<iInteractable>().GetGameObject().GetComponent<EchidnaController>())
+            if (_State == State.PushingEchidna && other.GetComponent<Interactable>().gameObject.GetComponent<EchidnaController>())
                 SetState(State.Roaming);
         }
     }
@@ -419,7 +430,13 @@ public class PlayerController : MonoBehaviour
     #region Debug
     private void OnDrawGizmos()
     {
-        Gizmos.DrawLine(transform.position, transform.position + InputVector);
+        if (_Debug)
+        {
+            foreach (Interactable i in _InteractablesInRange)
+                Gizmos.DrawWireSphere(i.transform.position, .3f);
+        }
+
+        Gizmos.DrawLine(transform.position, transform.position + FinalMovementVector);
         Gizmos.DrawWireSphere(transform.position, _Radius * 2);
 
         Gizmos.color = Color.blue;

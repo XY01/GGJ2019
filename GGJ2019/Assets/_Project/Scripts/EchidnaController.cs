@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
-public class EchidnaController : MonoBehaviour, iInteractable
+public class EchidnaController : Interactable
 {
     public enum State
     {
@@ -117,7 +117,8 @@ public class EchidnaController : MonoBehaviour, iInteractable
             // If idle timeout is up then start to wander
             if (_StateTimer >= _StateTimeoutDuration)
             {
-                print(name + " consuming finsihed with timer at: " + _StateTimer + "   " + _StateTimeoutDuration);
+                if (_Debug)
+                    print(name + " consuming finsihed with timer at: " + _StateTimer + "   " + _StateTimeoutDuration);
                 SetState(State.Wander);
             }
         }
@@ -166,9 +167,10 @@ public class EchidnaController : MonoBehaviour, iInteractable
             _StateTimer = 0;
         }
 
-        print(name + " State set to: " + _State.ToString());
+        if(_Debug)
+            print(name + " State set to: " + _State.ToString());
     }
-      
+    public bool _Debug = false;
     void LimitVelocity()
     {
         if(_RB.velocity.magnitude > ScaledMaxSpeed)
@@ -236,7 +238,8 @@ public class EchidnaController : MonoBehaviour, iInteractable
 
     void Consume(EchidnaInteractable interactable)
     {
-        print(name + "Consumed: " + interactable.name);
+        if (_Debug)
+            print(name + "Consumed: " + interactable.name);
 
         if(interactable._Type == EchidnaInteractable.Type.Food)
         {
@@ -298,7 +301,11 @@ public class EchidnaController : MonoBehaviour, iInteractable
 
     private void OnTriggerStay(Collider other)
     {
-        print(other.name);
+        TerrainZone zone = other.GetComponent<TerrainZone>();
+        if (zone != null)
+        {
+            _RB.AddForce(zone.WorldSpaceForce);
+        }
     }
 
     private void OnTriggerExit(Collider other)
