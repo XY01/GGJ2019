@@ -134,7 +134,9 @@ public class PlayerController : MonoBehaviour
         if (!_IsMoveBlocked)
         {
             if (_RaycastHitObject != null && _RaycastHitObject.layer != SRLayers.Terrain && _RayCastHitDist < _Radius * 1.2f)
-                print("Raycast hit object: " + _RaycastHitObject.name);
+                _InputMagScaler = Mathf.Clamp01(10 - _RaycastHitObject.GetComponent<Rigidbody>().mass);
+            else
+                _InputMagScaler = 1;
 
             // Update pos
             _RB.isKinematic = true;
