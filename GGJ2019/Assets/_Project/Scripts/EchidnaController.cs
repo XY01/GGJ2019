@@ -23,8 +23,9 @@ public class EchidnaController : MonoBehaviour, iInteractable
     float _DrunkenessNorm = 0;  // How much booze he has drank
     float _FullnessNorm = 0;    // How much food he has eaten
 
-    float _MaxSpeed = 2;
-    
+    float _MaxSpeed = 4;
+    public float _TerrainVelocityScaler = 1;
+    float ScaledMaxSpeed { get { return _MaxSpeed * _TerrainVelocityScaler; } }
 
     // Movement noise
     float _PerlinOffset = 0;
@@ -121,6 +122,8 @@ public class EchidnaController : MonoBehaviour, iInteractable
             }
         }
 
+        LimitVelocity();
+
         if (ExperienceManager.Instance != null)
             ExperienceManager.Instance._EchidnaDebug.text = "Echidna - State: " + _State + "  objects in range: " + _InteractablesInRange.Count + "Timer: " + _StateTimer + " / " + _StateTimeoutDuration;
     }
@@ -168,9 +171,9 @@ public class EchidnaController : MonoBehaviour, iInteractable
       
     void LimitVelocity()
     {
-        if(_RB.velocity.magnitude > _MaxSpeed)
+        if(_RB.velocity.magnitude > ScaledMaxSpeed)
         {
-            _RB.velocity = _RB.velocity.normalized * _MaxSpeed;
+            _RB.velocity = _RB.velocity.normalized * ScaledMaxSpeed;
         }
     }
 
@@ -181,7 +184,7 @@ public class EchidnaController : MonoBehaviour, iInteractable
 
     EchidnaInteractable SearchForClosestInteractable()
     {
-        print("Searching for interactable: " + _InteractablesInRange.Count);
+        //print("Searching for interactable: " + _InteractablesInRange.Count);
 
         EchidnaInteractable interactable = null;
 
@@ -286,6 +289,16 @@ public class EchidnaController : MonoBehaviour, iInteractable
         {
             _InteractablesInRange.Add(other.GetComponent<EchidnaInteractable>());
         }
+        else if (other.GetComponent<TerrainZone>())
+        {
+            _RB.velocity = _RB.velocity * .5f;
+            _TerrainVelocityScaler = other.GetComponent<TerrainZone>()._TerrainVelocityScaler;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        print(other.name);
     }
 
     private void OnTriggerExit(Collider other)
@@ -293,6 +306,11 @@ public class EchidnaController : MonoBehaviour, iInteractable
         if (other.GetComponent<EchidnaInteractable>() != null)
         {
             _InteractablesInRange.Remove(other.GetComponent<EchidnaInteractable>());
+        }
+        else if (other.GetComponent<TerrainZone>())
+        {
+            _RB.velocity += _RB.velocity * 2;
+            _TerrainVelocityScaler = 1;
         }
     }
 
