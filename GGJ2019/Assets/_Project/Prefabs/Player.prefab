@@ -96,14 +96,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _State: 0
-  _Player: 1
+  _Player: 0
   _PickupPosition: {fileID: 1770680184916935584}
   _Speed: 2
   _InputMagScaler: 1
   _Radius: 0.2
   _LayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   _MovementBlockingLayerMask:
     serializedVersion: 2
     m_Bits: 512
@@ -188,7 +188,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1951176794252454451}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -265,7 +265,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8408771349586746114}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
