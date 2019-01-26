@@ -61,6 +61,7 @@ public class EchidnaController : Interactable
     void Start()
     {
         _RB = GetComponent<Rigidbody>();
+        SetState(State.Idle);
     }
 
     void Update()
@@ -265,18 +266,13 @@ public class EchidnaController : Interactable
         return gameObject;
     }
 
-    public void BeginInteraction(PlayerController player)
+    public override void BeginInteraction(PlayerController player)
     {
         _PushingCount++;
         SetState(State.BeingPushed);
     }
 
-    public void ContinueInteraction(PlayerController player)
-    {
-
-    }
-
-    public void EndInteraction(PlayerController player)
+    public override void EndInteraction(PlayerController player)
     {
         _PushingCount--;
 

@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
         InteractingEnvironment,
         InteractingEchidna,
         PushingEchidna,
+        OutOfControl,
     }
     public enum ControlType
     {
@@ -73,6 +74,15 @@ public class PlayerController : MonoBehaviour
     public bool _Debug_StickyMove = false;
     public bool _Debug_SlipperyMove = false;
 
+    // Testing
+    void AddForce(Vector3 force)
+    {
+        _RB.isKinematic = false;
+        //_RB.AddForce(force);
+        _RB.velocity = force;
+        SetState(State.OutOfControl);
+    }
+
     void Start()
     {
         _RB = GetComponent<Rigidbody>();
@@ -84,7 +94,22 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // clean interactables list
         _InteractablesInRange.RemoveAll(item => item == null);
+
+        if (Input.GetKeyDown(KeyCode.F))
+            AddForce(new Vector3(Random.insideUnitCircle.x, 0, Random.insideUnitCircle.y) * 2);
+
+        if (_State == State.OutOfControl)
+        {
+            if(_RB.velocity.magnitude < .001f)
+            {
+                SetState(State.Roaming);
+            }
+
+            return;
+        }
+
 
         #region movement
         Vector3 newInputVec = Vector3.zero;
@@ -283,8 +308,8 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        if(ExperienceManager.Instance != null)
-            ExperienceManager.Instance._PlayerDebugs[(int)_Player].text = name + " State: " + _State.ToString();
+        if(ExperienceManager.Instance != null && _Debug)
+            ExperienceManager.Instance._PlayerDebugs[0].text = name + " State: " + _State.ToString();
     }
 
     float MassToVelocityScaler(float mass)
@@ -310,8 +335,12 @@ public class PlayerController : MonoBehaviour
         {
             _State = newState;
         }
+        else if (newState == State.OutOfControl)
+        {
+            _State = newState;
+        }
 
-        if(_Debug)
+        if (_Debug)
             print(name + " state set to : " + _State.ToString());
     }
 
@@ -361,17 +390,13 @@ public class PlayerController : MonoBehaviour
     {
         if (_Debug)
             print(name + " begun interaction with " + interactable.gameObject.name  + "  from layer " + interactable.gameObject.layer.ToString());
-
-        /*
+                
         if (interactable.gameObject.layer == SRLayers.Echidna)
         {
             SetState(State.InteractingEchidna);
             EchidnaController echidna = _ActiveInteractable.gameObject.GetComponent<EchidnaController>();
         }
-        else 
-        */
-        
-        if (interactable.gameObject.layer == SRLayers.Interactables)
+        else if (interactable.gameObject.layer == SRLayers.Interactables)
         {
             SetState(State.InteractingEnvironment);
         }
@@ -465,9 +490,10 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.layer == SRLayers.Echidna)
+        EchidnaController echidna = collision.gameObject.GetComponent<EchidnaController>();
+        if (echidna != null)
         {
-            collision.gameObject.GetComponent<EchidnaController>().BeginInteraction(this);
+            echidna.BeginInteraction(this);
             SetState(State.PushingEchidna);
         }
     }
@@ -480,6 +506,11 @@ public class PlayerController : MonoBehaviour
         {
             foreach (Interactable i in _InteractablesInRange)
                 Gizmos.DrawWireSphere(i.transform.position, .3f);
+        }
+
+        if(_ActiveInteractable != null)
+        {
+            Gizmos.DrawSphere(_ActiveInteractable.transform.position, .4f);
         }
 
         Gizmos.DrawLine(transform.position, transform.position + FinalMovementVector);
