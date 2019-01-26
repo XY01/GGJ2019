@@ -51,12 +51,13 @@ public class PlayerController : MonoBehaviour
     float _RotationSmoothing = 8;
 
     Ray _FwdRay;
-    bool _IsMoveBlocked = false;
+    //bool _IsMoveBlocked = false;
 
-    public LayerMask _LayerMask;
+    public LayerMask _MovementBlockingLayerMask;
 
     // Debug
     public bool _LogInteractables = false;
+    public Text _DebugText;
 
     public bool _Debug_StickyMove = false;
     public bool _Debug_SlipperyMove = false;
@@ -66,6 +67,8 @@ public class PlayerController : MonoBehaviour
         _RB = GetComponent<Rigidbody>();
         _Pos = transform.position;
         _Echidna = FindObjectOfType<EchidnaController>();
+
+        gameObject.layer = SRLayers.Players;
     }
 
     void Update()
@@ -89,6 +92,7 @@ public class PlayerController : MonoBehaviour
         newInputMag = newInputVec.magnitude;
         newInputDir = newInputVec.normalized;
 
+        #region Trigger areas
         // Modulate input vector in case in passive trigger areas      TODO works for now but needs modulation
         if (_Debug_StickyMove)
         {
@@ -106,6 +110,7 @@ public class PlayerController : MonoBehaviour
             // Smooth the input dir
             newInputDir = Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 6);
         }
+        #endregion
 
         _InputDirection = newInputDir;// Vector3.Lerp(_InputDirection, newInputDir, Time.deltaTime * 10);
         _InputMagnitude = Mathf.Lerp(_InputMagnitude, newInputMag, Time.deltaTime * 10);
@@ -114,28 +119,40 @@ public class PlayerController : MonoBehaviour
         if (InputVector != Vector3.zero)
             transform.LookAt(transform.position + InputVector);
 
-        // Raycast forward so we stay on ground. TO DO smooth out later
+        // Raycast forward to see if we are blocked by terrain
         RaycastHit hit;
         _FwdRay = new Ray(transform.position, newInputVec);
 
-        if (Physics.Raycast(_FwdRay, out hit, _Radius * 5, _LayerMask, QueryTriggerInteraction.Ignore))
+        // Raycast out to find objects that will block movement. Ignore triggers
+        if (Physics.Raycast(_FwdRay, out hit, _Radius * 3, _MovementBlockingLayerMask, QueryTriggerInteraction.Ignore))
         {
             _RaycastHitObject = hit.collider.gameObject;
             _RayCastHitDist = hit.distance;
 
-            _IsMoveBlocked = hit.collider.gameObject.layer == SRLayers.Terrain && hit.distance < _Radius ? true : false;
+            if(hit.distance < _Radius)
+                _InputDirection += hit.normal;
         }
         else
         {
             _RaycastHitObject = null;
         }
 
-        if (!_IsMoveBlocked)
+        
+        // Update input scaler
+        //if (!_IsMoveBlocked)
         {
-            if (_RaycastHitObject != null && _RaycastHitObject.layer != SRLayers.Terrain && _RayCastHitDist < _Radius * 1.2f)
-                _InputMagScaler = Mathf.Clamp01(10 - _RaycastHitObject.GetComponent<Rigidbody>().mass);
+            /*
+            if (_RaycastHitObject != null && _RaycastHitObject.layer != SRLayers.Terrain && _RayCastHitDist < _Radius * 3f)
+            {               
+                float newScaler = Mathf.Clamp01(1 - (_RaycastHitObject.GetComponent<Rigidbody>().mass/10));
+
+                if (newScaler < _InputMagScaler) _InputMagScaler = newScaler;
+
+                print("In mass range of  " + newScaler);
+            }
             else
-                _InputMagScaler = 1;
+                _InputMagScaler = Mathf.Lerp(_InputMagScaler, 1, Time.deltaTime * 16);
+            */
 
             // Update pos
             _RB.isKinematic = true;
@@ -144,9 +161,8 @@ public class PlayerController : MonoBehaviour
         }
 
         // Raycast down so we stay on ground. TO DO smooth out later        
-        Ray ray = new Ray(transform.position, Vector3.down);
-        
-        if (Physics.Raycast(ray, out hit))
+        Ray rayDown = new Ray(transform.position, Vector3.down);        
+        if (Physics.Raycast(rayDown, out hit, 10, _MovementBlockingLayerMask, QueryTriggerInteraction.Ignore))
         {
             transform.position = hit.point + (Vector3.up * _Radius);
         }
@@ -181,7 +197,8 @@ public class PlayerController : MonoBehaviour
                 SetState(State.Roaming);
         }
 
-            ExperienceManager.Instance._PlayerDebugs[(int)_Player].text = name + " State: " + _State.ToString();
+        //if(ExperienceManager.Instance != null)
+        //    ExperienceManager.Instance._DebugReadouts[0].text = name + " State: " + _State.ToString();
     }
 
     void SetState(State newState)
@@ -364,7 +381,7 @@ public class PlayerController : MonoBehaviour
     {
         Gizmos.DrawLine(transform.position, transform.position + InputVector);
 
-        Gizmos.color = _IsMoveBlocked ? Color.red : Color.blue;
+        Gizmos.color = Color.blue;
         Gizmos.DrawLine(transform.position, transform.position + _FwdRay.direction);
     }
     #endregion

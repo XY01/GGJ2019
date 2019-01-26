@@ -101,14 +101,11 @@ MonoBehaviour:
   _Speed: 2
   _InputMagScaler: 1
   _Radius: 0.2
+  _HeightOffset: 0.1
   _LayerMask:
     serializedVersion: 2
     m_Bits: 512
-  _MovementBlockingLayerMask:
-    serializedVersion: 2
-    m_Bits: 512
   _LogInteractables: 0
-  _DebugText: {fileID: 0}
   _Debug_StickyMove: 0
   _Debug_SlipperyMove: 0
 --- !u!54 &1951176792879214948
