@@ -1469,7 +1469,7 @@ PrefabInstance:
     - target: {fileID: 8112339470325384712, guid: 21d84f71600f0e14d8e5a06916873a7e,
         type: 3}
       propertyPath: m_Mass
-      value: 8
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8112339470325384712, guid: 21d84f71600f0e14d8e5a06916873a7e,
         type: 3}
@@ -2260,46 +2260,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1951176792879214950, guid: 4b1d4cb76d114fc429db3a4912066637,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.29999998
-      objectReference: {fileID: 0}
-    - target: {fileID: 1951176792879214950, guid: 4b1d4cb76d114fc429db3a4912066637,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.29999998
-      objectReference: {fileID: 0}
-    - target: {fileID: 1951176792879214950, guid: 4b1d4cb76d114fc429db3a4912066637,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.29999998
-      objectReference: {fileID: 0}
-    - target: {fileID: 1951176792879214951, guid: 4b1d4cb76d114fc429db3a4912066637,
-        type: 3}
-      propertyPath: _Player
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1951176792879214951, guid: 4b1d4cb76d114fc429db3a4912066637,
-        type: 3}
-      propertyPath: _Speed
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 1951176792879214951, guid: 4b1d4cb76d114fc429db3a4912066637,
         type: 3}
       propertyPath: _DebugText
       value: 
       objectReference: {fileID: 111847943}
-    - target: {fileID: 1951176792879214951, guid: 4b1d4cb76d114fc429db3a4912066637,
-        type: 3}
-      propertyPath: _Debug_StickyMove
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1951176792879214951, guid: 4b1d4cb76d114fc429db3a4912066637,
-        type: 3}
-      propertyPath: _LayerMask.m_Bits
-      value: 4294967295
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b1d4cb76d114fc429db3a4912066637, type: 3}
 --- !u!4 &1267861856 stripped
@@ -3152,5 +3117,15 @@ PrefabInstance:
       propertyPath: _DebugText
       value: 
       objectReference: {fileID: 2051638552}
+    - target: {fileID: 1951176792879214951, guid: 4b1d4cb76d114fc429db3a4912066637,
+        type: 3}
+      propertyPath: _LayerMask.m_Bits
+      value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 1951176792879214951, guid: 4b1d4cb76d114fc429db3a4912066637,
+        type: 3}
+      propertyPath: _Player
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b1d4cb76d114fc429db3a4912066637, type: 3}
