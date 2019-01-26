@@ -11,35 +11,42 @@ public enum State
     Playing,
     Paused,
     Cutscene,
+    Complete
 }
 
 public class ExperienceManager : MonoBehaviour
 {
-    public static ExperienceManager Instance;
-    public Text _TimeReadout;
-    private float _TimeTaken;
+    [HideInInspector]
+    public State _State;
 
+    public static ExperienceManager Instance;
+
+    // HUD
+    public Text _TimeReadout;
+
+    // Debug
     public Text _EchidnaDebug;
     public Text[] _PlayerDebugs;
     public Text _Message;
-
 
     private void Awake()
     {
         Instance = this;
     }
 
-    [HideInInspector]
-    public State _State;
-
-    void Update()
+    private void Update()
     {
-        if(_State == State.Playing)
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            print("test");
-            _TimeTaken += Time.deltaTime;
-            _TimeReadout.text = _TimeTaken.ToString("F2");
+            LevelComplete();
         }
+    }
+
+    private void LevelComplete()
+    {
+        // Display score UI
+
+        _State = State.Complete;
     }
 
 }
