@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d31d2ceed10cf2b409edff2901012598
+guid: 0ad3d1da3f56e894fb949bb468ed1a03
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -17,28 +17,27 @@ ModelImporter:
     400008: polySurface53
     400010: polySurface55
     400012: polySurface56
-    2100000: lambert4
-    2100002: lambert2
-    2100004: lambert5
-    2100006: lambert3
-    2300000: //RootNode
-    2300002: polySurface31
-    2300004: polySurface52
-    2300006: polySurface53
-    2300008: polySurface55
-    2300010: polySurface56
-    3300000: //RootNode
-    3300002: polySurface31
-    3300004: polySurface52
-    3300006: polySurface53
-    3300008: polySurface55
-    3300010: polySurface56
-    4300000: polySurface23
-    4300002: polySurface52
-    4300004: polySurface53
-    4300006: polySurface55
-    4300008: polySurface56
-    4300010: polySurface31
+    2100000: lambert2
+    2100002: lambert4
+    2100004: lambert3
+    2100006: lambert5
+    2300000: polySurface31
+    2300002: polySurface52
+    2300004: polySurface53
+    2300006: polySurface55
+    2300008: polySurface56
+    3300000: polySurface31
+    3300002: polySurface52
+    3300004: polySurface53
+    3300006: polySurface55
+    3300008: polySurface56
+    4300000: polySurface52
+    4300002: polySurface53
+    4300004: polySurface55
+    4300006: polySurface56
+    4300008: polySurface31
+    7400000: Take 001
+    9500000: //RootNode
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -66,7 +65,35 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -91,8 +118,8 @@ ModelImporter:
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
     useFileScale: 1
-    previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 0
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -119,7 +146,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
