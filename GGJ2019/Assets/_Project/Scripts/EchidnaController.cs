@@ -81,6 +81,10 @@ public class EchidnaController : Interactable
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Application.Quit();
+
+
         if (_State == State.Idle)
         {
             // Don't move while idle timer accumulates
