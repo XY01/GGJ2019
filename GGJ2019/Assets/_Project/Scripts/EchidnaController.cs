@@ -17,8 +17,7 @@ public class EchidnaController : Interactable
 
     State _State = State.Idle;
     public State CurrentState { get { return _State; } }
-    Rigidbody _RB;
-  
+    Rigidbody _RB;  
 
     float _DrunkenessNorm = 0;  // How much booze he has drank
     float _FullnessNorm = 0;    // How much food he has eaten
@@ -41,7 +40,9 @@ public class EchidnaController : Interactable
 
     // Pushing
     public float _PushingTimeoutDuration = 2;
-    int _PushingCount = 0;
+
+    PlayerController[] _Players;
+    public int _PushingCount = 0;
 
     //Consuming
     public float _ConsumeDuration = 3;
@@ -67,6 +68,7 @@ public class EchidnaController : Interactable
 
     void Start()
     {
+        _Players = FindObjectsOfType<PlayerController>();
         _RB = GetComponent<Rigidbody>();
         _AudioSource = GetComponent<AudioSource>();
         SetState(State.Idle);
@@ -81,6 +83,13 @@ public class EchidnaController : Interactable
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Application.Quit();
+
+        _PushingCount = 0;
+        if (_Players[0]._State == PlayerController.State.PushingEchidna) _PushingCount++;
+        if (_Players[1]._State == PlayerController.State.PushingEchidna) _PushingCount++;
+
         if (_State == State.Idle)
         {
             // Don't move while idle timer accumulates
@@ -112,7 +121,7 @@ public class EchidnaController : Interactable
 
 
             // Search for closest interactabl;e
-            EchidnaInteractable interactable = SearchForClosestInteractable();
+            EchidnaInteractable interactable = SearchForClosestInteractable(999);
             if (interactable != null)
             {
                 _ActiveInteractable = interactable;
@@ -162,6 +171,13 @@ public class EchidnaController : Interactable
             _State = state;
             _StateTimer = 0;
             _StateTimeoutDuration = _IdleTimeoutDuration;
+
+            EchidnaInteractable interactable = SearchForClosestInteractable(6);
+            if (interactable != null)
+            {
+                _ActiveInteractable = interactable;
+                SetState(State.Seeking);
+            }
         }
         else if (state == State.BeingPushed)
         {
@@ -178,7 +194,7 @@ public class EchidnaController : Interactable
 
             PlayRollCont();
 
-            EchidnaInteractable interactable = SearchForClosestInteractable();
+            EchidnaInteractable interactable = SearchForClosestInteractable(9999);
             if (interactable != null)
             {
                 _ActiveInteractable = interactable;
@@ -214,7 +230,7 @@ public class EchidnaController : Interactable
         return (_ActiveInteractable.transform.position - transform.position);
     }
 
-    EchidnaInteractable SearchForClosestInteractable()
+    EchidnaInteractable SearchForClosestInteractable(float withinDist)
     {
         //print("Searching for interactable: " + _InteractablesInRange.Count);
 
@@ -224,7 +240,7 @@ public class EchidnaController : Interactable
 
         if (_InteractablesInRange.Count > 0)
         {
-            float closestDist = 999;
+            float closestDist = withinDist;
             // Look for interactable in range
             foreach (EchidnaInteractable e in _InteractablesInRange)
             {
