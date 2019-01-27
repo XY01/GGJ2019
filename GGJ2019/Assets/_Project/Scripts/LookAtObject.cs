@@ -10,7 +10,11 @@ public class LookAtObject : MonoBehaviour
     {
         if(_TargetMainCamera == true)
         {
-            transform.LookAt(Camera.main.transform.position);
+            if (FindObjectOfType<Camera>() != null)
+            {
+                transform.LookAt(FindObjectOfType<Camera>().transform.position);
+            }
+
         }
         else
         {
