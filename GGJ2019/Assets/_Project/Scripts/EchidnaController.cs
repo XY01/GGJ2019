@@ -70,6 +70,13 @@ public class EchidnaController : Interactable
         _RB = GetComponent<Rigidbody>();
         _AudioSource = GetComponent<AudioSource>();
         SetState(State.Idle);
+        PlayRandBurp();
+    }
+
+    void PlayRandBurp()
+    {
+        Burp();
+        Invoke("PlayRandBurp", Random.Range(4, 20));
     }
 
     void Update()
@@ -133,7 +140,7 @@ public class EchidnaController : Interactable
         }
 
         if (_AudioSource.clip == _RollLoop)
-            _AudioSource.volume = _RB.velocity.magnitude.ScaleTo01(0, 3);
+            _AudioSource.volume = _RB.velocity.magnitude.ScaleTo01(0, 3) * .7f;
 
         LimitVelocity();
 
