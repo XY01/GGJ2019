@@ -46,8 +46,20 @@ public class PlayerController : MonoBehaviour
     float _InputMagnitude;
     public float _InputMagScaler = 1;
     public float _TerrainVelocityScaler = 1;
+    float _PushingScaler = .4f;
     Vector3 _ExternalForceVector = Vector3.zero;
-    Vector3 FinalMovementVector { get { return (_InputDirection * _InputMagnitude * _InputMagScaler * _TerrainVelocityScaler * _Speed) + (_ExternalForceVector); } }
+    Vector3 FinalMovementVector
+    {
+        get
+        {
+            if(_State == State.PushingEchidna && _Echidna._PushingCount <= 1)
+            {
+                return (_InputDirection * _InputMagnitude * _InputMagScaler * _TerrainVelocityScaler * _Speed * _PushingScaler) + (_ExternalForceVector);
+            }
+            else
+                return (_InputDirection * _InputMagnitude * _InputMagScaler * _TerrainVelocityScaler * _Speed) + (_ExternalForceVector);
+        }
+    }
 
     GameObject _RaycastHitObject;
     GameObject _LastRaycastHitObject;
@@ -360,6 +372,8 @@ public class PlayerController : MonoBehaviour
     #region Interaction methods
     void TryInteract()
     {
+        print(_Player.ToString());
+
         if (_Debug)
             print(name + " trying to interact. Interactables in range: " + _InteractablesInRange.Count);
 
