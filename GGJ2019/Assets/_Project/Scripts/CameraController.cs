@@ -13,6 +13,10 @@ public class CameraController : MonoBehaviour
 
     public bool _Initialised;
 
+    public Vector2 _FovRange = new Vector2(45, 90);
+    public Vector2 _DistRange = new Vector2(3, 8);
+
+
     void Initialise()
     {
         PlayerController[] players = FindObjectsOfType<PlayerController>();
@@ -43,13 +47,20 @@ public class CameraController : MonoBehaviour
             }
         }
 
+        float normDist = _MaxDist.ScaleTo01(_DistRange.x, _DistRange.y);
+        float newFOV = normDist.ScaleFrom01(_FovRange.x, _FovRange.y);
+        Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, newFOV, Time.deltaTime * 1);
+
         UpdateAverage();
         _CamLookAtTarget.position = _AveragePos;// Vector3.Lerp(_CamLookAtTarget.position, _AveragePos, Time.deltaTime * _Smoothing);
-        transform.position = _CamLookAtTarget.position + _BaseOffset;
+        transform.position = Vector3.Lerp(transform.position, _CamLookAtTarget.position + _BaseOffset, Time.deltaTime * 1);
+        transform.LookAt(_CamLookAtTarget.position);
     }
 
+    float _MaxDist = 0;
     void UpdateAverage()
     {
+        _MaxDist = 0;
         _AveragePos = Vector3.zero;
 
         for (int i = 0; i < _TransformsToKeepInFocus.Count; i++)
@@ -57,11 +68,23 @@ public class CameraController : MonoBehaviour
             _AveragePos += _TransformsToKeepInFocus[i].position;
         }
         _AveragePos /= _TransformsToKeepInFocus.Count;
+
+        for (int i = 0; i < _TransformsToKeepInFocus.Count; i++)
+        {
+            float dist = Vector3.Distance(_TransformsToKeepInFocus[i].position, _CamLookAtTarget.transform.position);
+           if (dist > _MaxDist)
+            {
+                _MaxDist = dist;
+            }
+        }
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireCube(_AveragePos, Vector3.one * .1f);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(transform.position, _AveragePos);
+
+        Gizmos.DrawCube(_AveragePos, Vector3.one * .1f);
         for (int i = 0; i < _TransformsToKeepInFocus.Count; i++)
         {
             Gizmos.DrawLine(_AveragePos, _TransformsToKeepInFocus[i].position);

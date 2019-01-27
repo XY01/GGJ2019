@@ -11,11 +11,23 @@ public class Interactable_Breakable : Interactable
     public int _HitsToDestroy = 3;
     public GameObject[] _Segments;
 
+    public AudioSource _Source;
+    public AudioClip _HitClip;
+    public AudioClip _BreakClip;
+
+
+    private void Start()
+    {
+        _Source = GetComponent<AudioSource>();
+    }
+
     #region Interactable interface methods   
     public override void BeginInteraction(PlayerController player)
     {
         _InteractingPlayer = player;
         Hit();
+
+
     }
 
     public override void ContinueInteraction(PlayerController player)
@@ -39,6 +51,9 @@ public class Interactable_Breakable : Interactable
     // If no life left tell player that interation is complete
     void Hit()
     {
+        if(_HitClip != null)
+            _Source.playClip(_HitClip);
+
         _HitsToDestroy -= 1;
 
         if (_HitsToDestroy <= 0f)
