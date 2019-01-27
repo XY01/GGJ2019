@@ -17,8 +17,7 @@ public class EchidnaController : Interactable
 
     State _State = State.Idle;
     public State CurrentState { get { return _State; } }
-    Rigidbody _RB;
-  
+    Rigidbody _RB;  
 
     float _DrunkenessNorm = 0;  // How much booze he has drank
     float _FullnessNorm = 0;    // How much food he has eaten
@@ -41,7 +40,9 @@ public class EchidnaController : Interactable
 
     // Pushing
     public float _PushingTimeoutDuration = 2;
-    int _PushingCount = 0;
+
+    PlayerController[] _Players;
+    public int _PushingCount = 0;
 
     //Consuming
     public float _ConsumeDuration = 3;
@@ -67,6 +68,7 @@ public class EchidnaController : Interactable
 
     void Start()
     {
+        _Players = FindObjectsOfType<PlayerController>();
         _RB = GetComponent<Rigidbody>();
         _AudioSource = GetComponent<AudioSource>();
         SetState(State.Idle);
@@ -84,6 +86,9 @@ public class EchidnaController : Interactable
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
 
+        _PushingCount = 0;
+        if (_Players[0]._State == PlayerController.State.PushingEchidna) _PushingCount++;
+        if (_Players[1]._State == PlayerController.State.PushingEchidna) _PushingCount++;
 
         if (_State == State.Idle)
         {
