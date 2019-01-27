@@ -6962,14 +6962,14 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2300004, guid: 4bbbe986c207d804fb894093a9206519, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 86ed5ad543f4b2743945550fb894d06a, type: 2}
     - target: {fileID: 3300004, guid: 4bbbe986c207d804fb894093a9206519, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1849684951}
+    - target: {fileID: 2300004, guid: 4bbbe986c207d804fb894093a9206519, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 86ed5ad543f4b2743945550fb894d06a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4bbbe986c207d804fb894093a9206519, type: 3}
 --- !u!1001 &183777408
@@ -11317,31 +11317,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130082714623260608, guid: 2c93559438942df4886c985631eea22d,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130082714623260636, guid: 2c93559438942df4886c985631eea22d,
-        type: 3}
-      propertyPath: _DebugText
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130082714623260636, guid: 2c93559438942df4886c985631eea22d,
-        type: 3}
-      propertyPath: _DebugPerlinField
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130082714623260636, guid: 2c93559438942df4886c985631eea22d,
-        type: 3}
-      propertyPath: _BasePerlForceScaler
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130082714623260636, guid: 2c93559438942df4886c985631eea22d,
-        type: 3}
-      propertyPath: _IdleTimeoutDuration
-      value: 30
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c93559438942df4886c985631eea22d, type: 3}
@@ -16743,25 +16718,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1630497122}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1637859115 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4130082714623260614, guid: 2c93559438942df4886c985631eea22d,
-    type: 3}
-  m_PrefabInstance: {fileID: 868887030}
-  m_PrefabAsset: {fileID: 0}
---- !u!135 &1637859116
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1637859115}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1644055147
 PrefabInstance:
   m_ObjectHideFlags: 0
