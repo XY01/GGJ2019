@@ -17,9 +17,10 @@ public class EchidnaController : Interactable
 
     State _State = State.Idle;
     public State CurrentState { get { return _State; } }
-    Rigidbody _RB;  
+    Rigidbody _RB;
 
-    float _DrunkenessNorm = 0;  // How much booze he has drank
+    [Range(0,1)]
+    public float _DrunkenessNorm = 0;  // How much booze he has drank
     float _FullnessNorm = 0;    // How much food he has eaten
 
     float _MaxSpeed = 4;
@@ -102,7 +103,7 @@ public class EchidnaController : Interactable
         else if (_State == State.BeingPushed)
         {
             //LimitVelocity();
-            //_RB.AddForce(GetPerlinForce(transform.position, _BasePerlfieldScaler, _BasePerlForceScaler, _PerlinOffset));
+            _RB.AddForce(GetPerlinForce(transform.position, _BasePerlfieldScaler, _BasePerlForceScaler, _PerlinOffset) * _DrunkenessNorm * .4f);
             
 
             // Don't move while idle timer accumulates

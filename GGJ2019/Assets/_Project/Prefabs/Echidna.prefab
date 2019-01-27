@@ -4781,9 +4781,10 @@ MonoBehaviour:
   _TerrainVelocityScaler: 1
   _BasePerlForceScaler: 8
   _BasePerlfieldScaler: 0.4
-  _IdleTimeoutDuration: 3
-  _PushingTimeoutDuration: 2
-  _ConsumeDuration: 5
+  _IdleTimeoutDuration: 1
+  _PushingTimeoutDuration: 1
+  _PushingCount: 0
+  _ConsumeDuration: 2
   _ControllableRadius: 1.5
   _PerceptionRadius: 1.5
   _Burps:
