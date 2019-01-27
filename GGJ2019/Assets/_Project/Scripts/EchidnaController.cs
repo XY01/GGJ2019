@@ -103,7 +103,7 @@ public class EchidnaController : Interactable
         else if (_State == State.BeingPushed)
         {
             //LimitVelocity();
-            _RB.AddForce(GetPerlinForce(transform.position, _BasePerlfieldScaler, _BasePerlForceScaler, _PerlinOffset) * _DrunkenessNorm);
+            _RB.AddForce(GetPerlinForce(transform.position, _BasePerlfieldScaler, _BasePerlForceScaler, _PerlinOffset) * _DrunkenessNorm * .4f);
             
 
             // Don't move while idle timer accumulates
