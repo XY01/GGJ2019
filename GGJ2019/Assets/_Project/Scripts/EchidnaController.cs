@@ -70,6 +70,13 @@ public class EchidnaController : Interactable
         _RB = GetComponent<Rigidbody>();
         _AudioSource = GetComponent<AudioSource>();
         SetState(State.Idle);
+        PlayRandBurp();
+    }
+
+    void PlayRandBurp()
+    {
+        Burp();
+        Invoke("PlayRandBurp", Random.Range(4, 20));
     }
 
     void Update()
@@ -132,10 +139,20 @@ public class EchidnaController : Interactable
             }
         }
 
+        if (_AudioSource.clip == _RollLoop)
+            _AudioSource.volume = _RB.velocity.magnitude.ScaleTo01(0, 3) * .7f;
+
         LimitVelocity();
 
         if (ExperienceManager.Instance != null)
             ExperienceManager.Instance._EchidnaDebug.text = "Echidna - State: " + _State + "  objects in range: " + _InteractablesInRange.Count + "Timer: " + _StateTimer + " / " + _StateTimeoutDuration;
+    }
+
+    void PlayRollCont()
+    {
+        _AudioSource.playClip(_RollStart);
+        _AudioSource.clip = _RollLoop;
+        _AudioSource.Play();
     }
 
     void SetState(State state)
@@ -151,11 +168,15 @@ public class EchidnaController : Interactable
             _State = state;
             _StateTimer = 0;
             _StateTimeoutDuration = _PushingTimeoutDuration;
+
+            PlayRollCont();
         }
         else if (state == State.Wander)
         {
             _State = state;
             _StateTimer = 0;
+
+            PlayRollCont();
 
             EchidnaInteractable interactable = SearchForClosestInteractable();
             if (interactable != null)

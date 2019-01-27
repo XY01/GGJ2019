@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     Vector3 _Pos;
     public float _Speed = 10;
 
-    
+
     Vector3 _InputDirection;
     float _InputMagnitude;
     public float _InputMagScaler = 1;
@@ -55,8 +55,8 @@ public class PlayerController : MonoBehaviour
 
     // Height Y
     public float _Radius = .15f;
-    float _YOffset = 0;
-    
+    float _YOffset = .1f;
+
     // Rotation
     float _RotationSmoothing = 8;
 
@@ -250,7 +250,7 @@ public class PlayerController : MonoBehaviour
         Ray rayDown = new Ray(transform.position + (Vector3.up * _Radius), Vector3.down);        
         if (Physics.Raycast(rayDown, out forwardHit, 10, _ForwardRaycastLayerMask, QueryTriggerInteraction.Ignore))
         {
-            transform.position = forwardHit.point + (Vector3.up * _Radius);
+            transform.position = forwardHit.point + (Vector3.up * _YOffset);
         }
         #endregion
 
