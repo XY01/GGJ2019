@@ -55,12 +55,19 @@ public class EchidnaController : Interactable
     float _CurrentScale = .4f;
     float _BaseScale = .4f;
 
+    [Header("Audio")]
+    public AudioClip _Burp;
+    public AudioClip _RollStart;
+    public AudioClip _RollLoop;
+    AudioSource _AudioSource;
+
     // DEBUG
     public bool _DebugPerlinField = false;
 
     void Start()
     {
         _RB = GetComponent<Rigidbody>();
+        _AudioSource = GetComponent<AudioSource>();
         SetState(State.Idle);
     }
 
