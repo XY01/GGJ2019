@@ -56,7 +56,8 @@ public class EchidnaController : Interactable
     float _BaseScale = .4f;
 
     [Header("Audio")]
-    public AudioClip _Burp;
+    public AudioClip[] _Burps;
+    public AudioClip _Drink;
     public AudioClip _RollStart;
     public AudioClip _RollLoop;
     AudioSource _AudioSource;
@@ -251,11 +252,16 @@ public class EchidnaController : Interactable
 
         if(interactable._Type == EchidnaInteractable.Type.Food)
         {
-            _FullnessNorm += interactable._EffectStrength;           
+            _FullnessNorm += interactable._EffectStrength;
+
+            //Audio
+            Burp();
         }
         else if (interactable._Type == EchidnaInteractable.Type.Booze)
         {
             _DrunkenessNorm += interactable._EffectStrength;
+            _AudioSource.playClip(_Drink);
+            Invoke("Burp", 1);
         }
 
         _ConsumeDuration = interactable.TimeToConsume;
@@ -265,6 +271,12 @@ public class EchidnaController : Interactable
         Destroy(interactable.gameObject);    
 
         SetState(State.Consuming);
+    }
+
+    void Burp()
+    {
+        //Audio
+        _AudioSource.playClip(_Burps[(int)(Random.value * _Burps.Length)]);
     }
 
     #region Interactable interface methods
