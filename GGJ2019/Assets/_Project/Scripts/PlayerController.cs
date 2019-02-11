@@ -256,13 +256,14 @@ public class PlayerController : MonoBehaviour
         _RB.isKinematic = true;
         _Pos += FinalMovementVector * Time.deltaTime;
         transform.position = _Pos;
-        
 
+
+        RaycastHit downHit;
         // Raycast down so we stay on ground. TO DO smooth out later        
         Ray rayDown = new Ray(transform.position + (Vector3.up * _Radius * 2), Vector3.down);        
-        if (Physics.Raycast(rayDown, out forwardHit, 10, _ForwardRaycastLayerMask, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(rayDown, out downHit, 10, _ForwardRaycastLayerMask, QueryTriggerInteraction.Ignore))
         {
-            transform.position = forwardHit.point + (Vector3.up * _YOffset);
+            transform.position = downHit.point + (Vector3.up * _YOffset);
         }
         #endregion
 

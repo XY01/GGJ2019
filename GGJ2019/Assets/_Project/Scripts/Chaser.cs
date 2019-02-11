@@ -18,11 +18,11 @@ public class Chaser : MonoBehaviour
     void Update()
     {
         _Players = FindObjectsOfType<PlayerController>();
-        Debug.Log(_Players[0].transform.position);
+        //Debug.Log(_Players[0].transform.position);
 
         foreach (PlayerController player in _Players)
         {
-            Debug.Log(Vector3.Distance(player.transform.position, _StarterPoint));
+            //Debug.Log(Vector3.Distance(player.transform.position, _StarterPoint));
             if(Vector3.Distance(player.transform.position, _StarterPoint) < _RangeMax)
             {
                 _Nav.destination = player.transform.position;
